@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bryan Yang - Full Stack Developer</title>
+    
+    <!-- Busuanzi 不蒜子统计 -->
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-pink: #FFB3D9;
+            --primary-blue: #B4E4FF;
+            --primary-purple: #E5D4FF;
+            --cream-white: #FFF8F0;
+            --soft-shadow: rgba(255, 179, 217, 0.3);
+            --text-dark: #5C5470;
+            --text-light: #9D9D9D;
+            --green-status: #7FE9A7;
+            --card-bg: rgba(255, 255, 255, 0.85);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #FFE5F1 0%, #E0F4FF 50%, #F5E6FF 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* 背景动画泡泡 */
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(255, 179, 217, 0.3));
+            animation: float 20s infinite ease-in-out;
+            pointer-events: none;
+        }
+
+        .bubble:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            left: 10%;
+            top: 20%;
+            animation-delay: 0s;
+        }
+
+        .bubble:nth-child(2) {
+            width: 60px;
+            height: 60px;
+            right: 15%;
+            top: 60%;
+            animation-delay: 3s;
+        }
+
+        .bubble:nth-child(3) {
+            width: 100px;
+            height: 100px;
+            left: 80%;
+            top: 30%;
+            animation-delay: 6s;
+        }
+
+        .bubble:nth-child(4) {
+            width: 50px;
+            height: 50px;
+            left: 20%;
+            bottom: 20%;
+            animation-delay: 9s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) translateX(0) scale(1);
+                opacity: 0.5;
+            }
+            25% {
+                transform: translateY(-30px) translateX(20px) scale(1.1);
+                opacity: 0.7;
+            }
+            50% {
+                transform: translateY(-60px) translateX(-20px) scale(0.9);
+                opacity: 0.5;
+            }
+            75% {
+                transform: translateY(-30px) translateX(-30px) scale(1.05);
+                opacity: 0.6;
+            }
+        }
+
+        /* 主卡片容器 */
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 50px 40px;
+            box-shadow: 
+                0 20px 60px rgba(255, 179, 217, 0.3),
+                0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+            position: relative;
+            z-index: 1;
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 头像和头部区域 */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .avatar-wrapper {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            position: relative;
+            animation: bounce 3s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            box-shadow: 0 10px 30px var(--soft-shadow);
+            border: 4px solid white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .avatar-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .avatar::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            }
+            100% {
+                transform: translateX(100%) translateY(100%) rotate(45deg);
+            }
+        }
+
+        h1 {
+            color: var(--text-dark);
+            font-size: 32px;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .intro {
+            color: var(--text-dark);
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(255, 179, 217, 0.1), rgba(180, 228, 255, 0.1));
+            border-radius: 15px;
+            border-left: 3px solid var(--primary-pink);
+        }
+
+        /* 信息卡片 */
+        .info-section {
+            margin: 25px 0;
+        }
+
+        .info-item {
+            background: white;
+            padding: 18px 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(180, 228, 255, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 179, 217, 0.3);
+        }
+
+        .info-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--primary-pink), var(--primary-blue));
+        }
+
+        .label {
+            color: var(--text-light);
+            font-size: 12px;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .value {
+            color: var(--text-dark);
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* 区块标题 */
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-pink);
+            display: inline-block;
+        }
+
+        /* 关于我卡片 */
+        .about-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+        }
+
+        .email-card {
+            grid-column: 1 / -1;
+        }
+
+        .about-card {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 2px 10px rgba(180, 228, 255, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .about-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 20px rgba(255, 179, 217, 0.25);
+        }
+
+        .about-icon {
+            font-size: 28px;
+            min-width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(255, 179, 217, 0.2), rgba(180, 228, 255, 0.2));
+            border-radius: 10px;
+        }
+
+        .about-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .about-label {
+            font-size: 11px;
+            color: var(--text-light);
+            margin-bottom: 4px;
+        }
+
+        .about-value {
+            font-size: 13px;
+            color: var(--text-dark);
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .copy-btn-small {
+            background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+            border: none;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .copy-btn-small:hover {
+            transform: scale(1.05);
+        }
+
+        .employment-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* 文章列表 */
+        .article-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .article-item {
+            background: white;
+            padding: 18px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(180, 228, 255, 0.15);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .article-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--primary-pink), var(--primary-blue));
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .article-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .article-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 20px rgba(255, 179, 217, 0.25);
+        }
+
+        .article-item.featured {
+            background: linear-gradient(135deg, rgba(255, 179, 217, 0.08), rgba(180, 228, 255, 0.08));
+            border: 1px solid rgba(255, 179, 217, 0.3);
+        }
+
+        .article-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .article-content {
+            position: relative;
+        }
+
+        .article-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .article-desc {
+            font-size: 13px;
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .article-tag {
+            background: rgba(180, 228, 255, 0.3);
+            color: var(--text-dark);
+            padding: 3px 10px;
+            border-radius: 10px;
+            font-size: 11px;
+        }
+
+        .article-date {
+            font-size: 11px;
+            color: var(--text-light);
+            margin-left: auto;
+        }
+
+        /* 邮箱复制按钮 */
+        .copy-btn {
+            background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+            border: none;
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(255, 179, 217, 0.3);
+        }
+
+        .copy-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(255, 179, 217, 0.5);
+        }
+
+        .copy-btn:active {
+            transform: scale(0.95);
+        }
+
+        .copy-btn.copied {
+            background: linear-gradient(135deg, var(--green-status), #5FD068);
+        }
+
+        /* 状态指示器 */
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(127, 233, 167, 0.2);
+            padding: 8px 15px;
+            border-radius: 20px;
+            position: relative;
+            cursor: help;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--green-status);
+            border-radius: 50%;
+            position: relative;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            background: var(--green-status);
+            border-radius: 50%;
+            animation: ripple 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(127, 233, 167, 0.7);
+            }
+            50% {
+                box-shadow: 0 0 0 5px rgba(127, 233, 167, 0);
+            }
+        }
+
+        @keyframes ripple {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(2);
+            }
+        }
+
+        .status-text {
+            font-size: 13px;
+            color: var(--text-dark);
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: absolute;
+            bottom: 120%;
+            left: 50%;
+            transform: translateX(-50%) scale(0);
+            background: rgba(92, 84, 112, 0.95);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 12px;
+            white-space: nowrap;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            opacity: 0;
+            z-index: 10;
+        }
+
+        .tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: rgba(92, 84, 112, 0.95);
+        }
+
+        .status-indicator:hover .tooltip {
+            transform: translateX(-50%) scale(1);
+            opacity: 1;
+        }
+
+        /* 快速链接 */
+        .links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .link-btn {
+            flex: 1;
+            min-width: 140px;
+            padding: 12px 20px;
+            background: white;
+            border: 2px solid var(--primary-blue);
+            color: var(--text-dark);
+            text-decoration: none;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .link-icon {
+            font-size: 16px;
+        }
+
+        .link-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(180, 228, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .link-btn:hover::before {
+            left: 100%;
+        }
+
+        .link-btn:hover {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+            color: white;
+            border-color: var(--primary-purple);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(180, 228, 255, 0.4);
+        }
+
+        .link-btn.github {
+            border-color: var(--primary-pink);
+        }
+
+        .link-btn.github:hover {
+            background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+            border-color: var(--primary-pink);
+        }
+
+        /* 浏览量统计 */
+        .visitor-stats {
+            text-align: center;
+            margin-top: 30px;
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(255, 179, 217, 0.1), rgba(229, 212, 255, 0.1));
+            border-radius: 15px;
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        .visitor-stats span {
+            color: var(--primary-pink);
+            font-weight: 700;
+            font-size: 18px;
+            margin: 0 5px;
+        }
+
+        /* 初音未来装饰 */
+        .miku-decoration {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 120px;
+            height: 120px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            animation: float-miku 4s infinite ease-in-out;
+        }
+
+        @keyframes float-miku {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-15px) rotate(5deg);
+            }
+            50% {
+                transform: translateY(-30px) rotate(0deg);
+            }
+            75% {
+                transform: translateY(-15px) rotate(-5deg);
+            }
+        }
+
+        .miku-decoration:hover {
+            transform: scale(1.2) rotate(10deg) !important;
+        }
+
+        .miku-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 10px 25px rgba(57, 197, 187, 0.4));
+        }
+
+        .miku-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* 音符装饰 */
+        .music-note {
+            position: absolute;
+            font-size: 24px;
+            opacity: 0;
+            animation: noteFloat 3s ease-in-out;
+            pointer-events: none;
+        }
+
+        @keyframes noteFloat {
+            0% {
+                opacity: 0;
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) rotate(360deg);
+            }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 35px 25px;
+                border-radius: 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .subtitle {
+                font-size: 14px;
+            }
+
+            .avatar-wrapper {
+                width: 100px;
+                height: 100px;
+            }
+
+            .avatar {
+                font-size: 40px;
+            }
+
+            .about-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .links {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .link-btn {
+                min-width: auto;
+                padding: 10px 15px;
+                font-size: 13px;
+            }
+
+            .miku-decoration {
+                width: 80px;
+                height: 80px;
+                bottom: 10px;
+                right: 10px;
+            }
+
+            .bubble {
+                display: none;
+            }
+
+            .section-title {
+                font-size: 16px;
+            }
+
+            .article-title {
+                font-size: 15px;
+            }
+        }
+
+        /* Toast 通知 */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--green-status), #5FD068);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(127, 233, 167, 0.4);
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 2000;
+            font-size: 14px;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- 背景泡泡 -->
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+    <div class="bubble"></div>
+
+    <!-- 主容器 -->
+    <div class="container">
+        <div class="header">
+            <div class="avatar-wrapper">
+                <div class="avatar">
+                    <img src="https://avatars.githubusercontent.com/u/66861267?v=4" alt="Bryan Yang" class="avatar-img">
+                </div>
+            </div>
+            <h1>Bryan Yang's Blog</h1>
+            <p class="subtitle">💻 Full Stack Developer · 📝 技术分享 · 🎨 生活记录</p>
+            <p class="intro">
+                我是在2017年的时候开始学习编程，这是我学习编程的第<strong id="days-count"></strong>天，欢迎来到我的博客。在这里记录技术成长、分享开发经验，以及生活中的点点滴滴。
+            </p>
+        </div>
+
+        <!-- 关于我 -->
+        <div class="info-section">
+            <div class="section-title">👨‍💻 关于我</div>
+            <div class="about-cards">
+                <div class="about-card">
+                    <div class="about-icon">💼</div>
+                    <div class="about-content">
+                        <div class="about-label">职业身份</div>
+                        <div class="about-value">Full Stack Developer</div>
+                    </div>
+                </div>
+                <div class="about-card">
+                    <div class="about-icon">🏢</div>
+                    <div class="about-content">
+                        <div class="about-label">在职状态</div>
+                        <div class="about-value">
+                            <div class="employment-status">
+                                <span class="status-dot"></span>
+                                <span class="status-text">在职</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-card">
+                    <div class="about-icon">🌱</div>
+                    <div class="about-content">
+                        <div class="about-label">状态</div>
+                        <div class="about-value">
+                            <div class="status-indicator">
+                                <span class="status-dot"></span>
+                                <span class="status-text">考虑新机会</span>
+                                <div class="tooltip">Currently employed, happy to explore new roles.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-card email-card">
+                    <div class="about-icon">✉️</div>
+                    <div class="about-content">
+                        <div class="about-label">联系方式</div>
+                        <div class="about-value" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                            <span id="email" style="font-size: 12px; cursor: pointer; word-break: break-all;">y51288033@outlook.com</span>
+                            <button class="copy-btn-small" onclick="copyEmail()">复制</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 最新文章 -->
+        <div class="info-section">
+            <div class="section-title">📝 最新文章</div>
+            <div class="article-list">
+                <div class="article-item featured">
+                    <div class="article-badge">置顶</div>
+                    <div class="article-content">
+                        <h3 class="article-title">我的大学生涯</h3>
+                        <p class="article-desc">回顾四年大学时光，从懵懂新生到即将毕业...</p>
+                        <div class="article-meta">
+                            <span class="article-tag">生活</span>
+                            <span class="article-tag">回忆</span>
+                            <span class="article-date">即将发布</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="article-item" onclick="showComingSoon(event)">
+                    <div class="article-content">
+                        <h3 class="article-title">React 性能优化实战</h3>
+                        <p class="article-desc">深入探讨 React 应用的性能优化技巧...</p>
+                        <div class="article-meta">
+                            <span class="article-tag">技术</span>
+                            <span class="article-tag">React</span>
+                            <span class="article-date">敬请期待</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="article-item" onclick="showComingSoon(event)">
+                    <div class="article-content">
+                        <h3 class="article-title">从零搭建个人博客</h3>
+                        <p class="article-desc">使用现代化技术栈打造属于自己的博客...</p>
+                        <div class="article-meta">
+                            <span class="article-tag">教程</span>
+                            <span class="article-tag">前端</span>
+                            <span class="article-date">敬请期待</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 快速链接 -->
+        <div class="info-section">
+            <div class="section-title">🔗 快速链接</div>
+            <div class="links">
+                <a href="https://github.com/DaZuiZui" target="_blank" class="link-btn github">
+                    <span class="link-icon">🐙</span>
+                    GitHub
+                </a>
+                <a href="#" class="link-btn" onclick="showComingSoon(event)">
+                    <span class="link-icon">📚</span>
+                    文章列表
+                </a>
+                <a href="#" class="link-btn" onclick="showComingSoon(event)">
+                    <span class="link-icon">✍️</span>
+                    随手记录
+                </a>
+            </div>
+        </div>
+
+        <!-- 浏览量统计 -->
+        <div class="visitor-stats">
+            <div>🌟 本站总访问量</div>
+            <div style="margin-top: 8px;">
+                <span id="busuanzi_value_site_pv">--</span> 次
+            </div>
+        </div>
+    </div>
+
+    <!-- 初音未来装饰 -->
+    <div class="miku-decoration" onclick="mikuClick()">
+        <img src="https://i.imgur.com/YvKZQa9.png" alt="Miku" class="miku-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+        <!-- 备用SVG，如果图片加载失败 -->
+        <svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg" style="display: none;" class="miku-svg">
+            <defs>
+                <linearGradient id="hairGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#5DDECD;stop-opacity:1" />
+                    <stop offset="50%" style="stop-color:#39C5BB;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#2BA89F;stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="skinGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#FFEEE4;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#FFE0D1;stop-opacity:1" />
+                </linearGradient>
+                <radialGradient id="eyeGradient" cx="50%" cy="50%">
+                    <stop offset="0%" style="stop-color:#4DD0E1;stop-opacity:1" />
+                    <stop offset="70%" style="stop-color:#26C6DA;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#00ACC1;stop-opacity:1" />
+                </radialGradient>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+            
+            <!-- 背景光晕 -->
+            <circle cx="100" cy="100" r="90" fill="#39C5BB" opacity="0.1"/>
+            <circle cx="100" cy="100" r="70" fill="#5DDECD" opacity="0.08"/>
+            
+            <!-- 长马尾左侧 -->
+            <path d="M 35 85 Q 10 95 8 125 Q 5 160 15 185 Q 20 200 28 195 Q 25 165 30 135 Q 32 110 35 95 Z" 
+                  fill="url(#hairGradient)" stroke="#2BA89F" stroke-width="1"/>
+            <ellipse cx="18" cy="140" rx="6" ry="45" fill="url(#hairGradient)" opacity="0.8" transform="rotate(-10 18 140)"/>
+            <ellipse cx="14" cy="155" rx="4" ry="30" fill="#5DDECD" opacity="0.5" transform="rotate(-15 14 155)"/>
+            
+            <!-- 长马尾右侧 -->
+            <path d="M 165 85 Q 190 95 192 125 Q 195 160 185 185 Q 180 200 172 195 Q 175 165 170 135 Q 168 110 165 95 Z" 
+                  fill="url(#hairGradient)" stroke="#2BA89F" stroke-width="1"/>
+            <ellipse cx="182" cy="140" rx="6" ry="45" fill="url(#hairGradient)" opacity="0.8" transform="rotate(10 182 140)"/>
+            <ellipse cx="186" cy="155" rx="4" ry="30" fill="#5DDECD" opacity="0.5" transform="rotate(15 186 155)"/>
+            
+            <!-- 头发后层 -->
+            <ellipse cx="100" cy="75" rx="50" ry="55" fill="url(#hairGradient)"/>
+            <path d="M 55 75 Q 55 120 60 130 L 140 130 Q 145 120 145 75" fill="url(#hairGradient)"/>
+            
+            <!-- 头发侧面装饰 -->
+            <path d="M 50 75 Q 45 90 48 105" stroke="#5DDECD" stroke-width="3" fill="none" opacity="0.6"/>
+            <path d="M 150 75 Q 155 90 152 105" stroke="#5DDECD" stroke-width="3" fill="none" opacity="0.6"/>
+            
+            <!-- 脸部 -->
+            <ellipse cx="100" cy="105" rx="40" ry="45" fill="url(#skinGradient)"/>
+            
+            <!-- 耳朵 -->
+            <ellipse cx="62" cy="105" rx="6" ry="10" fill="url(#skinGradient)"/>
+            <ellipse cx="138" cy="105" rx="6" ry="10" fill="url(#skinGradient)"/>
+            <ellipse cx="62" cy="105" rx="3" ry="5" fill="#FFD4C4" opacity="0.6"/>
+            <ellipse cx="138" cy="105" rx="3" ry="5" fill="#FFD4C4" opacity="0.6"/>
+            
+            <!-- 刘海层次 -->
+            <path d="M 52 75 Q 58 90 65 85 Q 72 78 78 82 Q 85 78 92 82 Q 100 78 108 82 Q 115 78 122 82 Q 128 78 135 85 Q 142 90 148 75" 
+                  fill="url(#hairGradient)"/>
+            <path d="M 75 72 Q 85 68 95 72" stroke="#5DDECD" stroke-width="2" fill="none" opacity="0.7"/>
+            <path d="M 105 72 Q 115 68 125 72" stroke="#5DDECD" stroke-width="2" fill="none" opacity="0.7"/>
+            
+            <!-- 发饰 -->
+            <rect x="90" y="60" width="20" height="8" rx="4" fill="#FF6B9D" filter="url(#glow)"/>
+            <circle cx="85" cy="64" r="3" fill="#FFB3D9"/>
+            <circle cx="115" cy="64" r="3" fill="#FFB3D9"/>
+            <polygon points="100,56 97,60 103,60" fill="#FF94B3"/>
+            
+            <!-- 眉毛 -->
+            <path d="M 75 90 Q 80 88 86 89" stroke="#8D6E63" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <path d="M 114 89 Q 120 88 125 90" stroke="#8D6E63" stroke-width="2" fill="none" stroke-linecap="round"/>
+            
+            <!-- 眼睛外轮廓 -->
+            <ellipse cx="80" cy="100" rx="10" ry="13" fill="white"/>
+            <ellipse cx="120" cy="100" rx="10" ry="13" fill="white"/>
+            
+            <!-- 眼睛虹膜 -->
+            <ellipse cx="80" cy="101" rx="7" ry="10" fill="url(#eyeGradient)"/>
+            <ellipse cx="120" cy="101" rx="7" ry="10" fill="url(#eyeGradient)"/>
+            
+            <!-- 瞳孔 -->
+            <ellipse cx="80" cy="102" rx="4" ry="6" fill="#1A237E"/>
+            <ellipse cx="120" cy="102" rx="4" ry="6" fill="#1A237E"/>
+            
+            <!-- 眼睛高光 -->
+            <circle cx="82" cy="98" r="3" fill="white" opacity="0.9"/>
+            <circle cx="122" cy="98" r="3" fill="white" opacity="0.9"/>
+            <circle cx="77" cy="104" r="1.5" fill="white" opacity="0.7"/>
+            <circle cx="117" cy="104" r="1.5" fill="white" opacity="0.7"/>
+            
+            <!-- 睫毛 -->
+            <path d="M 72 95 Q 70 92 68 94" stroke="#5D4037" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            <path d="M 88 95 Q 90 92 92 94" stroke="#5D4037" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            <path d="M 112 95 Q 110 92 108 94" stroke="#5D4037" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            <path d="M 128 95 Q 130 92 132 94" stroke="#5D4037" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            
+            <!-- 鼻子 -->
+            <circle cx="100" cy="108" r="1" fill="#FFB3C1" opacity="0.5"/>
+            
+            <!-- 腮红 -->
+            <ellipse cx="68" cy="112" rx="12" ry="7" fill="#FFB3D9" opacity="0.35"/>
+            <ellipse cx="132" cy="112" rx="12" ry="7" fill="#FFB3D9" opacity="0.35"/>
+            
+            <!-- 嘴巴 -->
+            <path d="M 90 120 Q 100 126 110 120" stroke="#FF6B9D" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <path d="M 92 121 Q 100 125 108 121" fill="#FFB3C1" opacity="0.4"/>
+            
+            <!-- 脖子 -->
+            <rect x="88" y="142" width="24" height="18" rx="4" fill="url(#skinGradient)"/>
+            
+            <!-- 衣领 -->
+            <path d="M 75 160 L 85 160 L 88 170 L 82 172 Z" fill="white"/>
+            <path d="M 125 160 L 115 160 L 112 170 L 118 172 Z" fill="white"/>
+            
+            <!-- 衣服主体 -->
+            <path d="M 65 160 Q 65 210 70 220 L 130 220 Q 135 210 135 160 Z" fill="#424242" stroke="#212121" stroke-width="1"/>
+            <rect x="75" y="160" width="50" height="60" rx="3" fill="#616161" opacity="0.3"/>
+            
+            <!-- 领带 -->
+            <polygon points="100,165 94,180 100,200 106,180" fill="#39C5BB" stroke="#2BA89F" stroke-width="1.5"/>
+            <ellipse cx="100" cy="163" r="5" fill="#2BA89F"/>
+            <circle cx="100" cy="163" r="3" fill="#5DDECD" opacity="0.6"/>
+            
+            <!-- 衣服装饰线 -->
+            <line x1="65" y1="165" x2="75" y2="175" stroke="#39C5BB" stroke-width="2" opacity="0.5"/>
+            <line x1="135" y1="165" x2="125" y2="175" stroke="#39C5BB" stroke-width="2" opacity="0.5"/>
+            
+            <!-- 袖子 -->
+            <ellipse cx="58" cy="180" rx="16" ry="28" fill="#616161"/>
+            <ellipse cx="142" cy="180" rx="16" ry="28" fill="#616161"/>
+            <ellipse cx="58" cy="180" rx="12" ry="22" fill="#757575" opacity="0.6"/>
+            <ellipse cx="142" cy="180" rx="12" ry="22" fill="#757575" opacity="0.6"/>
+            
+            <!-- 手臂装饰 -->
+            <rect x="50" y="175" width="16" height="6" rx="3" fill="#39C5BB" opacity="0.7"/>
+            <rect x="134" y="175" width="16" height="6" rx="3" fill="#39C5BB" opacity="0.7"/>
+            
+            <!-- 手 -->
+            <circle cx="50" cy="205" r="9" fill="url(#skinGradient)"/>
+            <circle cx="150" cy="205" r="9" fill="url(#skinGradient)"/>
+        </svg>
+    </div>
+
+    <!-- Toast 通知 -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // 计算编程天数（从2017年开始）
+        function calculateDays() {
+            const startDate = new Date('2017-01-01');
+            const today = new Date();
+            const diffTime = Math.abs(today - startDate);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            document.getElementById('days-count').textContent = diffDays.toLocaleString();
+        }
+
+        // 复制邮箱
+        function copyEmail() {
+            const email = document.getElementById('email').textContent;
+            navigator.clipboard.writeText(email).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const originalText = btn.querySelector('.copy-text').textContent;
+                
+                btn.classList.add('copied');
+                btn.querySelector('.copy-text').textContent = '已复制 ✓';
+                
+                showToast('邮箱已复制到剪贴板！');
+                
+                setTimeout(() => {
+                    btn.classList.remove('copied');
+                    btn.querySelector('.copy-text').textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        // 初音未来点击效果
+        function mikuClick() {
+            const miku = document.querySelector('.miku-decoration');
+            const notes = ['♪', '♫', '♬', '♩'];
+            
+            // 创建3个音符
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    const note = document.createElement('div');
+                    note.className = 'music-note';
+                    note.textContent = notes[Math.floor(Math.random() * notes.length)];
+                    note.style.left = (miku.offsetLeft + 60) + 'px';
+                    note.style.top = (miku.offsetTop + 20) + 'px';
+                    note.style.color = ['#39C5BB', '#FFB3D9', '#B4E4FF'][Math.floor(Math.random() * 3)];
+                    document.body.appendChild(note);
+                    
+                    setTimeout(() => note.remove(), 3000);
+                }, i * 200);
+            }
+            
+            showToast('Miku: こんにちは！(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧');
+        }
+
+        // 显示 Toast 通知
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // 即将推出提示
+        function showComingSoon(event) {
+            event.preventDefault();
+            showToast('文章功能即将上线，敬请期待！');
+        }
+
+        // 页面加载完成后执行
+        window.addEventListener('load', () => {
+            calculateDays();
+            
+            // 欢迎消息
+            setTimeout(() => {
+                showToast('欢迎来到 Bryan 的博客！٩(◕‿◕｡)۶');
+            }, 1000);
+        });
+
+        // 点击邮箱也可以复制
+        document.getElementById('email').addEventListener('click', copyEmail);
+        document.getElementById('email').style.cursor = 'pointer';
+    </script>
+</body>
+</html>
