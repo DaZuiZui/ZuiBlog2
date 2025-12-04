@@ -468,7 +468,7 @@
 
     <!-- 主容器 -->
     <div class="container">
-        <a href="/" class="back-btn">← 返回首页</a>
+        <a href="../../" class="back-btn">← 返回首页</a>
 
         <div class="header">
             <h1>📚 技术文章</h1>
@@ -517,12 +517,19 @@
                     'https://api.github.com/repos/DaZuiZui/ZuiBlog2/contents/blog/technology',
                     {
                         headers: {
-                            'Accept': 'application/vnd.github.v3+raw'
-                        }
+                            'Accept': 'application/vnd.github.v3+raw',
+                            'User-Agent': 'ZuiBlog-Reader'
+                        },
+                        cache: 'default'
                     }
                 );
 
                 if (!response.ok) {
+                    if (response.status === 403) {
+                        throw new Error('API速率限制，请稍后重试');
+                    } else if (response.status === 404) {
+                        throw new Error('文章目录不存在');
+                    }
                     throw new Error('Failed to fetch articles');
                 }
 
@@ -546,7 +553,7 @@
                 showStats();
             } catch (error) {
                 console.error('Error fetching articles:', error);
-                showError('加载文章失败，请稍后重试');
+                showError('加载文章失败：' + error.message);
             }
         }
 
@@ -555,7 +562,13 @@
             for (let article of articles) {
                 try {
                     const response = await fetch(
-                        `https://api.github.com/repos/DaZuiZui/ZuiBlog2/commits?path=blog/technology/${article.name}&per_page=1`
+                        `https://api.github.com/repos/DaZuiZui/ZuiBlog2/commits?path=blog/technology/${article.name}&per_page=1`,
+                        {
+                            headers: {
+                                'User-Agent': 'ZuiBlog-Reader'
+                            },
+                            cache: 'default'
+                        }
                     );
                     
                     if (response.ok) {
@@ -627,7 +640,7 @@
             }
 
             container.innerHTML = sorted.map((article, index) => `
-                <div class="article-item" onclick="openArticle('${article.downloadUrl}')">
+                <div class="article-item" onclick="openArticle('${article.name}', '${article.title.replace(/'/g, "\\'")}')">
                     <div class="article-header">
                         <div class="article-title">${index === 0 && currentSort === 'newest' ? '✨ ' : ''}${article.title}</div>
                         ${index === 0 && currentSort === 'newest' ? '<span class="article-badge">最新</span>' : ''}
@@ -641,8 +654,12 @@
         }
 
         // 打开文章
-        function openArticle(url) {
-            window.open(url, '_blank');
+        function openArticle(filename, title) {
+            const params = new URLSearchParams({
+                file: filename,
+                title: title
+            });
+            window.location.href = `../context/index.html?${params.toString()}`;
         }
 
         // 显示统计信息
