@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>2025 年度总结 | My Story</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            overflow: hidden;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+        }
+
+        .container {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            opacity: 0;
+            transform: translateY(100%);
+            transition: all 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateY(0);
+            z-index: 10;
+        }
+
+        .slide.prev {
+            transform: translateY(-100%);
+        }
+
+        /* 背景动画 */
+        .background-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        /* 导航点 */
+        .navigation {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(100, 100, 100, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-dot:hover {
+            transform: scale(1.3);
+            background: rgba(100, 100, 100, 0.6);
+        }
+
+        .nav-dot.active {
+            background: #667eea;
+            transform: scale(1.2);
+        }
+
+        .nav-dot::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            border: 2px solid #667eea;
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-dot.active::after {
+            opacity: 1;
+        }
+
+        /* 标题样式 */
+        h1 {
+            font-size: clamp(2rem, 8vw, 4rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            animation: fadeInUp 1s ease;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            color: #4a5568;
+            margin-bottom: 30px;
+            animation: fadeInUp 1s ease 0.2s backwards;
+            text-align: center;
+        }
+
+        h3 {
+            font-size: clamp(1.2rem, 4vw, 2rem);
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        p, li {
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            line-height: 1.8;
+            color: #4a5568;
+            max-width: 800px;
+            text-align: center;
+            animation: fadeInUp 1s ease 0.4s backwards;
+        }
+
+        /* 首页 */
+        #slide1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        #slide1 h1 {
+            color: white;
+            -webkit-text-fill-color: white;
+            font-size: clamp(2.5rem, 10vw, 5rem);
+            text-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        #slide1 .subtitle {
+            color: rgba(255,255,255,0.9);
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            margin-top: 20px;
+        }
+
+        #slide1 .scroll-hint {
+            position: absolute;
+            bottom: 40px;
+            animation: bounce 2s infinite;
+            color: white;
+            font-size: 0.9rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .scroll-hint .arrow {
+            width: 30px;
+            height: 30px;
+            border-left: 2px solid white;
+            border-bottom: 2px solid white;
+            transform: rotate(-45deg);
+        }
+
+        /* 卡片样式 */
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            max-width: 900px;
+            width: 90%;
+            margin: 20px auto;
+            animation: slideInUp 0.8s ease;
+        }
+
+        /* 时间线 */
+        .timeline-container {
+            max-width: 1000px;
+            width: 90%;
+            overflow-y: auto;
+            max-height: 80vh;
+            padding: 20px;
+        }
+
+        .timeline-item {
+            display: flex;
+            margin-bottom: 40px;
+            position: relative;
+            opacity: 0;
+            animation: fadeInLeft 0.6s ease forwards;
+        }
+
+        .timeline-item:nth-child(even) {
+            animation: fadeInRight 0.6s ease forwards;
+        }
+
+        .timeline-item:nth-child(1) { animation-delay: 0.1s; }
+        .timeline-item:nth-child(2) { animation-delay: 0.2s; }
+        .timeline-item:nth-child(3) { animation-delay: 0.3s; }
+        .timeline-item:nth-child(4) { animation-delay: 0.4s; }
+        .timeline-item:nth-child(5) { animation-delay: 0.5s; }
+        .timeline-item:nth-child(6) { animation-delay: 0.6s; }
+
+        .timeline-dot {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            margin-right: 20px;
+            flex-shrink: 0;
+            margin-top: 5px;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-dot:hover {
+            transform: scale(1.5);
+            box-shadow: 0 0 0 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .timeline-content {
+            flex: 1;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .timeline-month {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .timeline-text {
+            font-size: 1rem;
+            color: #4a5568;
+            line-height: 1.6;
+            text-align: left;
+        }
+
+        /* 收获卡片网格 */
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            width: 90%;
+            margin-top: 30px;
+        }
+
+        .achievement-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            opacity: 0;
+            animation: popIn 0.5s ease forwards;
+        }
+
+        .achievement-card:nth-child(1) { animation-delay: 0.1s; }
+        .achievement-card:nth-child(2) { animation-delay: 0.2s; }
+        .achievement-card:nth-child(3) { animation-delay: 0.3s; }
+        .achievement-card:nth-child(4) { animation-delay: 0.4s; }
+        .achievement-card:nth-child(5) { animation-delay: 0.5s; }
+        .achievement-card:nth-child(6) { animation-delay: 0.6s; }
+
+        .achievement-card:hover {
+            transform: translateY(-10px) rotate(2deg);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
+        }
+
+        .achievement-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .achievement-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .achievement-desc {
+            font-size: 0.95rem;
+            color: #4a5568;
+            line-height: 1.6;
+        }
+
+        /* 宠物画廊 */
+        .pet-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            width: 90%;
+            margin-top: 30px;
+        }
+
+        .pet-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            opacity: 0;
+            animation: scaleIn 0.5s ease forwards;
+        }
+
+        .pet-card:nth-child(1) { animation-delay: 0.1s; }
+        .pet-card:nth-child(2) { animation-delay: 0.2s; }
+        .pet-card:nth-child(3) { animation-delay: 0.3s; }
+        .pet-card:nth-child(4) { animation-delay: 0.4s; }
+        .pet-card:nth-child(5) { animation-delay: 0.5s; }
+
+        .pet-card:hover {
+            transform: scale(1.05) rotate(-2deg);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
+        }
+
+        .pet-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #667eea33 0%, #764ba233 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+        }
+
+        .pet-info {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .pet-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .pet-birthday {
+            font-size: 0.9rem;
+            color: #718096;
+        }
+
+        /* 目标列表 */
+        .goals-list {
+            list-style: none;
+            max-width: 600px;
+            width: 90%;
+            margin-top: 30px;
+        }
+
+        .goal-item {
+            background: white;
+            padding: 25px;
+            margin-bottom: 15px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: slideInRight 0.5s ease forwards;
+        }
+
+        .goal-item:nth-child(1) { animation-delay: 0.1s; }
+        .goal-item:nth-child(2) { animation-delay: 0.2s; }
+        .goal-item:nth-child(3) { animation-delay: 0.3s; }
+        .goal-item:nth-child(4) { animation-delay: 0.4s; }
+
+        .goal-item:hover {
+            transform: translateX(10px);
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+        }
+
+        .goal-number {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            min-width: 40px;
+        }
+
+        .goal-text {
+            font-size: 1.2rem;
+            color: #4a5568;
+            text-align: left;
+        }
+
+        /* 游戏卡片 */
+        .game-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            animation: flipIn 0.8s ease;
+        }
+
+        .game-title {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        .game-icon {
+            font-size: 5rem;
+            margin: 20px 0;
+        }
+
+        /* 动画 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes flipIn {
+            from {
+                opacity: 0;
+                transform: perspective(400px) rotateY(90deg);
+            }
+            to {
+                opacity: 1;
+                transform: perspective(400px) rotateY(0deg);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .navigation {
+                right: 15px;
+                gap: 10px;
+            }
+
+            .nav-dot {
+                width: 10px;
+                height: 10px;
+            }
+
+            .card {
+                padding: 25px;
+            }
+
+            .timeline-container {
+                max-height: 75vh;
+            }
+
+            .achievement-grid,
+            .pet-gallery {
+                grid-template-columns: 1fr;
+            }
+
+            .slide {
+                padding: 20px 10px;
+            }
+        }
+
+        /* 滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+
+        /* 心情曲线图 */
+        .mood-chart {
+            max-width: 800px;
+            width: 90%;
+            height: 300px;
+            margin-top: 30px;
+            position: relative;
+        }
+
+        .mood-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .mood-line {
+            fill: none;
+            stroke: url(#mood-gradient);
+            stroke-width: 3;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            animation: drawLine 2s ease forwards;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+        }
+
+        @keyframes drawLine {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        .mood-dot {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mood-dot:hover {
+            r: 8;
+        }
+
+        .mood-label {
+            font-size: 12px;
+            fill: #4a5568;
+        }
+
+        /* 反思卡片 */
+        .reflection-card {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            max-width: 700px;
+            width: 90%;
+            animation: slideInUp 0.8s ease;
+        }
+
+        .quote {
+            font-size: 1.8rem;
+            font-style: italic;
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .quote::before {
+            content: '"';
+            position: absolute;
+            left: 0;
+            top: -10px;
+            font-size: 4rem;
+            color: rgba(102, 126, 234, 0.3);
+            font-family: Georgia, serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 背景动画 -->
+        <div class="background-animation" id="bgAnimation"></div>
+
+        <!-- 导航点 -->
+        <div class="navigation" id="navigation"></div>
+
+        <!-- 幻灯片 1: 封面 -->
+        <div class="slide active" id="slide1">
+            <h1>2025</h1>
+            <p class="subtitle">一年的起伏，一生的成长</p>
+            <div class="scroll-hint">
+                <span>向下滑动开始</span>
+                <div class="arrow"></div>
+            </div>
+        </div>
+
+        <!-- 幻灯片 2: 概述 -->
+        <div class="slide" id="slide2">
+            <h2>回首这一年</h2>
+            <div class="card">
+                <p style="font-size: 1.2rem; line-height: 2;">
+                    回首2025年，不知不觉一年已经过去。<br><br>
+                    这一年，有<strong style="color: #f093fb;">欢乐</strong>、有<strong style="color: #764ba2;">烦恼</strong>、有<strong style="color: #4a5568;">背叛</strong>，<br>
+                    也有新的<strong style="color: #667eea;">机遇</strong>和<strong style="color: #48bb78;">成长</strong>。<br><br>
+                    整体来说，收获虽然不算特别大，<br>
+                    但经历丰富，心智有所成长。
+                </p>
+            </div>
+        </div>
+
+        <!-- 幻灯片 3: 收获 -->
+        <div class="slide" id="slide3">
+            <h2>2025 我的收获</h2>
+            <div class="achievement-grid">
+                <div class="achievement-card">
+                    <span class="achievement-icon">💼</span>
+                    <div class="achievement-title">高薪工作</div>
+                    <div class="achievement-desc">成功获得高薪工作机会，开启职业新篇章</div>
+                </div>
+                <div class="achievement-card">
+                    <span class="achievement-icon">🎓</span>
+                    <div class="achievement-title">本科顺利毕业</div>
+                    <div class="achievement-desc">顺利完成学业，成功获得学位证书</div>
+                </div>
+                <div class="achievement-card">
+                    <span class="achievement-icon">🎯</span>
+                    <div class="achievement-title">独立意识增强</div>
+                    <div class="achievement-desc">学会与家庭和社会保持适度距离，找到属于自己的节奏</div>
+                </div>
+                <div class="achievement-card">
+                    <span class="achievement-icon">💪</span>
+                    <div class="achievement-title">抗压能力提升</div>
+                    <div class="achievement-desc">经历打击和失落，学会自我疗愈</div>
+                </div>
+                <div class="achievement-card">
+                    <span class="achievement-icon">🌈</span>
+                    <div class="achievement-title">生活与兴趣平衡</div>
+                    <div class="achievement-desc">宠物、钓鱼、游戏与喜欢的人等丰富生活内容，让生活有温度</div>
+                </div>
+                <div class="achievement-card">
+                    <span class="achievement-icon">🚀</span>
+                    <div class="achievement-title">职业与技能成长</div>
+                    <div class="achievement-desc">新工作中积累经验，年底专注技术提升，收获自信</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 幻灯片 4: 情绪曲线 -->
+        <div class="slide" id="slide4">
+            <h2>我的2025心情曲线</h2>
+            <div class="mood-chart">
+                <svg class="mood-svg" viewBox="0 0 800 300">
+                    <defs>
+                        <linearGradient id="mood-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                            <stop offset="50%" style="stop-color:#f093fb;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <!-- 网格线 -->
+                    <line x1="50" y1="250" x2="750" y2="250" stroke="#e2e8f0" stroke-width="1"/>
+                    <line x1="50" y1="200" x2="750" y2="200" stroke="#e2e8f0" stroke-width="1"/>
+                    <line x1="50" y1="150" x2="750" y2="150" stroke="#e2e8f0" stroke-width="1"/>
+                    <line x1="50" y1="100" x2="750" y2="100" stroke="#e2e8f0" stroke-width="1"/>
+                    <line x1="50" y1="50" x2="750" y2="50" stroke="#e2e8f0" stroke-width="1"/>
+                    
+                    <!-- 心情曲线 -->
+                    <path class="mood-line" d="M 50,200 L 110,180 L 170,190 L 230,80 L 290,100 L 350,120 L 410,220 L 470,210 L 530,200 L 590,190 L 650,120 L 710,90 L 750,100"/>
+                    
+                    <!-- 数据点 -->
+                    <circle class="mood-dot" cx="50" cy="200" r="5" fill="#667eea"><title>1月: 回乡与矛盾</title></circle>
+                    <circle class="mood-dot" cx="110" cy="180" r="5" fill="#667eea"><title>2月: 麻木</title></circle>
+                    <circle class="mood-dot" cx="170" cy="190" r="5" fill="#667eea"><title>3月: 幸福时光</title></circle>
+                    <circle class="mood-dot" cx="230" cy="80" r="5" fill="#48bb78"><title>3月: 最快乐的月份</title></circle>
+                    <circle class="mood-dot" cx="290" cy="100" r="5" fill="#667eea"><title>4月: 扬帆起航</title></circle>
+                    <circle class="mood-dot" cx="350" cy="120" r="5" fill="#667eea"><title>5月: 幸福和焦虑</title></circle>
+                    <circle class="mood-dot" cx="410" cy="220" r="5" fill="#e53e3e"><title>6月: 背叛</title></circle>
+                    <circle class="mood-dot" cx="470" cy="210" r="5" fill="#764ba2"><title>7月: 宠物治愈</title></circle>
+                    <circle class="mood-dot" cx="530" cy="200" r="5" fill="#764ba2"><title>8月: 浑浑噩噩</title></circle>
+                    <circle class="mood-dot" cx="590" cy="190" r="5" fill="#764ba2"><title>9月: Helios来到</title></circle>
+                    <circle class="mood-dot" cx="650" cy="120" r="5" fill="#667eea"><title>10月: 浑噩</title></circle>
+                    <circle class="mood-dot" cx="710" cy="90" r="5" fill="#48bb78"><title>11月: 新的开始</title></circle>
+                    <circle class="mood-dot" cx="750" cy="100" r="5" fill="#48bb78"><title>12月: 回归正轨</title></circle>
+                    
+                    <!-- 月份标签 -->
+                    <text class="mood-label" x="40" y="270">1月</text>
+                    <text class="mood-label" x="160" y="270">3月</text>
+                    <text class="mood-label" x="280" y="270">5月</text>
+                    <text class="mood-label" x="400" y="270">7月</text>
+                    <text class="mood-label" x="520" y="270">9月</text>
+                    <text class="mood-label" x="640" y="270">11月</text>
+                </svg>
+            </div>
+            <p style="margin-top: 20px; color: #718096;">点击曲线上的圆点查看当月心情</p>
+        </div>
+
+        <!-- 幻灯片 5: 月度回顾 -->
+        <div class="slide" id="slide5">
+            <h2>2025 月度回顾</h2>
+            <div class="timeline-container">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-month">1月 · 回乡</div>
+                        <div class="timeline-text">
+                            在2024年12月离开了上一家公司，怀着充满斗志的心理面对新的生活。1月1日和同学从香港跨年回来，认识了一个新的朋友，虽然现在很少联系了。接着房租到期，短暂离开深圳，走向南京旅游去见一个老朋友——一个陪伴我成长的朋友。再次见到他，依然还能想到5年前的回忆。<br><br>
+                            回到黑龙江老家之前，我认为生活可以顺顺利利快快乐乐的和家人在一起。但远不如想象的那么好，刚回到家里就和家里发生了很大冲突和矛盾，还有父亲被医院误诊的事情，每天都很焦虑，很想立刻离开这个家。反而变得再也不想回到家。1月末平平淡淡过了一个年，一直盼着2月快点开学，我想离开这个家。
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-month">2月 · 麻木</div>
+                        <div class="timeline-text">
+                            2月在家里度过得有些浑浑噩噩，生活节奏完全乱了。本来可以在月末回学校的，我也可以过我的2月25日生日，但因为哈尔滨冬奥会的原因，开学延迟了一周，这让生日也被荒废了。那一天，我只是迷迷糊糊地睡了一天，感受不到快乐。<br><br>
+                            虽然父母不太干涉我的生活，但待在家里依然让我焦虑不安。我开始越来越清楚：家，已经不是让我舒心的地方。
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-month">3月 · 幸福</div>
+                        <div class="timeline-text">
+                            终于开学了！回到大学，见到了大学里最好的朋友们。夜晚独自走在校园的小路上，心里有一种既属于这里又不完全属于这里的微妙感受。看着离校的倒计时，我感受到一种奇异的自由感。<br><br>
+                            3月可以说是我这一年最快乐的一个月：我不必担心工作，因为手里握有30多个offer，知道自己在市场上很有竞争力；也不愁经济问题，因为过去两年的实习让我积攒了不少钱。每天的生活几乎都是轻松愉快，玩游戏、和朋友相处，唯一的不爽可能就是游戏里没打过别人（笑）。论文和毕业设计早在2024年就完成了，这让我更加无忧无虑。那时的3月，是真正属于我的、毫无负担的幸福时光。<br><br>
+                            当然也是有焦虑的，焦虑就是如何找到一个满意的房子。
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-month">4月 · 扬帆起航 - 重回深圳</div>
+                        <div class="timeline-text">
+                            4月5日，我来到了深圳，找到了一个我满意的出租屋，也有了一个高薪工作。在新的公司开启我梦的开始。刚来公司的时候我的确很开心，真的很开心。<br><br>
+                            在公司的日子我一直盼着5月12日回到学校。在新的公司我接触新的业务领域，学到了很多新的知识，我的能力也上涨很多。同样，我也开始了钓鱼这个新爱好。
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-month">5月 · 幸福和焦虑</div>
+                        <div class="timeline-text">
+                            在5月我天天盼着5月12日回到学校。公司也非常够意思，给我了1个多月的远程办公，并且这一个多月没有给我安排任何任务。让我感到很开心。<br><br>
+                            我也回到了学校，每天开心地打游戏，享受最后的大学时光，和朋友们在一起的每一刻都很珍贵。
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-month">6月 · 背叛</div>
+                        <div class="timeline-text">
+                            我成为了小丑。毕业的好心情也没有了，毕业典礼也没有参加。<br><br>
+                            无所谓，明天会更好。在6月16日默默回到了深圳，开始新的生活。
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-month">7月 · Jerry 和 Jamie 的来到</div>
+                        <div class="timeline-text">
+                            经过如此大的打击，我养了2个宠物，男孩叫Jerry，女孩叫Jamie。他们都是7月21日出生的。<br><br>
+                            他们虽然在治愈我，陪伴着我，但是我依然活在阴影当中，心情还是很低落。
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-month">8月 · 浑浑噩噩</div>
+                        <div class="timeline-text">
+                            折磨，CMN。整个8月都在浑浑噩噩中度过，感觉每天都很煎熬，看不到出路。<br><br>
+                            终于到了8月末我才迎来我的救赎，生活开始有了一丝转机。
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-month">9月 · Helios 的来到</div>
+                        <div class="timeline-text">
+                            9月份没有什么太大的事情发生，依然浑浑噩噩，但是Helios的来到给我生活带来了很多乐趣。Helios生日是5月18日，9月21日来到我家里。<br><br>
+                            但是依然浑浑噩噩，自己的技术水平也严重下降，工作无精打采，整个人状态都不太好。
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-month">10月 · 如此浑噩</div>
+                        <div class="timeline-text">
+                            浑浑噩噩，无任何变化。对生活充满了无奈，每天都在重复着同样的事情，看不到希望，也不知道该如何改变。<br><br>
+                            整个月都在迷茫和困惑中度过。
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-month">11月 · 新的开始</div>
+                        <div class="timeline-text">
+                            在浑浑噩噩的过程中我终于迎来了新的开始！我的生活开始走向幸福，终于看到了曙光。<br><br>
+                            心情也逐渐好转，对未来又有了期待和信心。一切都在往好的方向发展。
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-month">12月 · Nano 和 Yeco 的来到</div>
+                        <div class="timeline-text">
+                            12月我摸了一周鱼，剩下的时间都在提升自己的技术，我的生活也回到了正轨。同样我的Nano和Yeco也参与了我们的生活，他们都是11月10日出生的。<br><br>
+                            现在有5个毛孩子陪伴着我，生活变得充实而温暖。技术也在不断提升，工作状态也恢复了，一切都在变好。
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 幻灯片 6: 关于我 -->
+        <div class="slide" id="slide6">
+            <h2>关于我这个人</h2>
+            <div class="reflection-card">
+                <div class="quote">
+                    我很独立，也很在意自己的节奏。我不喜欢被管束，即便是亲人，也不希望他们过多干涉我的生活。
+                </div>
+                <p style="color: #4a5568; line-height: 1.8; font-size: 1.1rem;">
+                    我希望生活的节奏和选择掌握在自己手中，而不是顺应他人的期待。<br><br>
+                    <strong style="color: #667eea;">自由和独立</strong>，是我最看重的价值，<br>
+                    它们让我在面对复杂世界时仍然能保持清醒和坚定。
+                </p>
+            </div>
+        </div>
+
+        <!-- 幻灯片 7: 年度游戏 -->
+        <div class="slide" id="slide7">
+            <h2>我心中的2025年度最佳游戏</h2>
+            <div class="game-card">
+                <div class="game-title">RUST</div>
+                <div class="game-icon">🎮</div>
+                <p style="color: #718096; font-size: 1.1rem; margin-top: 20px;">
+                    在虚拟世界里建造、探索、生存<br>
+                    体验不一样的冒险人生
+                </p>
+            </div>
+        </div>
+
+        <!-- 幻灯片 8: 宠物们 -->
+        <div class="slide" id="slide8">
+            <h2>我的毛孩子们 🐾</h2>
+            <div class="pet-gallery">
+                <div class="pet-card">
+                    <div class="pet-image">🐹</div>
+                    <div class="pet-info">
+                        <div class="pet-name">Jamie</div>
+                        <div class="pet-birthday">生日: 7月21日</div>
+                    </div>
+                </div>
+                <div class="pet-card">
+                    <div class="pet-image">🐹</div>
+                    <div class="pet-info">
+                        <div class="pet-name">Jerry</div>
+                        <div class="pet-birthday">生日: 7月21日</div>
+                    </div>
+                </div>
+                <div class="pet-card">
+                    <div class="pet-image">🦎</div>
+                    <div class="pet-info">
+                        <div class="pet-name">Helios</div>
+                        <div class="pet-birthday">生日: 5月18日<br>来到: 9月21日</div>
+                    </div>
+                </div>
+                <div class="pet-card">
+                    <div class="pet-image">🦎</div>
+                    <div class="pet-info">
+                        <div class="pet-name">Nano</div>
+                        <div class="pet-birthday">生日: 11月10日</div>
+                    </div>
+                </div>
+                <div class="pet-card">
+                    <div class="pet-image">🐭</div>
+                    <div class="pet-info">
+                        <div class="pet-name">Yeco</div>
+                        <div class="pet-birthday">生日: 11月10日</div>
+                    </div>
+                </div>
+            </div>
+            <p style="margin-top: 30px; color: #667eea; font-size: 1.1rem;">
+                感谢你们陪伴我度过最艰难的时光 ❤️
+            </p>
+        </div>
+
+        <!-- 幻灯片 9: 2026目标 -->
+        <div class="slide" id="slide9">
+            <h2>2026 我的目标</h2>
+            <ul class="goals-list">
+                <li class="goal-item">
+                    <div class="goal-number">01</div>
+                    <div class="goal-text">存款在多多多多多多！！！💰</div>
+                </li>
+                <li class="goal-item">
+                    <div class="goal-number">02</div>
+                    <div class="goal-text">技术涨涨涨涨！！！！！🚀</div>
+                </li>
+                <li class="goal-item">
+                    <div class="goal-number">03</div>
+                    <div class="goal-text">爱情稳住 💕</div>
+                </li>
+                <li class="goal-item">
+                    <div class="goal-number">04</div>
+                    <div class="goal-text">处理好自己关系圈 🤝</div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 幻灯片 10: 结束语 -->
+        <div class="slide" id="slide10">
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 60px 40px; border-radius: 30px; max-width: 700px; width: 90%; box-shadow: 0 30px 80px rgba(0,0,0,0.2);">
+                <h1 style="color: white; -webkit-text-fill-color: white; margin-bottom: 30px;">再见 2025</h1>
+                <h2 style="color: rgba(255,255,255,0.95); margin-bottom: 30px;">你好 2026</h2>
+                <p style="color: rgba(255,255,255,0.9); font-size: 1.3rem; line-height: 2;">
+                    无论过去如何起伏<br>
+                    未来终将更加明亮<br><br>
+                    感谢所有的经历<br>
+                    期待所有的可能<br><br>
+                    <strong style="font-size: 1.5rem;">明天会更好！✨</strong>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 幻灯片管理
+        const slides = document.querySelectorAll('.slide');
+        const navigation = document.getElementById('navigation');
+        let currentSlide = 0;
+        let isAnimating = false;
+        let touchStartY = 0;
+        let touchEndY = 0;
+
+        // 创建导航点
+        slides.forEach((_, index) => {
+            const dot = document.createElement('div');
+            dot.className = 'nav-dot' + (index === 0 ? ' active' : '');
+            dot.addEventListener('click', () => goToSlide(index));
+            navigation.appendChild(dot);
+        });
+
+        const navDots = document.querySelectorAll('.nav-dot');
+
+        // 跳转到指定幻灯片
+        function goToSlide(index) {
+            if (isAnimating || index === currentSlide || index < 0 || index >= slides.length) return;
+            
+            isAnimating = true;
+            const direction = index > currentSlide ? 'next' : 'prev';
+            
+            slides[currentSlide].classList.remove('active');
+            if (direction === 'prev') {
+                slides[currentSlide].classList.add('prev');
+            }
+            
+            navDots[currentSlide].classList.remove('active');
+            
+            currentSlide = index;
+            
+            slides[currentSlide].classList.add('active');
+            slides[currentSlide].classList.remove('prev');
+            navDots[currentSlide].classList.add('active');
+            
+            setTimeout(() => {
+                isAnimating = false;
+            }, 800);
+        }
+
+        // 下一张
+        function nextSlide() {
+            goToSlide(currentSlide + 1);
+        }
+
+        // 上一张
+        function prevSlide() {
+            goToSlide(currentSlide - 1);
+        }
+
+        // 键盘控制
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            }
+        });
+
+        // 鼠标滚轮控制
+        let lastWheelTime = 0;
+        document.addEventListener('wheel', (e) => {
+            // 检查是否在时间线容器内滚动
+            const timelineContainer = document.querySelector('.timeline-container');
+            const isInTimeline = timelineContainer && timelineContainer.contains(e.target);
+            
+            // 如果在时间线内，允许正常滚动，不切换页面
+            if (isInTimeline) {
+                return;
+            }
+            
+            e.preventDefault();
+            const now = Date.now();
+            // 所有页面统一2秒延迟
+            const delay = 2000;
+            if (now - lastWheelTime < delay) return;
+            lastWheelTime = now;
+            
+            if (e.deltaY > 0) {
+                nextSlide();
+            } else {
+                prevSlide();
+            }
+        }, { passive: false });
+
+        // 触摸控制
+        document.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+
+        document.addEventListener('touchmove', (e) => {
+            touchEndY = e.touches[0].clientY;
+        }, { passive: true });
+
+        document.addEventListener('touchend', () => {
+            const diff = touchStartY - touchEndY;
+            if (Math.abs(diff) > 50) {
+                if (diff > 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+            }
+        }, { passive: true });
+
+        // 背景粒子动画
+        function createParticles() {
+            const bgAnimation = document.getElementById('bgAnimation');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                const size = Math.random() * 60 + 20;
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const delay = Math.random() * 20;
+                const duration = Math.random() * 20 + 10;
+                
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.left = x + '%';
+                particle.style.top = y + '%';
+                particle.style.background = `radial-gradient(circle, ${getRandomColor()}, transparent)`;
+                particle.style.animation = `float ${duration}s ${delay}s infinite ease-in-out`;
+                
+                bgAnimation.appendChild(particle);
+            }
+        }
+
+        function getRandomColor() {
+            const colors = [
+                'rgba(102, 126, 234, 0.1)',
+                'rgba(118, 75, 162, 0.1)',
+                'rgba(240, 147, 251, 0.1)',
+                'rgba(245, 87, 108, 0.1)',
+                'rgba(72, 187, 120, 0.1)'
+            ];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        // 添加浮动动画
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes float {
+                0%, 100% {
+                    transform: translate(0, 0) scale(1);
+                    opacity: 0.3;
+                }
+                50% {
+                    transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) scale(1.2);
+                    opacity: 0.6;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // 初始化
+        createParticles();
+
+        // 时间线项点击放大效果
+        document.querySelectorAll('.timeline-content').forEach(content => {
+            content.addEventListener('click', function() {
+                this.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 200);
+            });
+        });
+
+        // 目标项点击效果
+        document.querySelectorAll('.goal-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.style.transform = 'translateX(20px) scale(1.05)';
+                setTimeout(() => {
+                    this.style.transform = 'translateX(0) scale(1)';
+                }, 300);
+            });
+        });
+
+        // 宠物卡片点击效果
+        document.querySelectorAll('.pet-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.transform = 'scale(1.15) rotate(5deg)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1) rotate(0deg)';
+                }, 300);
+            });
+        });
+
+        // 成就卡片点击效果
+        document.querySelectorAll('.achievement-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const icon = this.querySelector('.achievement-icon');
+                icon.style.transform = 'scale(1.5) rotate(360deg)';
+                setTimeout(() => {
+                    icon.style.transform = 'scale(1) rotate(0deg)';
+                }, 500);
+            });
+        });
+
+        // 心情点点击提示
+        document.querySelectorAll('.mood-dot').forEach(dot => {
+            dot.addEventListener('click', function() {
+                const title = this.querySelector('title').textContent;
+                showToast(title);
+            });
+        });
+
+        // Toast 提示
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.textContent = message;
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 50px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(0,0,0,0.8);
+                color: white;
+                padding: 15px 30px;
+                border-radius: 25px;
+                font-size: 0.9rem;
+                z-index: 10000;
+                animation: slideInUp 0.3s ease;
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(-50%) translateY(20px)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
+        }
+
+        // 添加点击音效（可选）
+        function playSound() {
+            // 如果需要音效，可以在这里添加
+        }
+
+        // 防止页面滚动
+        document.body.style.overflow = 'hidden';
+
+        // 页面加载完成提示
+        window.addEventListener('load', () => {
+            console.log('🎉 2025年度总结加载完成！使用方向键、鼠标滚轮或触摸滑动浏览');
+        });
+    </script>
+</body>
+</html>
