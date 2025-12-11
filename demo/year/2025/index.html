@@ -288,17 +288,25 @@
             max-width: 1000px;
             width: 90%;
             margin-top: 30px;
+            max-height: 70vh;
+            overflow-y: auto;
+            padding: 10px;
         }
 
         .achievement-card {
             background: white;
             padding: 30px;
-            border-radius: 15px;
+            border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
             transition: all 0.3s ease;
             cursor: pointer;
             opacity: 0;
             animation: popIn 0.5s ease forwards;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
         }
 
         .achievement-card:nth-child(1) { animation-delay: 0.1s; }
@@ -309,8 +317,9 @@
         .achievement-card:nth-child(6) { animation-delay: 0.6s; }
 
         .achievement-card:hover {
-            transform: translateY(-10px) rotate(2deg);
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.3);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.3);
+            border: 2px solid #667eea;
         }
 
         .achievement-icon {
@@ -320,16 +329,16 @@
         }
 
         .achievement-title {
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             font-weight: bold;
             color: #667eea;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         .achievement-desc {
-            font-size: 0.95rem;
+            font-size: 1rem;
             color: #4a5568;
-            line-height: 1.6;
+            line-height: 1.8;
         }
 
         /* 宠物画廊 */
@@ -572,30 +581,117 @@
         /* 响应式 */
         @media (max-width: 768px) {
             .navigation {
-                right: 15px;
-                gap: 10px;
+                right: 10px;
+                gap: 8px;
             }
 
             .nav-dot {
-                width: 10px;
-                height: 10px;
+                width: 8px;
+                height: 8px;
             }
 
             .card {
-                padding: 25px;
+                padding: 20px 15px;
+                width: 95%;
             }
 
             .timeline-container {
-                max-height: 75vh;
+                max-height: 70vh;
+                padding: 10px;
+            }
+            
+            .timeline-content {
+                padding: 15px;
+            }
+            
+            .timeline-month {
+                font-size: 1.1rem;
+            }
+            
+            .timeline-text {
+                font-size: 0.9rem;
+                line-height: 1.8;
             }
 
             .achievement-grid,
             .pet-gallery {
                 grid-template-columns: 1fr;
+                gap: 15px;
+                max-height: 65vh;
+                padding: 5px;
+            }
+            
+            .achievement-card {
+                padding: 25px 20px;
+                border-radius: 15px;
+            }
+            
+            .achievement-icon {
+                font-size: 3rem;
+            }
+            
+            .achievement-title {
+                font-size: 1.2rem;
+            }
+            
+            .achievement-desc {
+                font-size: 0.95rem;
             }
 
             .slide {
-                padding: 20px 10px;
+                padding: 30px 15px;
+            }
+            
+            h1 {
+                font-size: 2.5rem !important;
+            }
+            
+            h2 {
+                font-size: 1.5rem !important;
+                margin-bottom: 20px;
+            }
+            
+            p, li {
+                font-size: 1rem !important;
+            }
+            
+            .mood-chart {
+                height: 250px;
+                margin-top: 20px;
+            }
+            
+            .goals-list {
+                width: 95%;
+            }
+            
+            .goal-item {
+                padding: 20px 15px;
+            }
+            
+            .goal-number {
+                font-size: 1.5rem;
+            }
+            
+            .goal-text {
+                font-size: 1rem;
+            }
+            
+            .pet-card .pet-image {
+                height: 180px;
+                font-size: 3rem;
+            }
+            
+            .game-card {
+                padding: 30px 20px;
+            }
+            
+            .quote {
+                font-size: 1.2rem;
+                padding-left: 25px;
+            }
+            
+            .quote::before {
+                font-size: 3rem;
             }
         }
 
@@ -1061,6 +1157,7 @@
         let isAnimating = false;
         let touchStartY = 0;
         let touchEndY = 0;
+        let touchStartTime = 0;
 
         // 创建导航点
         slides.forEach((_, index) => {
@@ -1121,19 +1218,41 @@
         // 鼠标滚轮控制
         let lastWheelTime = 0;
         document.addEventListener('wheel', (e) => {
-            // 检查是否在时间线容器内滚动
-            const timelineContainer = document.querySelector('.timeline-container');
-            const isInTimeline = timelineContainer && timelineContainer.contains(e.target);
-            
-            // 如果在时间线内，允许正常滚动，不切换页面
-            if (isInTimeline) {
+            // 如果正在动画中，直接返回
+            if (isAnimating) {
+                e.preventDefault();
                 return;
             }
             
-            e.preventDefault();
+            // 检查是否在可滚动容器内滚动
+            const timelineContainer = document.querySelector('.timeline-container');
+            const achievementGrid = document.querySelector('.achievement-grid');
+            const isInTimeline = timelineContainer && timelineContainer.contains(e.target);
+            const isInAchievement = achievementGrid && achievementGrid.contains(e.target);
+            
+            // 如果在可滚动区域内，检查是否已经滚动到底部或顶部
+            if (isInTimeline || isInAchievement) {
+                const scrollContainer = isInTimeline ? timelineContainer : achievementGrid;
+                const scrollTop = scrollContainer.scrollTop;
+                const scrollHeight = scrollContainer.scrollHeight;
+                const clientHeight = scrollContainer.clientHeight;
+                const isAtBottom = Math.abs(scrollHeight - scrollTop - clientHeight) < 5;
+                const isAtTop = scrollTop < 5;
+                
+                // 如果在底部且向下滚动，或在顶部且向上滚动，则允许翻页
+                if ((isAtBottom && e.deltaY > 0) || (isAtTop && e.deltaY < 0)) {
+                    e.preventDefault();
+                    // 继续执行翻页逻辑
+                } else {
+                    return; // 否则允许正常滚动
+                }
+            } else {
+                e.preventDefault();
+            }
+            
             const now = Date.now();
-            // 所有页面统一2秒延迟
-            const delay = 2000;
+            // 增加到1.5秒延迟，防止连续触发
+            const delay = 1500;
             if (now - lastWheelTime < delay) return;
             lastWheelTime = now;
             
@@ -1147,18 +1266,52 @@
         // 触摸控制
         document.addEventListener('touchstart', (e) => {
             touchStartY = e.touches[0].clientY;
+            touchEndY = e.touches[0].clientY;
+            touchStartTime = Date.now();
         }, { passive: true });
 
         document.addEventListener('touchmove', (e) => {
             touchEndY = e.touches[0].clientY;
         }, { passive: true });
 
-        document.addEventListener('touchend', () => {
+        document.addEventListener('touchend', (e) => {
+            // 检查是否在可滚动容器内
+            const timelineContainer = document.querySelector('.timeline-container');
+            const achievementGrid = document.querySelector('.achievement-grid');
+            const isInTimeline = timelineContainer && timelineContainer.contains(e.target);
+            const isInAchievement = achievementGrid && achievementGrid.contains(e.target);
+            
+            // 如果在可滚动区域内，检查是否已经滚动到底部或顶部
+            if (isInTimeline || isInAchievement) {
+                const scrollContainer = isInTimeline ? timelineContainer : achievementGrid;
+                const scrollTop = scrollContainer.scrollTop;
+                const scrollHeight = scrollContainer.scrollHeight;
+                const clientHeight = scrollContainer.clientHeight;
+                const isAtBottom = Math.abs(scrollHeight - scrollTop - clientHeight) < 5;
+                const isAtTop = scrollTop < 5;
+                
+                const diff = touchStartY - touchEndY;
+                
+                // 如果在底部且向上滑动，或在顶部且向下滑动，则允许翻页
+                if ((isAtBottom && diff > 0) || (isAtTop && diff < 0)) {
+                    // 继续执行翻页逻辑
+                } else {
+                    return; // 否则不触发翻页
+                }
+            }
+            
             const diff = touchStartY - touchEndY;
-            if (Math.abs(diff) > 50) {
+            const timeDiff = Date.now() - touchStartTime;
+            
+            console.log('滑动距离:', diff, '时间:', timeDiff); // 调试信息
+            
+            // 降低滑动距离阈值到50px，提高响应性
+            if (Math.abs(diff) > 50 && timeDiff < 800) {
                 if (diff > 0) {
+                    // 向上滑动，下一页
                     nextSlide();
                 } else {
+                    // 向下滑动，上一页
                     prevSlide();
                 }
             }
