@@ -922,6 +922,58 @@
                 font-size: 0.85rem;
             }
             
+            .city-timeline {
+                max-height: 70vh;
+                padding: 20px 5px;
+            }
+            
+            .city-timeline::before {
+                left: 30px;
+            }
+            
+            .city-stop {
+                flex-direction: row !important;
+                margin-bottom: 40px;
+            }
+            
+            .city-stop:nth-child(odd),
+            .city-stop:nth-child(even) {
+                flex-direction: row !important;
+            }
+            
+            .city-content {
+                width: calc(100% - 100px);
+                text-align: left !important;
+                padding: 20px;
+            }
+            
+            .city-point {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+                margin: 0 15px 0 5px;
+                order: 1 !important;
+                flex-shrink: 0;
+            }
+            
+            .city-stop:nth-child(odd) .city-point,
+            .city-stop:nth-child(even) .city-point {
+                order: 1 !important;
+            }
+            
+            .city-label {
+                font-size: 1.4rem;
+            }
+            
+            .city-desc {
+                font-size: 0.9rem;
+            }
+            
+            .city-tag {
+                font-size: 0.7rem;
+                padding: 3px 10px;
+            }
+            
             .quote {
                 font-size: 1.2rem;
                 padding-left: 25px;
@@ -1409,8 +1461,69 @@
             </div>
         </div>
 
-        <!-- 幻灯片 8: 年度音乐 -->
+        <!-- 幻灯片 8: 今年去过的城市 -->
         <div class="slide" id="slide8">
+            <h2>2025 我的旅行足迹 ✈️</h2>
+            <div class="city-timeline">
+                <div class="city-stop">
+                    <div class="city-content">
+                        <div class="city-label">深圳</div>
+                        <div class="city-desc">
+                            梦想开启的地方，在这里找到了高薪工作，开启新的人生篇章。这座现代化都市的快节奏，让我感受到了奋斗的力量。
+                        </div>
+                        <span class="city-tag">第一站</span>
+                    </div>
+                    <div class="city-point">🌴</div>
+                </div>
+                
+                <div class="city-stop">
+                    <div class="city-content">
+                        <div class="city-label">香港</div>
+                        <div class="city-desc">
+                            东方之珠，繁华与文化交织的城市。漫步维港，感受国际化氛围，品尝地道美食，体验不一样的生活。
+                        </div>
+                        <span class="city-tag">第二站</span>
+                    </div>
+                    <div class="city-point">🏙️</div>
+                </div>
+                
+                <div class="city-stop">
+                    <div class="city-content">
+                        <div class="city-label">南京</div>
+                        <div class="city-desc">
+                            六朝古都，历史与现代交融的城市。在这里追寻历史的足迹，感受文化的底蕴，每一条街道都讲述着故事。
+                        </div>
+                        <span class="city-tag">第三站</span>
+                    </div>
+                    <div class="city-point">🏯</div>
+                </div>
+                
+                <div class="city-stop">
+                    <div class="city-content">
+                        <div class="city-label">哈尔滨</div>
+                        <div class="city-desc">
+                            冰城夏都，充满异域风情的城市。中央大街的建筑，冰雪大世界的梦幻，让人流连忘返。在这里感受了北国风光。
+                        </div>
+                        <span class="city-tag">第四站</span>
+                    </div>
+                    <div class="city-point">❄️</div>
+                </div>
+                
+                <div class="city-stop">
+                    <div class="city-content">
+                        <div class="city-label">深圳</div>
+                        <div class="city-desc">
+                            再次回到这座城市，已经有了不同的感觉。这里是我奋斗的阵地，有我的梦想和期待。未来，继续在这里创造更多可能。
+                        </div>
+                        <span class="city-tag">归来</span>
+                    </div>
+                    <div class="city-point">🌴</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 幻灯片 9: 年度音乐 -->
+        <div class="slide" id="slide9">
             <h2>我心中的2025年度最佳音乐 🎵</h2>
             <div class="music-list">
                 <div class="music-item">
@@ -1440,8 +1553,8 @@
             </div>
         </div>
 
-        <!-- 幻灯片 9: 宠物们 -->
-        <div class="slide" id="slide9">
+        <!-- 幻灯片 10: 宠物们 -->
+        <div class="slide" id="slide10">
             <h2>我的毛孩子们 🐾</h2>
             <div class="pet-gallery">
                 <div class="pet-card">
@@ -1485,8 +1598,8 @@
             </p>
         </div>
 
-        <!-- 幻灯片 10: 2026目标 -->
-        <div class="slide" id="slide10">
+        <!-- 幻灯片 11: 2026目标 -->
+        <div class="slide" id="slide11">
             <h2>2026 我的目标</h2>
             <ul class="goals-list">
                 <li class="goal-item">
@@ -1508,8 +1621,8 @@
             </ul>
         </div>
 
-        <!-- 幻灯片 11: 结束语 -->
-        <div class="slide" id="slide11">
+        <!-- 幻灯片 12: 结束语 -->
+        <div class="slide" id="slide12">
             <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 60px 40px; border-radius: 30px; max-width: 700px; width: 90%; box-shadow: 0 30px 80px rgba(0,0,0,0.2);">
                 <h1 style="color: white; -webkit-text-fill-color: white; margin-bottom: 30px;">再见 2025</h1>
                 <h2 style="color: rgba(255,255,255,0.95); margin-bottom: 30px;">你好 2026</h2>
@@ -1535,7 +1648,7 @@
         let touchStartTime = 0;
 
         // 创建导航点
-        const slideLabels = ['封面', '回顾', '收获', '心情', '月度', '关于我', '游戏', '音乐', '宠物', '目标', '结束'];
+        const slideLabels = ['封面', '回顾', '收获', '心情', '月度', '关于我', '游戏', '城市', '音乐', '宠物', '目标', '结束'];
         slides.forEach((_, index) => {
             const wrapper = document.createElement('div');
             wrapper.className = 'nav-dot-wrapper';
