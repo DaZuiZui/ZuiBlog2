@@ -555,6 +555,92 @@
             font-size: 5rem;
             margin: 20px 0;
         }
+        
+        /* 音乐列表 */
+        .music-list {
+            max-width: 700px;
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-height: 75vh;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        
+        .music-item {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeInLeft 0.6s ease forwards;
+        }
+        
+        .music-item:nth-child(1) { animation-delay: 0.1s; }
+        .music-item:nth-child(2) { animation-delay: 0.2s; }
+        .music-item:nth-child(3) { animation-delay: 0.3s; }
+        
+        .music-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
+        }
+        
+        .music-rank {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            min-width: 50px;
+            text-align: center;
+        }
+        
+        .music-info {
+            flex: 1;
+        }
+        
+        .music-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+        
+        .music-artist {
+            font-size: 0.95rem;
+            color: #718096;
+        }
+        
+        .music-play {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        
+        .music-play:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .music-play::before {
+            content: '▶';
+            font-size: 0.8rem;
+        }
 
         /* 动画 */
         @keyframes fadeInUp {
@@ -805,6 +891,35 @@
             
             .game-card {
                 padding: 30px 20px;
+            }
+            
+            .music-list {
+                max-height: 70vh;
+                gap: 15px;
+                padding: 5px;
+            }
+            
+            .music-item {
+                padding: 20px;
+                gap: 15px;
+            }
+            
+            .music-rank {
+                font-size: 1.5rem;
+                min-width: 40px;
+            }
+            
+            .music-name {
+                font-size: 1.2rem;
+            }
+            
+            .music-artist {
+                font-size: 0.85rem;
+            }
+            
+            .music-play {
+                padding: 10px 18px;
+                font-size: 0.85rem;
             }
             
             .quote {
@@ -1294,8 +1409,39 @@
             </div>
         </div>
 
-        <!-- 幻灯片 8: 宠物们 -->
+        <!-- 幻灯片 8: 年度音乐 -->
         <div class="slide" id="slide8">
+            <h2>我心中的2025年度最佳音乐 🎵</h2>
+            <div class="music-list">
+                <div class="music-item">
+                    <div class="music-rank">1</div>
+                    <div class="music-info">
+                        <div class="music-name">小酒窝</div>
+                        <div class="music-artist">林俊杰 / 蔡卓妍</div>
+                    </div>
+                    <a href="https://music.163.com/#/song?id=186452" target="_blank" class="music-play">播放</a>
+                </div>
+                <div class="music-item">
+                    <div class="music-rank">2</div>
+                    <div class="music-info">
+                        <div class="music-name">江南</div>
+                        <div class="music-artist">林俊杰</div>
+                    </div>
+                    <a href="https://music.163.com/#/song?id=185668" target="_blank" class="music-play">播放</a>
+                </div>
+                <div class="music-item">
+                    <div class="music-rank">3</div>
+                    <div class="music-info">
+                        <div class="music-name">曹操</div>
+                        <div class="music-artist">林俊杰</div>
+                    </div>
+                    <a href="https://music.163.com/#/song?id=185809" target="_blank" class="music-play">播放</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 幻灯片 9: 宠物们 -->
+        <div class="slide" id="slide9">
             <h2>我的毛孩子们 🐾</h2>
             <div class="pet-gallery">
                 <div class="pet-card">
@@ -1339,8 +1485,8 @@
             </p>
         </div>
 
-        <!-- 幻灯片 9: 2026目标 -->
-        <div class="slide" id="slide9">
+        <!-- 幻灯片 10: 2026目标 -->
+        <div class="slide" id="slide10">
             <h2>2026 我的目标</h2>
             <ul class="goals-list">
                 <li class="goal-item">
@@ -1362,8 +1508,8 @@
             </ul>
         </div>
 
-        <!-- 幻灯片 10: 结束语 -->
-        <div class="slide" id="slide10">
+        <!-- 幻灯片 11: 结束语 -->
+        <div class="slide" id="slide11">
             <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 60px 40px; border-radius: 30px; max-width: 700px; width: 90%; box-shadow: 0 30px 80px rgba(0,0,0,0.2);">
                 <h1 style="color: white; -webkit-text-fill-color: white; margin-bottom: 30px;">再见 2025</h1>
                 <h2 style="color: rgba(255,255,255,0.95); margin-bottom: 30px;">你好 2026</h2>
@@ -1389,7 +1535,7 @@
         let touchStartTime = 0;
 
         // 创建导航点
-        const slideLabels = ['封面', '回顾', '收获', '心情', '月度', '关于我', '游戏', '宠物', '目标', '结束'];
+        const slideLabels = ['封面', '回顾', '收获', '心情', '月度', '关于我', '游戏', '音乐', '宠物', '目标', '结束'];
         slides.forEach((_, index) => {
             const wrapper = document.createElement('div');
             wrapper.className = 'nav-dot-wrapper';
