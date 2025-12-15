@@ -382,6 +382,7 @@
         .achievement-card:nth-child(4) { animation-delay: 0.4s; }
         .achievement-card:nth-child(5) { animation-delay: 0.5s; }
         .achievement-card:nth-child(6) { animation-delay: 0.6s; }
+        .achievement-card:nth-child(7) { animation-delay: 0.7s; }
 
         .achievement-card:hover {
             transform: translateY(-8px);
@@ -666,6 +667,16 @@
             .nav-dot {
                 width: 8px;
                 height: 8px;
+            }
+            
+            #slide1 .scroll-hint {
+                bottom: 80px;
+                font-size: 1rem;
+            }
+            
+            .scroll-hint .arrow {
+                width: 25px;
+                height: 25px;
             }
 
             .card {
@@ -1070,6 +1081,11 @@
                     <div class="achievement-title">职业与技能成长</div>
                     <div class="achievement-desc">新工作中积累经验，年底专注技术提升，收获自信</div>
                 </div>
+                <div class="achievement-card">
+                    <span class="achievement-icon">💰</span>
+                    <div class="achievement-title">经济独立</div>
+                    <div class="achievement-desc">实现经济自主，掌握财务自由的第一步</div>
+                </div>
             </div>
         </div>
 
@@ -1439,8 +1455,13 @@
             }
         });
 
-        // 鼠标滚轮控制
+        // 鼠标滚轮控制 - 优化敏感度
         let lastWheelTime = 0;
+        let wheelDeltaY = 0;
+        let wheelTimeout = null;
+        const WHEEL_THRESHOLD = 150; // 滚动累计阈值
+        const WHEEL_RESET_DELAY = 200; // 滚动重置延迟
+        
         document.addEventListener('wheel', (e) => {
             // 如果正在动画中，直接返回
             if (isAnimating) {
@@ -1477,15 +1498,36 @@
             }
             
             const now = Date.now();
-            // 增加到1.5秒延迟，防止连续触发
-            const delay = 1500;
-            if (now - lastWheelTime < delay) return;
-            lastWheelTime = now;
+            // 防止频繁翻页，2秒内只能翻页一次
+            if (now - lastWheelTime < 2000) {
+                wheelDeltaY = 0;
+                return;
+            }
             
-            if (e.deltaY > 0) {
-                nextSlide();
-            } else {
-                prevSlide();
+            // 累计滚动量
+            wheelDeltaY += e.deltaY;
+            
+            // 清除之前的重置计时器
+            if (wheelTimeout) {
+                clearTimeout(wheelTimeout);
+            }
+            
+            // 设置重置计时器，如果200ms内没有继续滚动，则重置累计量
+            wheelTimeout = setTimeout(() => {
+                wheelDeltaY = 0;
+            }, WHEEL_RESET_DELAY);
+            
+            // 当累计滚动量达到阈值时才翻页
+            if (Math.abs(wheelDeltaY) >= WHEEL_THRESHOLD) {
+                lastWheelTime = now;
+                
+                if (wheelDeltaY > 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+                
+                wheelDeltaY = 0; // 重置累计量
             }
         }, { passive: false });
 
