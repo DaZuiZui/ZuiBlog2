@@ -641,6 +641,202 @@
             content: '▶';
             font-size: 0.8rem;
         }
+        
+        /* 城市时间线 */
+        .city-timeline {
+            max-width: 900px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 20px 10px;
+            position: relative;
+        }
+        
+        .city-timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 20px;
+            bottom: auto;
+            height: calc(100% - 40px);
+            min-height: 2000px;
+            width: 4px;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 30%, #f093fb 60%, #ffd700 100%);
+            transform: translateX(-50%);
+            box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+            pointer-events: none;
+        }
+        
+        .city-stop {
+            display: flex;
+            align-items: center;
+            margin-bottom: 80px;
+            position: relative;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+        
+        .city-stop:nth-child(1) { animation-delay: 0.1s; }
+        .city-stop:nth-child(2) { animation-delay: 0.3s; }
+        .city-stop:nth-child(3) { animation-delay: 0.5s; }
+        .city-stop:nth-child(4) { animation-delay: 0.7s; }
+        .city-stop:nth-child(5) { animation-delay: 0.9s; }
+        
+        .city-stop:nth-child(odd) {
+            flex-direction: row;
+        }
+        
+        .city-stop:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+        
+        .city-content {
+            width: 42%;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            border: 2px solid transparent;
+        }
+        
+        .city-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px 20px 0 0;
+        }
+        
+        .city-stop:nth-child(odd) .city-content {
+            text-align: right;
+        }
+        
+        .city-stop:nth-child(even) .city-content {
+            text-align: left;
+        }
+        
+        .city-content:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.25);
+            border-color: #667eea;
+        }
+        
+        .city-point {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            box-shadow: 0 0 0 5px #fff, 0 0 0 10px #667eea, 0 0 20px rgba(102, 126, 234, 0.3);
+            z-index: 10;
+            position: relative;
+            margin: 0 30px;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        
+        .city-point.active {
+            transform: scale(1.4) rotate(360deg);
+            box-shadow: 0 0 0 5px #fff, 0 0 0 10px #f093fb, 0 0 30px rgba(240, 147, 251, 0.6);
+            animation: pulse-rotate 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-rotate {
+            0%, 100% {
+                transform: scale(1.4) rotate(360deg);
+            }
+            50% {
+                transform: scale(1.5) rotate(360deg);
+            }
+        }
+        
+        .city-stop:hover .city-point {
+            transform: scale(1.4) rotate(360deg);
+            box-shadow: 0 0 0 5px #fff, 0 0 0 10px #f093fb, 0 0 30px rgba(240, 147, 251, 0.6);
+        }
+        
+        .city-stop:nth-child(odd) .city-point {
+            order: 2;
+        }
+        
+        .city-stop:nth-child(even) .city-point {
+            order: 1;
+        }
+        
+        .city-label {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .city-subtitle {
+            font-size: 1.1rem;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+        
+        .city-desc {
+            font-size: 1.05rem;
+            color: #4a5568;
+            line-height: 1.9;
+            position: relative;
+        }
+        
+        .city-highlight {
+            color: #667eea;
+            font-weight: 600;
+            position: relative;
+            padding: 2px 6px;
+            background: rgba(102, 126, 234, 0.08);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        .city-highlight:hover {
+            background: rgba(102, 126, 234, 0.15);
+            transform: scale(1.05);
+        }
+        
+        .city-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-top: 15px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .city-tag:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .city-emoji {
+            font-size: 1.2rem;
+            margin: 0 4px;
+            display: inline-block;
+            animation: bounce 2s infinite;
+        }
 
         /* 动画 */
         @keyframes fadeInUp {
@@ -923,17 +1119,18 @@
             }
             
             .city-timeline {
-                max-height: 70vh;
+                max-height: 75vh;
                 padding: 20px 5px;
             }
             
             .city-timeline::before {
                 left: 30px;
+                min-height: 1500px;
             }
             
             .city-stop {
                 flex-direction: row !important;
-                margin-bottom: 40px;
+                margin-bottom: 50px;
             }
             
             .city-stop:nth-child(odd),
@@ -948,9 +1145,9 @@
             }
             
             .city-point {
-                width: 50px;
-                height: 50px;
-                font-size: 1.5rem;
+                width: 55px;
+                height: 55px;
+                font-size: 1.8rem;
                 margin: 0 15px 0 5px;
                 order: 1 !important;
                 flex-shrink: 0;
@@ -962,16 +1159,24 @@
             }
             
             .city-label {
-                font-size: 1.4rem;
+                font-size: 1.6rem;
+            }
+            
+            .city-subtitle {
+                font-size: 1rem;
             }
             
             .city-desc {
-                font-size: 0.9rem;
+                font-size: 0.95rem;
             }
             
             .city-tag {
-                font-size: 0.7rem;
-                padding: 3px 10px;
+                font-size: 0.75rem;
+                padding: 5px 12px;
+            }
+            
+            .city-emoji {
+                font-size: 1rem;
             }
             
             .quote {
@@ -1468,10 +1673,12 @@
                 <div class="city-stop">
                     <div class="city-content">
                         <div class="city-label">深圳</div>
+                        <div class="city-subtitle">梦想开始的地方</div>
                         <div class="city-desc">
-                            梦想开启的地方，在这里找到了高薪工作，开启新的人生篇章。这座现代化都市的快节奏，让我感受到了奋斗的力量。
+                            在这里找到了<span class="city-highlight">高薪工作</span>，开启全新的人生篇章 <span class="city-emoji">🚀</span><br>
+                            从零开始，每一步都是<span class="city-highlight">梦想的起点</span>
                         </div>
-                        <span class="city-tag">第一站</span>
+                        <span class="city-tag">🎯 第一站</span>
                     </div>
                     <div class="city-point">🌴</div>
                 </div>
@@ -1479,10 +1686,13 @@
                 <div class="city-stop">
                     <div class="city-content">
                         <div class="city-label">香港</div>
+                        <div class="city-subtitle">跨年狂欢之旅</div>
                         <div class="city-desc">
-                            东方之珠，繁华与文化交织的城市。漫步维港，感受国际化氛围，品尝地道美食，体验不一样的生活。
+                            与<span class="city-highlight">伙伴一起跨年狂欢</span> <span class="city-emoji">🎉</span><br>
+                            也认识了<span class="city-highlight">新朋友</span>（虽然目前来往少了）<br>
+                            那些难忘的瞬间，是2025最美好的回忆
                         </div>
-                        <span class="city-tag">第二站</span>
+                        <span class="city-tag">✨ 第二站</span>
                     </div>
                     <div class="city-point">🏙️</div>
                 </div>
@@ -1490,10 +1700,13 @@
                 <div class="city-stop">
                     <div class="city-content">
                         <div class="city-label">南京</div>
+                        <div class="city-subtitle">老友重逢</div>
                         <div class="city-desc">
-                            六朝古都，历史与现代交融的城市。在这里追寻历史的足迹，感受文化的底蕴，每一条街道都讲述着故事。
+                            见到了<span class="city-highlight">多年的好友</span> <span class="city-emoji">🤝</span><br>
+                            <span class="city-highlight">熟悉的感觉涌上心头</span>，仿佛时光未曾流逝<br>
+                            友谊的温度，在古都的街头蔓延
                         </div>
-                        <span class="city-tag">第三站</span>
+                        <span class="city-tag">💙 第三站</span>
                     </div>
                     <div class="city-point">🏯</div>
                 </div>
@@ -1501,10 +1714,13 @@
                 <div class="city-stop">
                     <div class="city-content">
                         <div class="city-label">哈尔滨</div>
+                        <div class="city-subtitle">毕业时刻</div>
                         <div class="city-desc">
-                            冰城夏都，充满异域风情的城市。中央大街的建筑，冰雪大世界的梦幻，让人流连忘返。在这里感受了北国风光。
+                            <span class="city-highlight">短暂的快乐时光</span> <span class="city-emoji">😊</span><br>
+                            在这座冰雪之城，拿到了我的<span class="city-highlight">学士学位</span> <span class="city-emoji">🎓</span><br>
+                            <span class="city-highlight" style="font-size: 1.1rem;">毕业快乐，前程似锦！</span>
                         </div>
-                        <span class="city-tag">第四站</span>
+                        <span class="city-tag">🎊 第四站</span>
                     </div>
                     <div class="city-point">❄️</div>
                 </div>
@@ -1512,10 +1728,13 @@
                 <div class="city-stop">
                     <div class="city-content">
                         <div class="city-label">深圳</div>
+                        <div class="city-subtitle">再次回归</div>
                         <div class="city-desc">
-                            再次回到这座城市，已经有了不同的感觉。这里是我奋斗的阵地，有我的梦想和期待。未来，继续在这里创造更多可能。
+                            回到这座城市，已是<span class="city-highlight">全新的自己</span> <span class="city-emoji">💪</span><br>
+                            这里是我<span class="city-highlight">奋斗的阵地</span>，承载着梦想与未来<br>
+                            继续前行，创造更多可能！
                         </div>
-                        <span class="city-tag">归来</span>
+                        <span class="city-tag">🌟 归来</span>
                     </div>
                     <div class="city-point">🌴</div>
                 </div>
@@ -1732,13 +1951,15 @@
             const timelineContainer = document.querySelector('.timeline-container');
             const achievementGrid = document.querySelector('.achievement-grid');
             const petGallery = document.querySelector('.pet-gallery');
+            const cityTimeline = document.querySelector('.city-timeline');
             const isInTimeline = timelineContainer && timelineContainer.contains(e.target);
             const isInAchievement = achievementGrid && achievementGrid.contains(e.target);
             const isInPetGallery = petGallery && petGallery.contains(e.target);
+            const isInCityTimeline = cityTimeline && cityTimeline.contains(e.target);
             
             // 如果在可滚动区域内，检查是否已经滚动到底部或顶部
-            if (isInTimeline || isInAchievement || isInPetGallery) {
-                const scrollContainer = isInTimeline ? timelineContainer : (isInAchievement ? achievementGrid : petGallery);
+            if (isInTimeline || isInAchievement || isInPetGallery || isInCityTimeline) {
+                const scrollContainer = isInTimeline ? timelineContainer : (isInAchievement ? achievementGrid : (isInCityTimeline ? cityTimeline : petGallery));
                 const scrollTop = scrollContainer.scrollTop;
                 const scrollHeight = scrollContainer.scrollHeight;
                 const clientHeight = scrollContainer.clientHeight;
@@ -1806,13 +2027,15 @@
             const timelineContainer = document.querySelector('.timeline-container');
             const achievementGrid = document.querySelector('.achievement-grid');
             const petGallery = document.querySelector('.pet-gallery');
+            const cityTimeline = document.querySelector('.city-timeline');
             const isInTimeline = timelineContainer && timelineContainer.contains(e.target);
             const isInAchievement = achievementGrid && achievementGrid.contains(e.target);
             const isInPetGallery = petGallery && petGallery.contains(e.target);
+            const isInCityTimeline = cityTimeline && cityTimeline.contains(e.target);
             
             // 如果在可滚动区域内，检查是否已经滚动到底部或顶部
-            if (isInTimeline || isInAchievement || isInPetGallery) {
-                const scrollContainer = isInTimeline ? timelineContainer : (isInAchievement ? achievementGrid : petGallery);
+            if (isInTimeline || isInAchievement || isInPetGallery || isInCityTimeline) {
+                const scrollContainer = isInTimeline ? timelineContainer : (isInAchievement ? achievementGrid : (isInCityTimeline ? cityTimeline : petGallery));
                 const scrollTop = scrollContainer.scrollTop;
                 const scrollHeight = scrollContainer.scrollHeight;
                 const clientHeight = scrollContainer.clientHeight;
@@ -1901,6 +2124,40 @@
 
         // 初始化
         createParticles();
+        
+        // 城市时间线滚动监听 - 进入视口时旋转节点
+        const cityTimeline = document.querySelector('.city-timeline');
+        if (cityTimeline) {
+            cityTimeline.addEventListener('scroll', () => {
+                const cityStops = document.querySelectorAll('.city-stop');
+                const container = cityTimeline;
+                const containerRect = container.getBoundingClientRect();
+                
+                cityStops.forEach(stop => {
+                    const stopRect = stop.getBoundingClientRect();
+                    const point = stop.querySelector('.city-point');
+                    
+                    // 检查节点是否在视口中心区域
+                    const isInView = stopRect.top >= containerRect.top && 
+                                   stopRect.bottom <= containerRect.bottom;
+                    
+                    // 或者节点的中心在容器的中心附近
+                    const stopCenter = stopRect.top + stopRect.height / 2;
+                    const containerCenter = containerRect.top + containerRect.height / 2;
+                    const distanceFromCenter = Math.abs(stopCenter - containerCenter);
+                    const isNearCenter = distanceFromCenter < containerRect.height / 3;
+                    
+                    if (isInView || isNearCenter) {
+                        point.classList.add('active');
+                    } else {
+                        point.classList.remove('active');
+                    }
+                });
+            });
+            
+            // 初始化时触发一次
+            cityTimeline.dispatchEvent(new Event('scroll'));
+        }
         
         // ========== 彩蛋效果 ==========
         
