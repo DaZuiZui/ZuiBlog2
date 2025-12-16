@@ -1344,32 +1344,127 @@
         .mood-line {
             fill: none;
             stroke: url(#mood-gradient);
-            stroke-width: 3;
+            stroke-width: 4;
             stroke-linecap: round;
             stroke-linejoin: round;
-            animation: drawLine 2s ease forwards;
-            stroke-dasharray: 1000;
-            stroke-dashoffset: 1000;
+            stroke-dasharray: 2000;
+            stroke-dashoffset: 2000;
+            animation: drawLine 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            filter: drop-shadow(0 2px 4px rgba(102, 126, 234, 0.3));
         }
 
         @keyframes drawLine {
-            to {
+            0% {
+                stroke-dashoffset: 2000;
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            100% {
                 stroke-dashoffset: 0;
+                opacity: 1;
             }
         }
 
         .mood-dot {
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            opacity: 0;
+            transform: scale(0);
+            animation: popDot 0.5s ease-out forwards;
+        }
+
+        @keyframes popDot {
+            0% {
+                opacity: 0;
+                transform: scale(0);
+            }
+            50% {
+                transform: scale(1.3);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         .mood-dot:hover {
-            r: 8;
+            transform: scale(1.5);
+            filter: drop-shadow(0 0 8px currentColor);
         }
 
         .mood-label {
             font-size: 12px;
             fill: #4a5568;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        
+        .mood-status-label {
+            font-size: 11px;
+            font-weight: 600;
+            fill: #667eea;
+            opacity: 0;
+            animation: fadeInScale 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* 月份提示框 */
+        .mood-tooltip {
+            position: absolute;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            pointer-events: none;
+            opacity: 0;
+            transform: translate(-50%, -100%) scale(0.8);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            white-space: nowrap;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+            z-index: 100;
+        }
+
+        .mood-tooltip::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 6px solid #764ba2;
+        }
+
+        .mood-tooltip.show {
+            opacity: 1;
+            transform: translate(-50%, -100%) scale(1);
         }
 
         /* 反思卡片 */
@@ -1574,6 +1669,7 @@
         <div class="slide" id="slide4">
             <h2>我的2025心情曲线</h2>
             <div class="mood-chart">
+                <div class="mood-tooltip" id="moodTooltip"></div>
                 <svg class="mood-svg" viewBox="0 0 800 300">
                     <defs>
                         <linearGradient id="mood-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -1592,31 +1688,70 @@
                     <!-- 心情曲线 -->
                     <path class="mood-line" d="M 50,200 L 110,180 L 170,190 L 230,80 L 290,100 L 350,120 L 410,220 L 470,210 L 530,200 L 590,190 L 650,120 L 710,90 L 750,100"/>
                     
-                    <!-- 数据点 -->
-                    <circle class="mood-dot" cx="50" cy="200" r="5" fill="#667eea"><title>1月: 回乡与矛盾</title></circle>
-                    <circle class="mood-dot" cx="110" cy="180" r="5" fill="#667eea"><title>2月: 麻木</title></circle>
-                    <circle class="mood-dot" cx="170" cy="190" r="5" fill="#667eea"><title>3月: 幸福时光</title></circle>
-                    <circle class="mood-dot" cx="230" cy="80" r="5" fill="#48bb78"><title>3月: 最快乐的月份</title></circle>
-                    <circle class="mood-dot" cx="290" cy="100" r="5" fill="#667eea"><title>4月: 扬帆起航</title></circle>
-                    <circle class="mood-dot" cx="350" cy="120" r="5" fill="#667eea"><title>5月: 幸福和焦虑</title></circle>
-                    <circle class="mood-dot" cx="410" cy="220" r="5" fill="#e53e3e"><title>6月: 背叛</title></circle>
-                    <circle class="mood-dot" cx="470" cy="210" r="5" fill="#764ba2"><title>7月: 宠物治愈</title></circle>
-                    <circle class="mood-dot" cx="530" cy="200" r="5" fill="#764ba2"><title>8月: 浑浑噩噩</title></circle>
-                    <circle class="mood-dot" cx="590" cy="190" r="5" fill="#764ba2"><title>9月: Helios来到</title></circle>
-                    <circle class="mood-dot" cx="650" cy="120" r="5" fill="#667eea"><title>10月: 浑噩</title></circle>
-                    <circle class="mood-dot" cx="710" cy="90" r="5" fill="#48bb78"><title>11月: 新的开始</title></circle>
-                    <circle class="mood-dot" cx="750" cy="100" r="5" fill="#48bb78"><title>12月: 回归正轨</title></circle>
+                    <!-- 数据点和状态标签 -->
+                    <g>
+                        <circle class="mood-dot" cx="50" cy="200" r="5" fill="#667eea" data-month="1" data-title="1月: 回乡与矛盾" style="animation-delay: 0.15s"></circle>
+                        <text class="mood-status-label" x="50" y="185" text-anchor="middle" style="animation-delay: 0.15s">回乡与矛盾</text>
+                    </g>
+                    <g>
+                        <circle class="mood-dot" cx="110" cy="180" r="5" fill="#667eea" data-month="2" data-title="2月: 麻木" style="animation-delay: 0.3s"></circle>
+                        <text class="mood-status-label" x="110" y="165" text-anchor="middle" style="animation-delay: 0.3s">麻木</text>
+                    </g>
+                    <g>
+                        <circle class="mood-dot" cx="170" cy="190" r="5" fill="#667eea" data-month="3" data-title="3月: 扬帆起航" style="animation-delay: 0.45s"></circle>
+                        <text class="mood-status-label" x="170" y="175" text-anchor="middle" style="animation-delay: 0.45s">扬帆起航</text>
+                    </g>
+                    <g>
+                        <circle class="mood-dot" cx="230" cy="80" r="5" fill="#48bb78" data-month="4" data-title="4月: 最快乐的月份" style="animation-delay: 0.6s"></circle>
+                        <text class="mood-status-label" x="230" y="65" text-anchor="middle" fill="#48bb78" style="animation-delay: 0.6s">最快乐的月份</text>
+                    </g>
+                    <g>
+                        <circle class="mood-dot" cx="290" cy="100" r="5" fill="#667eea" data-month="5" data-title="5月: 幸福也焦虑" style="animation-delay: 0.75s"></circle>
+                        <text class="mood-status-label" x="290" y="85" text-anchor="middle" style="animation-delay: 0.75s">幸福也焦虑</text>
+                    </g>
+                    <g>
+                        <circle class="mood-dot" cx="350" cy="120" r="5" fill="#e53e3e" data-month="6" data-title="6月: 背叛" style="animation-delay: 0.9s"></circle>
+                        <text class="mood-status-label" x="350" y="105" text-anchor="middle" fill="#e53e3e" style="animation-delay: 0.9s">背叛</text>
+                    </g>
+                    <g>
+                        <circle class="mood-dot" cx="410" cy="220" r="5" fill="#764ba2" data-month="7" data-title="7月: 宠物治愈" style="animation-delay: 1.05s"></circle>
+                        <text class="mood-status-label" x="410" y="240" text-anchor="middle" fill="#764ba2" style="animation-delay: 1.05s">宠物治愈</text>
+                    </g>
+                    <g>
+                        <circle class="mood-dot" cx="470" cy="210" r="5" fill="#764ba2" data-month="8" data-title="8月: 浑浑噩噩" style="animation-delay: 1.2s"></circle>
+                        <text class="mood-status-label" x="470" y="230" text-anchor="middle" fill="#764ba2" style="animation-delay: 1.2s">浑浑噩噩</text>
+                    </g>
+                    <g>
+                        <circle class="mood-dot" cx="530" cy="200" r="5" fill="#764ba2" data-month="9" data-title="9月: Helios来到" style="animation-delay: 1.35s"></circle>
+                        <text class="mood-status-label" x="530" y="220" text-anchor="middle" fill="#764ba2" style="animation-delay: 1.35s">Helios来到</text>
+                    </g>
+                    <g>
+                        <circle class="mood-dot" cx="590" cy="190" r="5" fill="#764ba2" data-month="10" data-title="10月: 浑噩" style="animation-delay: 1.5s"></circle>
+                        <text class="mood-status-label" x="590" y="175" text-anchor="middle" fill="#764ba2" style="animation-delay: 1.5s">浑噩</text>
+                    </g>
+                    <g>
+                        <circle class="mood-dot" cx="650" cy="120" r="5" fill="#48bb78" data-month="11" data-title="11月: 新的开始" style="animation-delay: 1.65s"></circle>
+                        <text class="mood-status-label" x="650" y="105" text-anchor="middle" fill="#48bb78" style="animation-delay: 1.65s">新的开始</text>
+                    </g>
+                    <g>
+                        <circle class="mood-dot" cx="710" cy="90" r="5" fill="#48bb78" data-month="12" data-title="12月: 回归正轨" style="animation-delay: 1.8s"></circle>
+                        <text class="mood-status-label" x="710" y="75" text-anchor="middle" fill="#48bb78" style="animation-delay: 1.8s">回归正轨</text>
+                    </g>
+                    <g>
+                        <circle class="mood-dot" cx="750" cy="100" r="5" fill="#48bb78" data-month="13" data-title="当下: 继续前行" style="animation-delay: 1.95s"></circle>
+                        <text class="mood-status-label" x="750" y="85" text-anchor="middle" fill="#48bb78" style="animation-delay: 1.95s">继续前行</text>
+                    </g>
                     
                     <!-- 月份标签 -->
-                    <text class="mood-label" x="40" y="270">1月</text>
-                    <text class="mood-label" x="160" y="270">3月</text>
-                    <text class="mood-label" x="280" y="270">5月</text>
-                    <text class="mood-label" x="400" y="270">7月</text>
-                    <text class="mood-label" x="520" y="270">9月</text>
-                    <text class="mood-label" x="640" y="270">11月</text>
+                    <text class="mood-label" x="40" y="270" style="animation-delay: 2.2s">1月</text>
+                    <text class="mood-label" x="160" y="270" style="animation-delay: 2.2s">3月</text>
+                    <text class="mood-label" x="280" y="270" style="animation-delay: 2.2s">5月</text>
+                    <text class="mood-label" x="400" y="270" style="animation-delay: 2.2s">7月</text>
+                    <text class="mood-label" x="520" y="270" style="animation-delay: 2.2s">9月</text>
+                    <text class="mood-label" x="640" y="270" style="animation-delay: 2.2s">11月</text>
                 </svg>
             </div>
-            <p style="margin-top: 20px; color: #718096;">点击曲线上的圆点查看当月心情</p>
+            <p style="margin-top: 20px; color: #718096; animation: fadeIn 1s ease 2.5s backwards;">悬停在圆点上查看当月心情详情 ✨</p>
         </div>
 
         <!-- 幻灯片 5: 月度回顾 -->
@@ -2016,9 +2151,56 @@
             slides[currentSlide].classList.remove('prev');
             navDots[currentSlide].classList.add('active');
             
+            // 如果切换到心情曲线slide，重新触发动画
+            if (index === 3) { // slide4是第4个slide，index为3
+                restartMoodAnimation();
+            }
+            
             setTimeout(() => {
                 isAnimating = false;
             }, 800);
+        }
+        
+        // 重新启动心情曲线动画
+        function restartMoodAnimation() {
+            const moodLine = document.querySelector('.mood-line');
+            const moodDots = document.querySelectorAll('.mood-dot');
+            const moodStatusLabels = document.querySelectorAll('.mood-status-label');
+            const moodLabels = document.querySelectorAll('.mood-label');
+            
+            if (moodLine) {
+                // 重置并重新播放线条动画
+                moodLine.style.animation = 'none';
+                setTimeout(() => {
+                    moodLine.style.animation = 'drawLine 2s cubic-bezier(0.4, 0, 0.2, 1) forwards';
+                }, 10);
+            }
+            
+            // 重置并重新播放圆点动画 - 在绘制过程中依次弹出，每个间隔0.15秒
+            moodDots.forEach((dot, index) => {
+                dot.style.animation = 'none';
+                setTimeout(() => {
+                    const delay = 0.15 + index * 0.15;
+                    dot.style.animation = `popDot 0.5s ease-out ${delay}s forwards`;
+                }, 10);
+            });
+            
+            // 重置并重新播放状态标签动画 - 和圆点同步
+            moodStatusLabels.forEach((label, index) => {
+                label.style.animation = 'none';
+                setTimeout(() => {
+                    const delay = 0.15 + index * 0.15;
+                    label.style.animation = `fadeInScale 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) ${delay}s forwards`;
+                }, 10);
+            });
+            
+            // 重置并重新播放月份标签动画 - 所有月份同时出现
+            moodLabels.forEach((label) => {
+                label.style.animation = 'none';
+                setTimeout(() => {
+                    label.style.animation = `fadeInUp 0.6s ease-out 2.2s forwards`;
+                }, 10);
+            });
         }
 
         // 下一张
@@ -2314,6 +2496,55 @@
             
             // 初始化时触发一次
             updateTimelineDots();
+        }
+        
+        // ========== 心情曲线交互效果 ==========
+        
+        // 悬浮显示月份详情
+        const moodTooltip = document.getElementById('moodTooltip');
+        const moodDots = document.querySelectorAll('.mood-dot');
+        const moodChart = document.querySelector('.mood-chart');
+        
+        if (moodTooltip && moodChart) {
+            moodDots.forEach(dot => {
+                dot.addEventListener('mouseenter', function(e) {
+                    const title = this.getAttribute('data-title');
+                    const rect = this.getBoundingClientRect();
+                    const chartRect = moodChart.getBoundingClientRect();
+                    
+                    moodTooltip.textContent = title;
+                    moodTooltip.style.left = (rect.left - chartRect.left + rect.width / 2) + 'px';
+                    moodTooltip.style.top = (rect.top - chartRect.top - 10) + 'px';
+                    moodTooltip.classList.add('show');
+                });
+                
+                dot.addEventListener('mouseleave', function() {
+                    moodTooltip.classList.remove('show');
+                });
+                
+                // 移动端点击显示
+                dot.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const title = this.getAttribute('data-title');
+                    const rect = this.getBoundingClientRect();
+                    const chartRect = moodChart.getBoundingClientRect();
+                    
+                    moodTooltip.textContent = title;
+                    moodTooltip.style.left = (rect.left - chartRect.left + rect.width / 2) + 'px';
+                    moodTooltip.style.top = (rect.top - chartRect.top - 10) + 'px';
+                    moodTooltip.classList.add('show');
+                    
+                    // 3秒后自动隐藏
+                    setTimeout(() => {
+                        moodTooltip.classList.remove('show');
+                    }, 3000);
+                });
+            });
+            
+            // 点击其他地方隐藏tooltip
+            document.addEventListener('click', () => {
+                moodTooltip.classList.remove('show');
+            });
         }
         
         // ========== 彩蛋效果 ==========
