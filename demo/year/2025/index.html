@@ -279,11 +279,24 @@
             overflow-y: auto;
             max-height: 80vh;
             padding: 20px;
+            position: relative;
+        }
+        
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 0;
+            bottom: auto;
+            min-height: 3500px;
+            width: 3px;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            box-shadow: 0 0 8px rgba(102, 126, 234, 0.4);
         }
 
         .timeline-item {
             display: flex;
-            margin-bottom: 40px;
+            margin-bottom: 60px;
             position: relative;
             opacity: 0;
             animation: fadeInLeft 0.6s ease forwards;
@@ -301,49 +314,116 @@
         .timeline-item:nth-child(6) { animation-delay: 0.6s; }
 
         .timeline-dot {
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 50%;
-            margin-right: 20px;
+            margin-right: 25px;
             flex-shrink: 0;
             margin-top: 5px;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+            box-shadow: 0 0 0 5px rgba(255, 255, 255, 1), 0 0 0 8px rgba(102, 126, 234, 0.3);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            z-index: 10;
+        }
+        
+        .timeline-dot::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: inherit;
+            animation: pulse-dot 2s ease-in-out infinite;
+            opacity: 0;
+        }
+        
+        @keyframes pulse-dot {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+        
+        .timeline-dot.active {
+            transform: scale(1.6) rotate(360deg);
+            box-shadow: 0 0 0 5px rgba(255, 255, 255, 1), 0 0 0 10px #f093fb, 0 0 20px rgba(240, 147, 251, 0.6);
         }
 
         .timeline-dot:hover {
-            transform: scale(1.5);
-            box-shadow: 0 0 0 8px rgba(102, 126, 234, 0.3);
+            transform: scale(1.6) rotate(180deg);
+            box-shadow: 0 0 0 5px rgba(255, 255, 255, 1), 0 0 0 10px rgba(102, 126, 234, 0.5), 0 0 15px rgba(102, 126, 234, 0.4);
         }
 
         .timeline-content {
             flex: 1;
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            padding: 25px 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
+            position: relative;
+            border: 2px solid transparent;
+            overflow: hidden;
+        }
+        
+        .timeline-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .timeline-content:hover::before {
+            transform: scaleX(1);
         }
 
         .timeline-content:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transform: translateX(10px) translateY(-8px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
+            border-color: #667eea;
+        }
+        
+        .timeline-content.expanded {
+            background: linear-gradient(135deg, #f0f4ff 0%, #fef5ff 100%);
+            border-color: #667eea;
         }
 
         .timeline-month {
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             font-weight: bold;
-            color: #667eea;
-            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .timeline-month::before {
+            content: '📅';
+            font-size: 1.2rem;
+            filter: none;
+            -webkit-text-fill-color: initial;
         }
 
         .timeline-text {
-            font-size: 1rem;
+            font-size: 1.05rem;
             color: #4a5568;
-            line-height: 1.6;
+            line-height: 1.9;
             text-align: left;
         }
 
@@ -969,6 +1049,21 @@
             .timeline-container {
                 max-height: 70vh;
                 padding: 10px;
+            }
+            
+            .timeline-container::before {
+                left: 20px;
+                min-height: 3000px;
+            }
+            
+            .timeline-item {
+                margin-bottom: 40px;
+            }
+            
+            .timeline-dot {
+                width: 20px;
+                height: 20px;
+                margin-right: 15px;
             }
             
             .timeline-content {
@@ -2157,6 +2252,36 @@
             
             // 初始化时触发一次
             cityTimeline.dispatchEvent(new Event('scroll'));
+        }
+        
+        // 月度回顾滚动监听 - 进入视口时激活节点
+        const timelineContainer = document.querySelector('.timeline-container');
+        if (timelineContainer) {
+            timelineContainer.addEventListener('scroll', () => {
+                const timelineItems = document.querySelectorAll('.timeline-item');
+                const container = timelineContainer;
+                const containerRect = container.getBoundingClientRect();
+                
+                timelineItems.forEach(item => {
+                    const itemRect = item.getBoundingClientRect();
+                    const dot = item.querySelector('.timeline-dot');
+                    
+                    // 检查项目是否在视口中心区域
+                    const itemCenter = itemRect.top + itemRect.height / 2;
+                    const containerCenter = containerRect.top + containerRect.height / 2;
+                    const distanceFromCenter = Math.abs(itemCenter - containerCenter);
+                    const isNearCenter = distanceFromCenter < containerRect.height / 3;
+                    
+                    if (isNearCenter) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            });
+            
+            // 初始化时触发一次
+            timelineContainer.dispatchEvent(new Event('scroll'));
         }
         
         // ========== 彩蛋效果 ==========
