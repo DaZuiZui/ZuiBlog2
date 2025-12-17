@@ -1502,13 +1502,35 @@
             }
             
             .reflection-card {
-                padding: 25px 20px;
+                padding: 35px 25px;
                 width: 95%;
             }
             
-            .reflection-card p {
-                font-size: 0.95rem !important;
-                line-height: 1.8 !important;
+            .quote {
+                font-size: 1.2rem;
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+            
+            .quote::before {
+                font-size: 2.5rem;
+                left: 20px;
+                top: -15px;
+            }
+            
+            .reflection-text {
+                font-size: 1rem !important;
+                line-height: 2 !important;
+            }
+            
+            .value-badge {
+                padding: 10px 18px;
+                font-size: 0.95rem;
+            }
+            
+            .about-values {
+                gap: 10px;
+                margin-top: 20px;
             }
         }
 
@@ -1673,39 +1695,107 @@
 
         /* 反思卡片 */
         .reflection-card {
-            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-            padding: 35px 30px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-            max-width: 700px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            padding: 50px 40px;
+            border-radius: 30px;
+            box-shadow: 0 25px 70px rgba(102, 126, 234, 0.4);
+            max-width: 800px;
             width: 90%;
+            position: relative;
+            overflow: hidden;
             animation: slideInUp 0.8s ease;
+        }
+        
+        .reflection-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+            pointer-events: none;
         }
 
         .quote {
-            font-size: 1.5rem;
-            font-style: italic;
-            color: #4a5568;
-            line-height: 1.7;
-            margin-bottom: 20px;
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: #ffffff;
+            line-height: 1.8;
+            margin-bottom: 30px;
             position: relative;
-            padding-left: 25px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
         .quote::before {
-            content: '"';
+            content: '💭';
             position: absolute;
-            left: 0;
-            top: -10px;
-            font-size: 4rem;
-            color: rgba(102, 126, 234, 0.3);
-            font-family: Georgia, serif;
+            left: 30px;
+            top: -20px;
+            font-size: 3rem;
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 8px rgba(255, 215, 0, 0.3));
         }
         
         .reflection-text {
-            color: #4a5568;
-            line-height: 1.8;
+            font-size: 1.2rem;
+            color: #ffffff;
+            line-height: 2.2;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .reflection-text strong {
+            display: inline-block;
+            padding: 4px 16px;
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 20px;
+            color: #ffffff;
+            font-weight: 600;
+            margin: 0 4px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .about-values {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .value-badge {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            color: #ffffff;
             font-size: 1.1rem;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .value-badge:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+            background: rgba(255, 255, 255, 0.3);
         }
         
         /* 点击波纹效果 */
@@ -2126,9 +2216,15 @@
                 </div>
                 <p class="reflection-text">
                     我希望生活的节奏和选择掌握在自己手中，而不是顺应他人的期待。<br><br>
-                    <strong style="color: #667eea;">自由和独立</strong>，是我最看重的价值，<br>
+                    <strong>自由和独立</strong>，是我最看重的价值，<br>
                     它们让我在面对复杂世界时仍然能保持清醒和坚定。
                 </p>
+                <div class="about-values">
+                    <div class="value-badge">🎯 追求自由</div>
+                    <div class="value-badge">💪 保持独立</div>
+                    <div class="value-badge">🌟 自我节奏</div>
+                    <div class="value-badge">✨ 清醒坚定</div>
+                </div>
             </div>
         </div>
 
@@ -2310,7 +2406,7 @@
                 </li>
                 <li class="goal-item">
                     <div class="goal-number">03</div>
-                    <div class="goal-text">爱情稳住 💕</div>
+                    <div class="goal-text">要爱情</div>
                 </li>
                 <li class="goal-item">
                     <div class="goal-number">04</div>
