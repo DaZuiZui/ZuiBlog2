@@ -243,6 +243,10 @@
             font-size: clamp(1rem, 3vw, 1.5rem);
             margin-top: 20px;
         }
+        
+        #slide12 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
 
         #slide1 .scroll-hint {
             position: absolute;
@@ -1190,14 +1194,23 @@
 
         /* 响应式 */
         @media (max-width: 768px) {
+            body {
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+            
             .navigation {
                 right: 10px;
                 gap: 8px;
+                bottom: max(20px, env(safe-area-inset-bottom));
             }
 
             .nav-dot {
                 width: 8px;
                 height: 8px;
+            }
+            
+            .nav-dot-wrapper {
+                padding: 8px;
             }
             
             #slide1 .scroll-hint {
@@ -1360,11 +1373,12 @@
             }
             
             h1 {
-                font-size: 2.5rem !important;
+                font-size: 2.2rem !important;
+                margin-bottom: 15px;
             }
             
             h2 {
-                font-size: 1.5rem !important;
+                font-size: 1.4rem !important;
                 margin-bottom: 20px;
             }
             
@@ -1375,6 +1389,12 @@
             .mood-chart {
                 height: 250px;
                 margin-top: 20px;
+                width: 95%;
+            }
+            
+            .mood-status-label {
+                font-size: 0.7rem;
+                padding: 3px 8px;
             }
             
             .goals-list {
@@ -1400,6 +1420,16 @@
             
             .game-card {
                 padding: 30px 20px;
+                width: 95%;
+            }
+            
+            .game-title {
+                font-size: 2rem;
+            }
+            
+            .game-icon {
+                font-size: 3.5rem;
+                margin: 15px 0;
             }
             
             .music-list {
@@ -1531,6 +1561,39 @@
             .about-values {
                 gap: 10px;
                 margin-top: 20px;
+            }
+            
+            .farewell-card {
+                padding: 40px 25px;
+                width: 95%;
+                max-width: 95%;
+            }
+            
+            .farewell-title {
+                margin-bottom: 20px;
+            }
+            
+            .farewell-subtitle {
+                margin-bottom: 30px;
+            }
+            
+            .farewell-message {
+                line-height: 2.2;
+            }
+            
+            .farewell-highlight {
+                font-size: 1.2rem;
+                padding: 4px 12px;
+                margin-top: 10px;
+                display: inline-block;
+            }
+            
+            .farewell-stars .star {
+                display: none;
+            }
+            
+            .farewell-card::before {
+                animation-duration: 30s;
             }
         }
 
@@ -1796,6 +1859,114 @@
             transform: translateY(-5px);
             box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
             background: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* 告别卡片 */
+        .farewell-card {
+            background: transparent;
+            padding: 60px 50px;
+            border-radius: 0;
+            max-width: 900px;
+            width: 90%;
+            box-shadow: none;
+            position: relative;
+            overflow: visible;
+            animation: fadeIn 1s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .farewell-card::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 25s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .farewell-title {
+            color: #ffffff;
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 700;
+            margin-bottom: 25px;
+            text-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+            -webkit-text-fill-color: white;
+        }
+        
+        .farewell-subtitle {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            font-weight: 600;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 3px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .farewell-message {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            line-height: 2.3;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .farewell-highlight {
+            display: inline-block;
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #ffd700;
+            padding: 5px 15px;
+            background: rgba(255, 215, 0, 0.15);
+            border-radius: 15px;
+            margin-top: 15px;
+            border: 1.5px solid rgba(255, 215, 0, 0.35);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { 
+                box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+                transform: scale(1.03);
+            }
+        }
+        
+        .farewell-stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .star {
+            position: absolute;
+            background: #ffffff;
+            border-radius: 50%;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
         }
         
         /* 点击波纹效果 */
@@ -2417,16 +2588,26 @@
 
         <!-- 幻灯片 12: 结束语 -->
         <div class="slide" id="slide12">
-            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 60px 40px; border-radius: 30px; max-width: 700px; width: 90%; box-shadow: 0 30px 80px rgba(0,0,0,0.2);">
-                <h1 style="color: white; -webkit-text-fill-color: white; margin-bottom: 30px;">再见 2025</h1>
-                <h2 style="color: rgba(255,255,255,0.95); margin-bottom: 30px;">你好 2026</h2>
-                <p style="color: rgba(255,255,255,0.9); font-size: 1.3rem; line-height: 2;">
+            <div class="farewell-card">
+                <div class="farewell-stars">
+                    <div class="star" style="width: 4px; height: 4px; top: 10%; left: 20%; animation-delay: 0s;"></div>
+                    <div class="star" style="width: 3px; height: 3px; top: 20%; left: 80%; animation-delay: 0.5s;"></div>
+                    <div class="star" style="width: 5px; height: 5px; top: 30%; left: 15%; animation-delay: 1s;"></div>
+                    <div class="star" style="width: 4px; height: 4px; top: 40%; left: 85%; animation-delay: 1.5s;"></div>
+                    <div class="star" style="width: 3px; height: 3px; top: 60%; left: 25%; animation-delay: 2s;"></div>
+                    <div class="star" style="width: 5px; height: 5px; top: 70%; left: 75%; animation-delay: 2.5s;"></div>
+                    <div class="star" style="width: 4px; height: 4px; top: 80%; left: 40%; animation-delay: 0.8s;"></div>
+                    <div class="star" style="width: 3px; height: 3px; top: 15%; left: 60%; animation-delay: 1.2s;"></div>
+                </div>
+                <h1 class="farewell-title">Bye 2025 🌅</h1>
+                <h2 class="farewell-subtitle">Hello 2026 ✨</h2>
+                <div class="farewell-message">
                     无论过去如何起伏<br>
                     未来终将更加明亮<br><br>
-                    感谢所有的经历<br>
-                    期待所有的可能<br><br>
-                    <strong style="font-size: 1.5rem;">明天会更好！✨</strong>
-                </p>
+                    感谢所有的经历 🙏<br>
+                    期待所有的可能 🚀<br><br>
+                    <span class="farewell-highlight">明天会更好！🌟</span>
+                </div>
             </div>
         </div>
     </div>
