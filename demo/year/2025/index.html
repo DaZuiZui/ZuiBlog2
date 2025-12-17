@@ -2611,7 +2611,6 @@
                         <div class="music-name">小酒窝</div>
                         <div class="music-artist">林俊杰 / 蔡卓妍</div>
                     </div>
-                    <a href="https://music.163.com/#/song?id=186452" target="_blank" class="music-play">播放</a>
                 </div>
                 <div class="music-item">
                     <div class="music-rank">2</div>
@@ -2619,7 +2618,6 @@
                         <div class="music-name">江南</div>
                         <div class="music-artist">林俊杰</div>
                     </div>
-                    <a href="https://music.163.com/#/song?id=185668" target="_blank" class="music-play">播放</a>
                 </div>
                 <div class="music-item">
                     <div class="music-rank">3</div>
@@ -2627,7 +2625,6 @@
                         <div class="music-name">曹操</div>
                         <div class="music-artist">林俊杰</div>
                     </div>
-                    <a href="https://music.163.com/#/song?id=185809" target="_blank" class="music-play">播放</a>
                 </div>
             </div>
         </div>
@@ -2869,19 +2866,26 @@
             const achievementGrid = document.querySelector('.achievement-grid');
             const petGallery = document.querySelector('.pet-gallery');
             const cityTimeline = document.querySelector('.city-timeline');
+            const musicList = document.querySelector('.music-list');
+            
             const isInTimeline = timelineContainer && timelineContainer.contains(e.target);
             const isInAchievement = achievementGrid && achievementGrid.contains(e.target);
             const isInPetGallery = petGallery && petGallery.contains(e.target);
             const isInCityTimeline = cityTimeline && cityTimeline.contains(e.target);
+            const isInMusicList = musicList && musicList.contains(e.target);
             
             // 如果在可滚动区域内，检查是否已经滚动到底部或顶部
-            if (isInTimeline || isInAchievement || isInPetGallery || isInCityTimeline) {
-                const scrollContainer = isInTimeline ? timelineContainer : (isInAchievement ? achievementGrid : (isInCityTimeline ? cityTimeline : petGallery));
+            if (isInTimeline || isInAchievement || isInPetGallery || isInCityTimeline || isInMusicList) {
+                const scrollContainer = isInTimeline ? timelineContainer : 
+                                      (isInAchievement ? achievementGrid : 
+                                      (isInCityTimeline ? cityTimeline : 
+                                      (isInMusicList ? musicList : petGallery)));
+                
                 const scrollTop = scrollContainer.scrollTop;
                 const scrollHeight = scrollContainer.scrollHeight;
                 const clientHeight = scrollContainer.clientHeight;
-                const isAtBottom = Math.abs(scrollHeight - scrollTop - clientHeight) < 10;
-                const isAtTop = scrollTop < 10;
+                const isAtBottom = Math.abs(scrollHeight - scrollTop - clientHeight) < 20;
+                const isAtTop = scrollTop < 20;
                 
                 // 如果在底部且向下滚动，或在顶部且向上滚动，则允许翻页
                 if ((isAtBottom && e.deltaY > 0) || (isAtTop && e.deltaY < 0)) {
@@ -2945,36 +2949,43 @@
             const achievementGrid = document.querySelector('.achievement-grid');
             const petGallery = document.querySelector('.pet-gallery');
             const cityTimeline = document.querySelector('.city-timeline');
+            const musicList = document.querySelector('.music-list');
+            
             const isInTimeline = timelineContainer && timelineContainer.contains(e.target);
             const isInAchievement = achievementGrid && achievementGrid.contains(e.target);
             const isInPetGallery = petGallery && petGallery.contains(e.target);
             const isInCityTimeline = cityTimeline && cityTimeline.contains(e.target);
-            
-            // 如果在可滚动区域内，检查是否已经滚动到底部或顶部
-            if (isInTimeline || isInAchievement || isInPetGallery || isInCityTimeline) {
-                const scrollContainer = isInTimeline ? timelineContainer : (isInAchievement ? achievementGrid : (isInCityTimeline ? cityTimeline : petGallery));
-                const scrollTop = scrollContainer.scrollTop;
-                const scrollHeight = scrollContainer.scrollHeight;
-                const clientHeight = scrollContainer.clientHeight;
-                const isAtBottom = Math.abs(scrollHeight - scrollTop - clientHeight) < 10;
-                const isAtTop = scrollTop < 10;
-                
-                const diff = touchStartY - touchEndY;
-                
-                // 如果在底部且向上滑动，或在顶部且向下滑动，则允许翻页
-                if ((isAtBottom && diff > 0) || (isAtTop && diff < 0)) {
-                    // 继续执行翻页逻辑
-                } else {
-                    return; // 否则不触发翻页
-                }
-            }
+            const isInMusicList = musicList && musicList.contains(e.target);
             
             const diff = touchStartY - touchEndY;
             const timeDiff = Date.now() - touchStartTime;
             
-            console.log('滑动距离:', diff, '时间:', timeDiff); // 调试信息
+            // 如果在可滚动区域内，检查是否已经滚动到底部或顶部
+            if (isInTimeline || isInAchievement || isInPetGallery || isInCityTimeline || isInMusicList) {
+                const scrollContainer = isInTimeline ? timelineContainer : 
+                                      (isInAchievement ? achievementGrid : 
+                                      (isInCityTimeline ? cityTimeline : 
+                                      (isInMusicList ? musicList : petGallery)));
+                
+                const scrollTop = scrollContainer.scrollTop;
+                const scrollHeight = scrollContainer.scrollHeight;
+                const clientHeight = scrollContainer.clientHeight;
+                const isAtBottom = Math.abs(scrollHeight - scrollTop - clientHeight) < 20;
+                const isAtTop = scrollTop < 20;
+                
+                // 如果在底部且向上滑动，或在顶部且向下滑动，则允许翻页
+                if ((isAtBottom && diff > 50) || (isAtTop && diff < -50)) {
+                    // 继续执行翻页逻辑
+                    if (diff > 0) {
+                        nextSlide();
+                    } else {
+                        prevSlide();
+                    }
+                }
+                return; // 否则不触发翻页
+            }
             
-            // 降低滑动距离阈值到50px，提高响应性
+            // 非滚动区域，直接翻页
             if (Math.abs(diff) > 50 && timeDiff < 800) {
                 if (diff > 0) {
                     // 向上滑动，下一页
