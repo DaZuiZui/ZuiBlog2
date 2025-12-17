@@ -1601,35 +1601,80 @@
             }
             
             .reflection-card {
-                padding: 25px 20px;
-                width: 95%;
+                padding: 25px 18px;
+                width: 90%;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+                border-radius: 20px;
+                max-height: none;
+                display: block;
             }
             
             .quote {
-                font-size: 1.1rem;
-                padding: 18px;
-                margin-bottom: 18px;
+                font-size: 1rem;
+                padding: 20px 15px;
+                margin-bottom: 20px;
+                background: rgba(255, 255, 255, 0.15);
+                border-radius: 15px;
+                color: white;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                box-shadow: none;
+                line-height: 1.8;
+                text-align: left;
+                font-weight: 400;
+                backdrop-filter: blur(10px);
             }
             
             .quote::before {
-                font-size: 2rem;
-                left: 18px;
-                top: -12px;
+                display: none;
             }
             
             .reflection-text {
-                font-size: 0.95rem !important;
+                font-size: 0.9rem !important;
                 line-height: 1.9 !important;
+                color: rgba(255, 255, 255, 0.95);
+                padding: 0;
+                background: none;
+                border-radius: 0;
+                box-shadow: none;
+                margin-bottom: 20px;
+                text-align: left;
+            }
+            
+            .reflection-text strong {
+                display: inline;
+                color: #ffd700;
+                font-weight: 600;
+                background: none;
+                padding: 0;
+                border-radius: 0;
+            }
+            
+            .reflection-text br {
+                display: block;
+                content: "";
+                margin-top: 8px;
             }
             
             .value-badge {
-                padding: 8px 14px;
+                padding: 10px 14px;
                 font-size: 0.85rem;
+                background: rgba(255, 255, 255, 0.2);
+                color: white;
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                box-shadow: none;
+                backdrop-filter: blur(10px);
+            }
+            
+            .value-badge:hover {
+                background: rgba(255, 255, 255, 0.3);
+                transform: none;
             }
             
             .about-values {
                 gap: 8px;
-                margin-top: 18px;
+                margin-top: 0;
+                justify-content: flex-start;
             }
             
             .farewell-card {
