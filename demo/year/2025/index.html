@@ -1980,84 +1980,98 @@
             background: transparent;
             padding: 60px 50px;
             border-radius: 0;
-            max-width: 900px;
+            max-width: 700px;
             width: 90%;
             box-shadow: none;
             position: relative;
             overflow: visible;
-            animation: fadeIn 1s ease;
+            animation: fadeIn 1.2s ease;
+            text-align: center;
         }
         
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
         .farewell-card::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: rotate 25s linear infinite;
-            pointer-events: none;
-            z-index: 0;
+            display: none;
         }
         
         .farewell-title {
             color: #ffffff;
-            font-size: clamp(2.5rem, 8vw, 4.5rem);
-            font-weight: 700;
-            margin-bottom: 25px;
-            text-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+            font-size: clamp(3rem, 10vw, 5rem);
+            font-weight: 300;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
             position: relative;
             z-index: 1;
             -webkit-text-fill-color: white;
+            letter-spacing: 0.05em;
+            animation: titleSlide 1s ease 0.3s backwards;
+        }
+        
+        @keyframes titleSlide {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .farewell-subtitle {
-            color: rgba(255, 255, 255, 0.95);
-            font-size: clamp(1.8rem, 5vw, 3rem);
-            font-weight: 600;
-            margin-bottom: 40px;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: 300;
+            margin-bottom: 50px;
             position: relative;
             z-index: 1;
-            text-shadow: 0 3px 15px rgba(0, 0, 0, 0.2);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            letter-spacing: 0.05em;
+            animation: subtitleSlide 1s ease 0.5s backwards;
+        }
+        
+        @keyframes subtitleSlide {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .farewell-message {
-            color: rgba(255, 255, 255, 0.95);
-            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-            line-height: 2.3;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            line-height: 2.5;
             position: relative;
             z-index: 1;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            text-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+            font-weight: 300;
+            animation: messageSlide 1s ease 0.7s backwards;
+        }
+        
+        @keyframes messageSlide {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .farewell-highlight {
             display: inline-block;
-            font-size: 1.6rem;
-            font-weight: 600;
-            color: #ffd700;
-            padding: 5px 15px;
-            background: rgba(255, 215, 0, 0.15);
-            border-radius: 15px;
-            margin-top: 15px;
-            border: 1.5px solid rgba(255, 215, 0, 0.35);
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-            animation: pulse-glow 2s ease-in-out infinite;
+            font-size: clamp(1.4rem, 3vw, 1.8rem);
+            font-weight: 400;
+            color: #ffffff;
+            padding: 0;
+            background: none;
+            border-radius: 0;
+            margin-top: 20px;
+            border: none;
+            box-shadow: none;
+            animation: highlightPulse 2s ease-in-out infinite;
+            letter-spacing: 0.1em;
         }
         
-        @keyframes pulse-glow {
+        @keyframes highlightPulse {
             0%, 100% { 
-                box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+                opacity: 0.9;
                 transform: scale(1);
             }
             50% { 
-                box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
-                transform: scale(1.03);
+                opacity: 1;
+                transform: scale(1.05);
             }
         }
         
@@ -2069,6 +2083,7 @@
             height: 100%;
             pointer-events: none;
             z-index: 0;
+            display: none;
         }
         
         .star {
@@ -2700,24 +2715,12 @@
         <!-- 幻灯片 12: 结束语 -->
         <div class="slide" id="slide12">
             <div class="farewell-card">
-                <div class="farewell-stars">
-                    <div class="star" style="width: 4px; height: 4px; top: 10%; left: 20%; animation-delay: 0s;"></div>
-                    <div class="star" style="width: 3px; height: 3px; top: 20%; left: 80%; animation-delay: 0.5s;"></div>
-                    <div class="star" style="width: 5px; height: 5px; top: 30%; left: 15%; animation-delay: 1s;"></div>
-                    <div class="star" style="width: 4px; height: 4px; top: 40%; left: 85%; animation-delay: 1.5s;"></div>
-                    <div class="star" style="width: 3px; height: 3px; top: 60%; left: 25%; animation-delay: 2s;"></div>
-                    <div class="star" style="width: 5px; height: 5px; top: 70%; left: 75%; animation-delay: 2.5s;"></div>
-                    <div class="star" style="width: 4px; height: 4px; top: 80%; left: 40%; animation-delay: 0.8s;"></div>
-                    <div class="star" style="width: 3px; height: 3px; top: 15%; left: 60%; animation-delay: 1.2s;"></div>
-                </div>
-                <h1 class="farewell-title">Bye 2025 🌅</h1>
-                <h2 class="farewell-subtitle">Hello 2026 ✨</h2>
+                <h1 class="farewell-title">Bye 2025</h1>
+                <h2 class="farewell-subtitle">Hello 2026</h2>
                 <div class="farewell-message">
-                    无论过去如何起伏<br>
-                    未来终将更加明亮<br><br>
-                    感谢所有的经历 🙏<br>
-                    期待所有的可能 🚀<br><br>
-                    <span class="farewell-highlight">明天会更好！🌟</span>
+                    无论过去如何起伏，未来终将更加明亮<br><br>
+                    感谢所有的经历，期待所有的可能<br><br>
+                    <span class="farewell-highlight">明天会更好 ✨</span>
                 </div>
             </div>
         </div>
