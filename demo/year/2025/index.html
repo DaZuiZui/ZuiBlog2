@@ -3002,11 +3002,11 @@
                 const scrollTop = scrollContainer.scrollTop;
                 const scrollHeight = scrollContainer.scrollHeight;
                 const clientHeight = scrollContainer.clientHeight;
-                const isAtBottom = Math.abs(scrollHeight - scrollTop - clientHeight) < 20;
-                const isAtTop = scrollTop < 20;
+                const isAtBottom = Math.abs(scrollHeight - scrollTop - clientHeight) < 8;
+                const isAtTop = scrollTop < 8;
                 
                 // 如果在底部且向上滑动，或在顶部且向下滑动，则允许翻页
-                if ((isAtBottom && diff > 50) || (isAtTop && diff < -50)) {
+                if ((isAtBottom && diff > 30) || (isAtTop && diff < -30)) {
                     // 继续执行翻页逻辑
                     if (diff > 0) {
                         nextSlide();
@@ -3018,7 +3018,7 @@
             }
             
             // 非滚动区域，直接翻页
-            if (Math.abs(diff) > 50 && timeDiff < 800) {
+            if (Math.abs(diff) > 30 && timeDiff < 800) {
                 if (diff > 0) {
                     // 向上滑动，下一页
                     nextSlide();
