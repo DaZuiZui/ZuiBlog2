@@ -536,7 +536,7 @@
     <div class="container">
         <div class="header">
             <div class="header-top">
-                <a href="../list/index.html" class="back-btn">← 返回文章列表</a></a>
+                <a href="../list/index.html" class="back-btn" id="backBtn">← 返回文章列表</a>
             </div>
             <div id="header-content">
                 <h1>文章加载中...</h1>
@@ -575,10 +575,63 @@
         // 自定义渲染器
         const renderer = new marked.Renderer();
 
+        const DEFAULT_CONFIG = {
+            repoOwner: 'DaZuiZui',
+            repoName: 'ZuiBlog2',
+            repoPath: 'blog/technology',
+            listTitle: '技术文章',
+            listEmoji: '📚',
+            listDescription: '分享技术知识和开发经验',
+            readerTitle: '文章阅读',
+            welcomeMessage: '欢迎来到技术文章列表！'
+        };
+
         // 获取URL参数
         function getQueryParam(param) {
             const params = new URLSearchParams(window.location.search);
             return params.get(param);
+        }
+
+        function getConfig() {
+            return {
+                ...DEFAULT_CONFIG,
+                repoPath: getQueryParam('repoPath') || DEFAULT_CONFIG.repoPath,
+                listTitle: getQueryParam('listTitle') || DEFAULT_CONFIG.listTitle,
+                listEmoji: getQueryParam('listEmoji') || DEFAULT_CONFIG.listEmoji,
+                listDescription: getQueryParam('listDescription') || DEFAULT_CONFIG.listDescription,
+                readerTitle: getQueryParam('readerTitle') || DEFAULT_CONFIG.readerTitle,
+                welcomeMessage: getQueryParam('welcomeMessage') || DEFAULT_CONFIG.welcomeMessage
+            };
+        }
+
+        const pageConfig = getConfig();
+
+        function buildSearchParams(extraParams = {}) {
+            const params = new URLSearchParams({
+                repoPath: pageConfig.repoPath,
+                listTitle: pageConfig.listTitle,
+                listEmoji: pageConfig.listEmoji,
+                listDescription: pageConfig.listDescription,
+                readerTitle: pageConfig.readerTitle,
+                welcomeMessage: pageConfig.welcomeMessage,
+                ...extraParams
+            });
+            return params;
+        }
+
+        function buildRawContentUrl(filename) {
+            const normalizedPath = pageConfig.repoPath
+                .split('/')
+                .map(segment => encodeURIComponent(segment))
+                .join('/');
+            return `https://raw.githubusercontent.com/${pageConfig.repoOwner}/${pageConfig.repoName}/main/${normalizedPath}/${encodeURIComponent(filename)}`;
+        }
+
+        function applyPageMeta() {
+            document.title = `${pageConfig.readerTitle} - Bryan Yang's Blog`;
+            const backBtn = document.getElementById('backBtn');
+            backBtn.href = `../list/index.html?${buildSearchParams().toString()}`;
+            backBtn.textContent = `← 返回${pageConfig.listTitle}`;
         }
 
         // 计算阅读时间（按字数）
@@ -605,7 +658,7 @@
                 }
 
                 // 使用raw.githubusercontent.com进行加载
-                const url = `https://raw.githubusercontent.com/DaZuiZui/ZuiBlog2/main/blog/technology/${encodeURIComponent(filename)}`;
+                const url = buildRawContentUrl(filename);
 
                 const response = await fetch(url, {
                     method: 'GET',
@@ -697,6 +750,7 @@
 
         // 页面加载时获取文章
         window.addEventListener('load', () => {
+            applyPageMeta();
             loadArticle();
         });
     </script>

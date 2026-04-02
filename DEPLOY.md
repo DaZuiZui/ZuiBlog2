@@ -12,8 +12,10 @@ ZuiBlog-v2/
 │       └── context/
 │           └── index.html             # 文章阅读页
 └── blog/
-    └── technology/
-        └── *.md                       # 技术文章（Markdown文件）
+    ├── technology/
+    │   └── *.md                       # 技术文章（Markdown文件）
+    └── notes/
+        └── *.md                       # 随手一记（Markdown文件）
 ```
 
 ## GitHub Pages 部署
@@ -29,10 +31,11 @@ ZuiBlog-v2/
 - **首页**：https://dazuizui.github.io/ZuiBlog2/
 - **文章列表**：https://dazuizui.github.io/ZuiBlog2/demo/technology/list/index.html
 - **文章阅读**：https://dazuizui.github.io/ZuiBlog2/demo/technology/context/index.html?file=文件名&title=标题
+- **随手一记**：https://dazuizui.github.io/ZuiBlog2/demo/technology/list/index.html?repoPath=blog%2Fnotes&listTitle=%E9%9A%8F%E6%89%8B%E4%B8%80%E8%AE%B0
 
 ### 3. 工作流程
 
-1. 访问文章列表页面，自动从GitHub API获取 `blog/technology/` 下的所有 `.md` 文件
+1. 访问列表页面，自动从GitHub API获取目标目录下的所有 `.md` 文件
 2. 点击任何文章，跳转到文章阅读页面
 3. 阅读页面使用 `marked.js` 将Markdown转换为HTML并渲染
 4. 代码块使用 `highlight.js` 进行语法高亮
@@ -51,9 +54,11 @@ ZuiBlog-v2/
 
 ### 6. 文章添加方法
 
-1. 在 `blog/technology/` 目录下添加新的 `.md` 文件
+1. 在对应目录下添加新的 `.md` 文件
+   - 技术文章放在 `blog/technology/`
+   - 随手一记放在 `blog/notes/`
 2. Push到GitHub仓库
-3. 刷新文章列表页面，新文章会自动显示
+3. 刷新对应列表页面，新文章会自动显示
 4. 文章按创建时间自动排序，最新的显示在最上面
 
 ## 本地测试
@@ -73,6 +78,6 @@ npx http-server
 ## 注意事项
 
 - 所有路径都使用相对路径，确保在任何环境下都能工作
-- Markdown文件必须在 `blog/technology/` 目录下
+- Markdown文件必须放在对应的内容目录下，例如 `blog/technology/` 或 `blog/notes/`
 - 支持简体中文和英文混合内容
 - 自动计算文章阅读时间
