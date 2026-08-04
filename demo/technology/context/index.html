@@ -1,579 +1,71 @@
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements. See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership. The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License. You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>文章阅读 - Bryan Yang's Blog</title>
-    
-    <!-- Markdown to HTML库 -->
+    <meta name="theme-color" content="#f2f0e9">
+    <title>文章阅读 — Bryan Yang</title>
+    <link rel="stylesheet" href="../../../assets/styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/styles/github-dark-dimmed.min.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    
-    <!-- 代码高亮库 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/styles/atom-one-light.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/highlight.min.js"></script>
-
-    <!-- Busuanzi 不蒜子统计 -->
-    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary-pink: #FFB3D9;
-            --primary-blue: #B4E4FF;
-            --primary-purple: #E5D4FF;
-            --cream-white: #FFF8F0;
-            --soft-shadow: rgba(255, 179, 217, 0.3);
-            --text-dark: #5C5470;
-            --text-light: #9D9D9D;
-            --green-status: #7FE9A7;
-            --card-bg: rgba(255, 255, 255, 0.85);
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-            background: linear-gradient(135deg, #FFE5F1 0%, #E0F4FF 50%, #F5E6FF 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 20px;
-            padding-top: 40px;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        /* 背景动画泡泡 */
-        .bubble {
-            position: fixed;
-            border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(255, 179, 217, 0.3));
-            animation: float 20s infinite ease-in-out;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .bubble:nth-child(1) {
-            width: 80px;
-            height: 80px;
-            left: 10%;
-            top: 20%;
-            animation-delay: 0s;
-        }
-
-        .bubble:nth-child(2) {
-            width: 60px;
-            height: 60px;
-            right: 15%;
-            top: 60%;
-            animation-delay: 3s;
-        }
-
-        .bubble:nth-child(3) {
-            width: 100px;
-            height: 100px;
-            left: 80%;
-            top: 30%;
-            animation-delay: 6s;
-        }
-
-        .bubble:nth-child(4) {
-            width: 50px;
-            height: 50px;
-            left: 20%;
-            bottom: 20%;
-            animation-delay: 9s;
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0) translateX(0) scale(1);
-                opacity: 0.5;
-            }
-            25% {
-                transform: translateY(-30px) translateX(20px) scale(1.1);
-                opacity: 0.7;
-            }
-            50% {
-                transform: translateY(-60px) translateX(-20px) scale(0.9);
-                opacity: 0.5;
-            }
-            75% {
-                transform: translateY(-30px) translateX(-30px) scale(1.05);
-                opacity: 0.6;
-            }
-        }
-
-        /* 主容器 */
-        .container {
-            max-width: 900px;
-            width: 100%;
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            border-radius: 30px;
-            padding: 50px 40px;
-            box-shadow: 
-                0 20px 60px rgba(255, 179, 217, 0.3),
-                0 0 0 1px rgba(255, 255, 255, 0.8) inset;
-            position: relative;
-            z-index: 1;
-            animation: slideIn 0.8s ease-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* 头部 */
-        .header {
-            margin-bottom: 30px;
-            border-bottom: 2px solid var(--primary-pink);
-            padding-bottom: 20px;
-        }
-
-        .header-top {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
-
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 16px;
-            background: white;
-            border: 2px solid var(--primary-blue);
-            color: var(--text-dark);
-            border-radius: 15px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
-
-        .back-btn:hover {
-            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
-            color: white;
-            border-color: var(--primary-purple);
-            transform: translateY(-2px);
-        }
-
-        h1 {
-            color: var(--text-dark);
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 10px;
-            word-break: break-word;
-        }
-
-        .article-meta {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            font-size: 13px;
-            color: var(--text-light);
-        }
-
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            background: rgba(180, 228, 255, 0.2);
-            padding: 4px 10px;
-            border-radius: 8px;
-        }
-
-        /* 加载状态 */
-        .loading {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--text-light);
-        }
-
-        .spinner {
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(255, 179, 217, 0.3);
-            border-top-color: var(--primary-pink);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 15px;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* Markdown 内容样式 */
-        .markdown-content {
-            line-height: 1.8;
-            color: var(--text-dark);
-            animation: fadeIn 0.6s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        .markdown-content h1,
-        .markdown-content h2,
-        .markdown-content h3,
-        .markdown-content h4,
-        .markdown-content h5,
-        .markdown-content h6 {
-            color: var(--text-dark);
-            font-weight: 700;
-            margin: 20px 0 10px 0;
-            padding-bottom: 8px;
-            border-bottom: 2px solid var(--primary-pink);
-        }
-
-        .markdown-content h1 {
-            font-size: 28px;
-            margin-top: 0;
-        }
-
-        .markdown-content h2 {
-            font-size: 24px;
-        }
-
-        .markdown-content h3 {
-            font-size: 20px;
-            border-bottom: 1px solid var(--primary-blue);
-        }
-
-        .markdown-content h4,
-        .markdown-content h5,
-        .markdown-content h6 {
-            font-size: 16px;
-            border: none;
-        }
-
-        .markdown-content p {
-            margin: 15px 0;
-        }
-
-        .markdown-content ul,
-        .markdown-content ol {
-            margin: 15px 0 15px 25px;
-        }
-
-        .markdown-content li {
-            margin: 8px 0;
-            line-height: 1.8;
-        }
-
-        .markdown-content blockquote {
-            border-left: 4px solid var(--primary-pink);
-            padding: 12px 15px;
-            margin: 15px 0;
-            background: rgba(255, 179, 217, 0.1);
-            border-radius: 8px;
-            color: var(--text-dark);
-            font-style: italic;
-        }
-
-        .markdown-content code {
-            background: rgba(180, 228, 255, 0.2);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            color: #c41d7f;
-        }
-
-        .markdown-content pre {
-            background: #f6f8fa;
-            border: 1px solid rgba(180, 228, 255, 0.3);
-            border-radius: 8px;
-            padding: 15px;
-            overflow-x: auto;
-            margin: 15px 0;
-        }
-
-        .markdown-content pre code {
-            background: none;
-            padding: 0;
-            color: inherit;
-        }
-
-        .markdown-content a {
-            color: var(--primary-blue);
-            text-decoration: none;
-            transition: all 0.3s ease;
-            border-bottom: 1px dashed var(--primary-blue);
-        }
-
-        .markdown-content a:hover {
-            color: var(--primary-pink);
-            border-bottom-color: var(--primary-pink);
-        }
-
-        .markdown-content img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            margin: 15px 0;
-            box-shadow: 0 4px 15px rgba(255, 179, 217, 0.2);
-        }
-
-        .markdown-content table {
-            border-collapse: collapse;
-            width: 100%;
-            margin: 15px 0;
-        }
-
-        .markdown-content table th,
-        .markdown-content table td {
-            border: 1px solid rgba(180, 228, 255, 0.3);
-            padding: 10px 12px;
-            text-align: left;
-        }
-
-        .markdown-content table th {
-            background: rgba(180, 228, 255, 0.15);
-            font-weight: 600;
-            color: var(--text-dark);
-        }
-
-        .markdown-content table tr:nth-child(even) {
-            background: rgba(255, 179, 217, 0.05);
-        }
-
-        .markdown-content hr {
-            border: none;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--primary-pink), transparent);
-            margin: 30px 0;
-        }
-
-        /* 错误状态 */
-        .error-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--text-light);
-        }
-
-        .error-icon {
-            font-size: 48px;
-            margin-bottom: 15px;
-        }
-
-        /* 统计信息 */
-        .article-stats {
-            text-align: center;
-            margin-top: 30px;
-            padding: 15px;
-            background: linear-gradient(135deg, rgba(255, 179, 217, 0.1), rgba(180, 228, 255, 0.1));
-            border-radius: 15px;
-            font-size: 12px;
-            color: var(--text-light);
-        }
-
-        /* 初音未来装饰 */
-        .miku-decoration {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 280px;
-            height: 280px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            z-index: 1000;
-            animation: float-miku 4s infinite ease-in-out;
-        }
-
-        @keyframes float-miku {
-            0%, 100% {
-                transform: translateY(0) rotate(0deg);
-            }
-            25% {
-                transform: translateY(-15px) rotate(5deg);
-            }
-            50% {
-                transform: translateY(-30px) rotate(0deg);
-            }
-            75% {
-                transform: translateY(-15px) rotate(-5deg);
-            }
-        }
-
-        .miku-decoration:hover {
-            transform: scale(1.2) rotate(10deg) !important;
-        }
-
-        .miku-img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            filter: drop-shadow(0 10px 25px rgba(57, 197, 187, 0.4)) 
-                    brightness(1.05) contrast(1.1)
-                    drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
-            image-rendering: crisp-edges;
-        }
-
-        /* 音符装饰 */
-        .music-note {
-            position: absolute;
-            font-size: 24px;
-            opacity: 0;
-            animation: noteFloat 3s ease-in-out;
-            pointer-events: none;
-        }
-
-        @keyframes noteFloat {
-            0% {
-                opacity: 0;
-                transform: translateY(0) rotate(0deg);
-            }
-            50% {
-                opacity: 1;
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-100px) rotate(360deg);
-            }
-        }
-
-        /* Toast 通知 */
-        .toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, var(--green-status), #5FD068);
-            color: white;
-            padding: 15px 25px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(127, 233, 167, 0.4);
-            transform: translateX(400px);
-            transition: transform 0.3s ease;
-            z-index: 2000;
-            font-size: 14px;
-        }
-
-        .toast.show {
-            transform: translateX(0);
-        }
-
-        /* 响应式设计 */
-        @media (max-width: 768px) {
-            .container {
-                padding: 30px 20px;
-                border-radius: 20px;
-            }
-
-            h1 {
-                font-size: 24px;
-            }
-
-            .header-top {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-
-            .article-meta {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .miku-decoration {
-                width: 120px;
-                height: 120px;
-                bottom: 10px;
-                right: 10px;
-            }
-
-            .bubble {
-                display: none;
-            }
-
-            .markdown-content h1 {
-                font-size: 22px;
-            }
-
-            .markdown-content h2 {
-                font-size: 20px;
-            }
-
-            .markdown-content h3 {
-                font-size: 18px;
-            }
-        }
-    </style>
 </head>
-<body>
-    <!-- 背景泡泡 -->
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
-    <div class="bubble"></div>
+<body class="reader-page">
+    <nav class="page-nav" aria-label="页面导航">
+        <a class="brand" href="../../../index.html">
+            <span class="brand-mark">BY</span>
+            <span>Bryan Yang</span>
+        </a>
+        <a class="back-link" href="../list/index.html" id="backBtn">← 返回文章列表</a>
+    </nav>
 
-    <!-- 主容器 -->
-    <div class="container">
-        <div class="header">
-            <div class="header-top">
-                <a href="../list/index.html" class="back-btn" id="backBtn">← 返回文章列表</a>
-            </div>
+    <main class="reader-main">
+        <header class="reader-header">
+            <span class="section-kicker">Writing / Bryan Yang</span>
             <div id="header-content">
-                <h1>文章加载中...</h1>
+                <h1>文章加载中…</h1>
             </div>
-        </div>
+        </header>
 
-        <!-- 文章内容 -->
-        <div id="content" class="loading">
-            <div class="spinner"></div>
-            <p>正在加载文章...</p>
-        </div>
+        <article id="content" class="loading" aria-live="polite">
+            <div class="spinner" aria-hidden="true"></div>
+            <p>正在读取文章…</p>
+        </article>
 
-        <!-- 统计信息 -->
-        <div class="article-stats" id="stats" style="display: none;">
-            <div>📖 阅读本文需要约 <span id="readTime">--</span> 分钟</div>
-        </div>
-    </div>
+        <footer class="article-stats" id="stats" hidden>
+            Estimated reading time / <span id="readTime">—</span> min
+        </footer>
+    </main>
 
-    <!-- 初音未来装饰 -->
-    <div class="miku-decoration" onclick="mikuClick()">
-        <img src="https://raw.githubusercontent.com/DaZuiZui/ZuiBlog2/main/image/HatsuneMikuSekai.png" alt="Miku" class="miku-img" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
-        <!-- 备用占位 -->
-        <div style="display: none; width: 100%; height: 100%; background: linear-gradient(135deg, #FFB3D9, #E5D4FF); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 60px;">♪</div>
-    </div>
-
-    <!-- Toast 通知 -->
-    <div class="toast" id="toast"></div>
+    <img
+        class="page-miku"
+        src="../../../image/HatsuneMikuSekai.png"
+        alt="初音未来"
+        onclick="mikuClick(this)"
+    >
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <script>
-        // 配置 marked
-        marked.setOptions({
-            breaks: true,
-            gfm: true
-        });
-
-        // 自定义渲染器
-        const renderer = new marked.Renderer();
+        marked.setOptions({ breaks: true, gfm: true });
 
         const DEFAULT_CONFIG = {
             repoOwner: 'DaZuiZui',
@@ -586,28 +78,19 @@
             welcomeMessage: '欢迎来到技术文章列表！'
         };
 
-        // 获取URL参数
-        function getQueryParam(param) {
-            const params = new URLSearchParams(window.location.search);
-            return params.get(param);
-        }
-
-        function getConfig() {
-            return {
-                ...DEFAULT_CONFIG,
-                repoPath: getQueryParam('repoPath') || DEFAULT_CONFIG.repoPath,
-                listTitle: getQueryParam('listTitle') || DEFAULT_CONFIG.listTitle,
-                listEmoji: getQueryParam('listEmoji') || DEFAULT_CONFIG.listEmoji,
-                listDescription: getQueryParam('listDescription') || DEFAULT_CONFIG.listDescription,
-                readerTitle: getQueryParam('readerTitle') || DEFAULT_CONFIG.readerTitle,
-                welcomeMessage: getQueryParam('welcomeMessage') || DEFAULT_CONFIG.welcomeMessage
-            };
-        }
-
-        const pageConfig = getConfig();
+        const query = new URLSearchParams(window.location.search);
+        const pageConfig = {
+            ...DEFAULT_CONFIG,
+            repoPath: query.get('repoPath') || DEFAULT_CONFIG.repoPath,
+            listTitle: query.get('listTitle') || DEFAULT_CONFIG.listTitle,
+            listEmoji: query.get('listEmoji') || DEFAULT_CONFIG.listEmoji,
+            listDescription: query.get('listDescription') || DEFAULT_CONFIG.listDescription,
+            readerTitle: query.get('readerTitle') || DEFAULT_CONFIG.readerTitle,
+            welcomeMessage: query.get('welcomeMessage') || DEFAULT_CONFIG.welcomeMessage
+        };
 
         function buildSearchParams(extraParams = {}) {
-            const params = new URLSearchParams({
+            return new URLSearchParams({
                 repoPath: pageConfig.repoPath,
                 listTitle: pageConfig.listTitle,
                 listEmoji: pageConfig.listEmoji,
@@ -616,7 +99,15 @@
                 welcomeMessage: pageConfig.welcomeMessage,
                 ...extraParams
             });
-            return params;
+        }
+
+        function escapeHtml(value) {
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
         }
 
         function buildRawContentUrl(filename) {
@@ -628,131 +119,93 @@
         }
 
         function applyPageMeta() {
-            document.title = `${pageConfig.readerTitle} - Bryan Yang's Blog`;
-            const backBtn = document.getElementById('backBtn');
-            backBtn.href = `../list/index.html?${buildSearchParams().toString()}`;
-            backBtn.textContent = `← 返回${pageConfig.listTitle}`;
+            document.title = `${pageConfig.readerTitle} — Bryan Yang`;
+            const backButton = document.getElementById('backBtn');
+            backButton.href = `../list/index.html?${buildSearchParams().toString()}`;
+            backButton.textContent = `← 返回${pageConfig.listTitle}`;
         }
 
-        // 计算阅读时间（按字数）
         function calculateReadTime(text) {
             const chineseCount = (text.match(/[\u4E00-\u9FA5]/g) || []).length;
             const englishCount = (text.match(/[a-zA-Z]+/g) || []).length;
-            
-            // 中文按300字/分钟，英文按200字/分钟
-            const chineseTime = chineseCount / 300;
-            const englishTime = englishCount / 200;
-            
-            return Math.max(1, Math.ceil(chineseTime + englishTime));
+            return Math.max(1, Math.ceil(chineseCount / 300 + englishCount / 200));
         }
 
-        // 加载并显示文章
         async function loadArticle() {
+            const filename = query.get('file');
+            const title = query.get('title');
+            if (!filename) {
+                showError('没有指定要阅读的文章');
+                return;
+            }
+
             try {
-                const filename = getQueryParam('file');
-                const title = getQueryParam('title');
-
-                if (!filename) {
-                    showError('未指定文章');
-                    return;
-                }
-
-                // 使用raw.githubusercontent.com进行加载
-                const url = buildRawContentUrl(filename);
-
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        'Accept': 'text/plain'
-                    }
+                const response = await fetch(buildRawContentUrl(filename), {
+                    headers: { Accept: 'text/plain' }
                 });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+                if (!response.ok) throw new Error(`请求失败（${response.status}）`);
 
                 const markdown = await response.text();
-                const html = marked.parse(markdown);
+                const articleTitle = title || filename.replace(/\.md$/i, '');
+                const safeHtml = DOMPurify.sanitize(marked.parse(markdown));
 
-                // 显示内容
+                document.title = `${articleTitle} — Bryan Yang`;
                 document.getElementById('header-content').innerHTML = `
-                    <h1>${title || filename.replace(/\.md$/i, '')}</h1>
+                    <h1>${escapeHtml(articleTitle)}</h1>
                     <div class="article-meta">
-                        <span class="meta-item">📄 ${filename}</span>
-                        <span class="meta-item">📝 ${markdown.length} 字符</span>
+                        <span class="meta-item">${escapeHtml(filename)}</span>
+                        <span class="meta-item">${markdown.length.toLocaleString()} chars</span>
                     </div>
                 `;
 
-                const contentDiv = document.getElementById('content');
-                contentDiv.className = 'markdown-content';
-                contentDiv.innerHTML = html;
+                const content = document.getElementById('content');
+                content.className = 'markdown-content';
+                content.innerHTML = safeHtml;
+                content.querySelectorAll('pre code').forEach(block => hljs.highlightElement(block));
 
-                // 高亮代码块
-                contentDiv.querySelectorAll('pre code').forEach(block => {
-                    hljs.highlightElement(block);
-                });
-
-                // 显示阅读时间
-                const readTime = calculateReadTime(markdown);
-                document.getElementById('readTime').textContent = readTime;
-                document.getElementById('stats').style.display = 'block';
-
-                showToast('文章加载成功！开始阅读吧~ (๑•́  ω •̀๑)');
-
+                document.getElementById('readTime').textContent = calculateReadTime(markdown);
+                document.getElementById('stats').hidden = false;
             } catch (error) {
                 console.error('Error loading article:', error);
-                showError('加载文章失败，请检查网络连接或稍后重试');
+                showError(`文章加载失败：${error.message}`);
             }
         }
 
-        // 显示错误
         function showError(message) {
-            const contentDiv = document.getElementById('content');
-            contentDiv.className = 'error-state';
-            contentDiv.innerHTML = `
-                <div class="error-icon">❌</div>
-                <p>${message}</p>
+            const content = document.getElementById('content');
+            content.className = 'error-state';
+            content.innerHTML = `
+                <div class="error-icon">!</div>
+                <p>${escapeHtml(message)}</p>
             `;
         }
 
-        // Miku点击效果
-        function mikuClick() {
-            const miku = document.querySelector('.miku-decoration');
-            const notes = ['♪', '♫', '♬', '♩'];
-            
-            for (let i = 0; i < 3; i++) {
-                setTimeout(() => {
-                    const note = document.createElement('div');
-                    note.className = 'music-note';
-                    note.textContent = notes[Math.floor(Math.random() * notes.length)];
-                    note.style.left = (miku.offsetLeft + 90) + 'px';
-                    note.style.top = (miku.offsetTop + 30) + 'px';
-                    note.style.color = ['#39C5BB', '#FFB3D9', '#B4E4FF'][Math.floor(Math.random() * 3)];
-                    document.body.appendChild(note);
-                    
-                    setTimeout(() => note.remove(), 3000);
-                }, i * 200);
-            }
-            
-            showToast('Miku: 加油阅读！(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧');
-        }
-
-        // 显示 Toast
         function showToast(message) {
             const toast = document.getElementById('toast');
             toast.textContent = message;
             toast.classList.add('show');
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
+            window.clearTimeout(showToast.timer);
+            showToast.timer = window.setTimeout(() => toast.classList.remove('show'), 2400);
         }
 
-        // 页面加载时获取文章
-        window.addEventListener('load', () => {
-            applyPageMeta();
-            loadArticle();
-        });
+        function mikuClick(element) {
+            const rect = element.getBoundingClientRect();
+            ['♪', '♫', '♬'].forEach((symbol, index) => {
+                window.setTimeout(() => {
+                    const note = document.createElement('span');
+                    note.className = 'music-note';
+                    note.textContent = symbol;
+                    note.style.left = `${rect.left + rect.width * 0.45}px`;
+                    note.style.top = `${rect.top + 30}px`;
+                    document.body.appendChild(note);
+                    window.setTimeout(() => note.remove(), 1800);
+                }, index * 120);
+            });
+            showToast('Miku says: 慢慢读，别忘了休息 ♪');
+        }
+
+        applyPageMeta();
+        loadArticle();
     </script>
 </body>
 </html>
