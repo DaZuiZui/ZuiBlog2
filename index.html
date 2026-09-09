@@ -75,14 +75,18 @@
                 </div>
             </div>
 
-            <div class="hero-visual" aria-label="初音未来人物插画">
-                <span class="visual-note">AVAILABLE FOR IDEAS</span>
-                <img
-                    class="hero-miku"
-                    src="image/HatsuneMikuSekai.png"
-                    alt="初音未来"
-                    onclick="mikuClick(this)"
-                >
+            <div class="hero-visual" aria-label="Bryan Yang 的个人简介">
+                <div class="visual-topline">
+                    <span>SELECTED SIGNALS</span>
+                    <span>2026 / 09</span>
+                </div>
+                <div class="visual-monogram" aria-hidden="true">BY</div>
+                <div class="visual-grid" aria-hidden="true"></div>
+                <div class="visual-caption">
+                    <span class="visual-dot"></span>
+                    <span>Building with intent</span>
+                    <span class="visual-caption-line"></span>
+                </div>
             </div>
         </header>
     </div>
@@ -209,23 +213,6 @@
             } catch (error) {
                 window.location.href = `mailto:${email}`;
             }
-        }
-
-        function mikuClick(element) {
-            const rect = element.getBoundingClientRect();
-            const notes = ['♪', '♫', '♬'];
-            notes.forEach((noteText, index) => {
-                window.setTimeout(() => {
-                    const note = document.createElement('span');
-                    note.className = 'music-note';
-                    note.textContent = noteText;
-                    note.style.left = `${rect.left + rect.width * (0.38 + index * 0.12)}px`;
-                    note.style.top = `${rect.top + rect.height * 0.3}px`;
-                    document.body.appendChild(note);
-                    window.setTimeout(() => note.remove(), 1800);
-                }, index * 120);
-            });
-            showToast('Miku says: 保持好奇，也保持输出 ♪');
         }
 
         document.getElementById('copy-email').addEventListener('click', copyEmail);
