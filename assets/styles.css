@@ -107,11 +107,17 @@ button {
     height: 36px;
     display: grid;
     place-items: center;
+    overflow: hidden;
     border: 1px solid rgba(82, 223, 202, 0.55);
     border-radius: 50%;
-    color: var(--accent);
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-    font-size: 12px;
+    background: var(--surface-strong, #fff);
+}
+
+.brand-mark img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
 }
 
 .nav-links {
@@ -325,16 +331,19 @@ button {
     border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-.visual-monogram {
+.visual-avatar {
     position: absolute;
     top: 50%;
     left: 50%;
-    color: var(--paper-bright);
-    font-size: clamp(120px, 17vw, 220px);
-    font-weight: 800;
-    letter-spacing: -0.16em;
-    line-height: 0.8;
-    transform: translate(-54%, -52%);
+    z-index: 1;
+    width: min(248px, 62%);
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border: 8px solid rgba(255, 255, 255, 0.86);
+    border-radius: 50%;
+    box-shadow: 0 18px 42px rgba(29, 88, 67, 0.16);
+    transform: translate(-50%, -54%);
 }
 
 .visual-grid {
@@ -1407,7 +1416,6 @@ body.home .brand {
 body.home .brand-mark {
     border-color: rgba(24, 189, 120, 0.45);
     background: var(--surface-strong);
-    color: var(--home-accent-strong);
 }
 
 body.home .nav-links a {
@@ -1512,8 +1520,8 @@ body.home .visual-topline {
     border-bottom-color: var(--home-line);
 }
 
-body.home .visual-monogram {
-    color: var(--home-ink-strong);
+body.home .visual-avatar {
+    border-color: #fff;
 }
 
 body.home .visual-grid {
