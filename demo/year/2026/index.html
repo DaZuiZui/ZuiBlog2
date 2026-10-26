@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#eff9ef">
+    <title>2026 年度总结 · 我成为人生的救赎</title>
+    <style>
+        :root {
+            --bg: #eff9ef;
+            --surface: rgba(255, 255, 255, 0.62);
+            --surface-strong: rgba(255, 255, 255, 0.86);
+            --ink: #263a34;
+            --ink-strong: #101b17;
+            --muted: #65766f;
+            --faint: #8ba097;
+            --line: rgba(38, 58, 52, 0.13);
+            --accent: #18bd78;
+            --accent-strong: #07965b;
+            --accent-soft: rgba(24, 189, 120, 0.13);
+            --chip: #283a34;
+            --shadow: 0 22px 65px rgba(28, 75, 57, 0.1);
+            --radius: 16px;
+            --sans: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+            --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body { height: 100%; }
+
+        body {
+            background: var(--bg);
+            color: var(--ink);
+            font-family: var(--sans);
+            font-size: 15px;
+            line-height: 1.65;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            opacity: 0.36;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.78' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.09'/%3E%3C/svg%3E");
+        }
+
+        body::selection, body *::selection {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        button, input { font: inherit; color: inherit; }
+        button { background: none; border: 0; cursor: pointer; }
+        a { color: inherit; text-decoration: none; }
+
+        .ambient {
+            position: fixed;
+            z-index: 0;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .ambient-one {
+            width: 680px;
+            height: 680px;
+            top: -240px;
+            left: -180px;
+            background: radial-gradient(circle, rgba(103, 207, 195, 0.28), transparent 68%);
+            animation: drift 18s ease-in-out infinite alternate;
+        }
+
+        .ambient-two {
+            width: 760px;
+            height: 760px;
+            right: -300px;
+            bottom: -280px;
+            background: radial-gradient(circle, rgba(86, 220, 136, 0.26), transparent 68%);
+            animation: drift 22s ease-in-out infinite alternate-reverse;
+        }
+
+        #field {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .topbar, .rail, .toast { position: fixed; z-index: 30; }
+
+        .topbar {
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            border-bottom: 1px solid var(--line);
+            background: rgba(239, 249, 239, 0.72);
+            backdrop-filter: blur(16px);
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--ink-strong);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+        }
+
+        .brand-mark {
+            width: 34px;
+            height: 34px;
+            display: grid;
+            place-items: center;
+            border: 1px solid rgba(24, 189, 120, 0.45);
+            border-radius: 50%;
+            background: var(--surface-strong);
+            color: var(--accent-strong);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .year-chip, .sound, .again, .button {
+            min-height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 14px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            background: var(--surface);
+            color: var(--ink-strong);
+            font-size: 13px;
+            font-weight: 700;
+            backdrop-filter: blur(12px);
+            transition: transform 180ms ease, border-color 180ms ease, background 180ms ease, color 180ms ease;
+        }
+
+        .sound[aria-pressed="true"], .button-primary, .again:hover, .sound:hover, .button:hover {
+            border-color: var(--accent);
+        }
+
+        .button-primary {
+            min-height: 48px;
+            padding: 0 22px;
+            background: var(--accent);
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .button-primary:hover, .again:hover {
+            background: var(--accent-strong);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        .sound[aria-pressed="true"] {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .rail {
+            right: 22px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .rail button {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+            min-height: 28px;
+            color: var(--faint);
+            font-family: var(--mono);
+            font-size: 11px;
+            letter-spacing: 0.04em;
+        }
+
+        .rail button::after {
+            content: "";
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: rgba(38, 58, 52, 0.18);
+            box-shadow: 0 0 0 4px transparent;
+            transition: background 200ms ease, box-shadow 200ms ease;
+        }
+
+        .rail button[aria-current="true"] {
+            color: var(--accent-strong);
+            font-weight: 700;
+        }
+
+        .rail button[aria-current="true"]::after {
+            background: var(--accent);
+            box-shadow: 0 0 0 5px var(--accent-soft);
+        }
+
+        .chapter {
+            position: absolute;
+            inset: 0;
+            z-index: 3;
+            display: grid;
+            place-items: center;
+            padding: 96px 108px 48px 40px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(18px);
+            transition: opacity 520ms ease, transform 620ms cubic-bezier(.2,.7,.2,1), visibility 520ms;
+        }
+
+        .chapter.is-on {
+            opacity: 1;
+            visibility: visible;
+            transform: none;
+            z-index: 4;
+        }
+
+        .sheet {
+            width: min(1080px, 100%);
+            max-height: 100%;
+            overflow: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(24, 189, 120, 0.45) transparent;
+        }
+
+        .eyebrow {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 18px;
+            color: var(--accent-strong);
+            font-family: var(--mono);
+            font-size: 12px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .eyebrow::before {
+            content: "";
+            width: 28px;
+            height: 1px;
+            background: currentColor;
+        }
+
+        h1, h2 {
+            color: var(--ink-strong);
+            font-weight: 800;
+            letter-spacing: -0.055em;
+        }
+
+        h1 {
+            font-size: clamp(48px, 6.4vw, 88px);
+            line-height: 0.98;
+        }
+
+        h2 {
+            margin: 0 0 22px;
+            font-size: clamp(34px, 4.2vw, 56px);
+            line-height: 1.05;
+        }
+
+        .accent-word { color: var(--accent); }
+
+        .slot { color: var(--muted); line-height: 1.8; }
+
+        .cover {
+            display: grid;
+            grid-template-columns: minmax(0, 1.12fr) minmax(320px, 0.88fr);
+            gap: clamp(28px, 4vw, 64px);
+            align-items: center;
+        }
+
+        .sub {
+            max-width: 520px;
+            margin-top: 22px;
+            color: var(--ink);
+            font-size: 17px;
+            line-height: 1.85;
+        }
+
+        .hero-actions { margin-top: 28px; }
+
+        .hint {
+            margin-top: 18px;
+            color: var(--faint);
+            font-family: var(--mono);
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .panel {
+            position: relative;
+            min-height: 460px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 28px 28px 24px;
+            border: 1px solid rgba(24, 189, 120, 0.28);
+            border-radius: var(--radius);
+            background:
+                radial-gradient(circle at 78% 16%, rgba(24, 189, 120, 0.28), transparent 13rem),
+                linear-gradient(160deg, rgba(255, 255, 255, 0.94), rgba(239, 249, 239, 0.78));
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(16px);
+            isolation: isolate;
+        }
+
+        .panel::before {
+            content: "";
+            position: absolute;
+            inset: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.72);
+            border-radius: 12px;
+            pointer-events: none;
+        }
+
+        .visual-topline, .visual-caption {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--faint);
+            font-family: var(--mono);
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .visual-topline {
+            justify-content: space-between;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .visual-avatar {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 2;
+            width: min(220px, 58%);
+            aspect-ratio: 1;
+            object-fit: cover;
+            border: 8px solid rgba(255, 255, 255, 0.92);
+            border-radius: 50%;
+            box-shadow: 0 18px 42px rgba(29, 88, 67, 0.16);
+            transform: translate(-50%, -54%);
+        }
+
+        .visual-grid {
+            position: absolute;
+            inset: 78px 42px 72px;
+            z-index: 1;
+            background-image:
+                linear-gradient(rgba(38, 58, 52, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(38, 58, 52, 0.08) 1px, transparent 1px);
+            background-size: 42px 42px;
+            mask-image: linear-gradient(to bottom, transparent, #000 22%, #000 78%, transparent);
+            opacity: 0.85;
+        }
+
+        .orb-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 1;
+            width: 268px;
+            height: 268px;
+            margin: -152px 0 0 -134px;
+            border-radius: 50%;
+            border: 1px dashed rgba(24, 189, 120, 0.55);
+        }
+
+        .chapter.play .orb-ring { animation: spin 22s linear infinite; }
+        .chapter.play .visual-dot { animation: pulse-glow 2.8s ease-in-out infinite; }
+
+        .visual-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 0 5px var(--accent-soft);
+        }
+
+        .visual-caption-line {
+            width: 42px;
+            height: 1px;
+            margin-left: auto;
+            background: var(--line);
+        }
+
+        .lines { display: grid; gap: 14px; }
+
+        .lines p {
+            color: var(--ink-strong);
+            font-size: clamp(28px, 4vw, 52px);
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            line-height: 1.15;
+            opacity: 0;
+            transform: translateY(14px);
+        }
+
+        .chapter.play .lines p { animation: rise-in 700ms ease forwards; }
+        .chapter.play .lines p:nth-child(2) { animation-delay: 160ms; }
+        .chapter.play .lines p:nth-child(3) { animation-delay: 320ms; color: var(--accent); }
+
+        .rule {
+            width: 0;
+            height: 2px;
+            margin-top: 26px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+        }
+
+        .chapter.play .rule { animation: draw 1s 520ms ease forwards; }
+
+        .stats, .rites {
+            display: grid;
+            gap: 12px;
+        }
+
+        .stats { grid-template-columns: repeat(4, 1fr); }
+        .rites { grid-template-columns: repeat(3, 1fr); }
+
+        .stat, .rite, .vow, .reader, .glass {
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: var(--surface);
+            box-shadow: 0 12px 35px rgba(29, 76, 60, 0.04);
+            backdrop-filter: blur(12px);
+        }
+
+        .stat {
+            min-height: 168px;
+            padding: 22px 18px;
+            background:
+                linear-gradient(160deg, rgba(24, 189, 120, 0.12), transparent 68%),
+                var(--surface);
+        }
+
+        .stat b {
+            display: block;
+            color: var(--ink-strong);
+            font-size: clamp(40px, 4.4vw, 60px);
+            font-weight: 800;
+            letter-spacing: -0.06em;
+            line-height: 1;
+        }
+
+        .stat span { display: block; margin-top: 14px; color: var(--muted); line-height: 1.6; }
+
+        .months {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+        }
+
+        .glass {
+            min-height: 92px;
+            padding: 12px 12px 14px;
+            text-align: left;
+            transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
+        }
+
+        .glass:hover, .glass.on, .rite:hover, .vow:hover {
+            border-color: rgba(24, 189, 120, 0.45);
+            box-shadow: var(--shadow);
+            transform: translateY(-3px);
+        }
+
+        .glass em, .glass strong, .rite strong, .vow strong { display: block; font-style: normal; }
+        .glass em {
+            display: inline-flex;
+            width: fit-content;
+            margin-bottom: 2px;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: var(--accent-soft);
+            color: var(--accent-strong);
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 0;
+            line-height: 1.2;
+        }
+        .glass.on em {
+            background: var(--accent);
+            color: #fff;
+        }
+        .rite small, .vow small {
+            color: var(--faint);
+            font-family: var(--mono);
+            font-size: 11px;
+            letter-spacing: 0.06em;
+        }
+
+        .glass strong {
+            margin-top: 8px;
+            color: var(--ink-strong);
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+        }
+
+        .glass.on {
+            background:
+                linear-gradient(160deg, rgba(24, 189, 120, 0.18), transparent 70%),
+                var(--surface-strong);
+        }
+
+        .glass.on strong, .rite.on strong { color: var(--accent-strong); }
+
+        .month-hint {
+            margin: -4px 0 14px;
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        .reader {
+            margin: 0 0 12px;
+            padding: 16px 18px;
+            min-height: 96px;
+        }
+
+        .reader .eyebrow {
+            margin-bottom: 8px;
+            font-family: var(--sans);
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            text-transform: none;
+        }
+        .reader h3 {
+            margin: 4px 0 6px;
+            color: var(--ink-strong);
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+        }
+
+        .wipe {
+            position: relative;
+            height: min(440px, 58vh);
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            --cut: 48%;
+        }
+
+        .pane {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            align-content: end;
+            padding: 28px;
+        }
+
+        .pane h3 {
+            margin-bottom: 8px;
+            color: var(--ink-strong);
+            font-size: clamp(32px, 4vw, 52px);
+            font-weight: 800;
+            letter-spacing: -0.05em;
+        }
+
+        .pane-before {
+            background:
+                linear-gradient(160deg, rgba(139, 160, 151, 0.28), transparent 60%),
+                #f7faf7;
+        }
+
+        .pane-after {
+            background:
+                radial-gradient(80% 70% at 80% 10%, rgba(24, 189, 120, 0.34), transparent 58%),
+                linear-gradient(180deg, #f3fff8, #dff8ea);
+            clip-path: inset(0 0 0 var(--cut));
+        }
+
+        .wipe input {
+            position: absolute;
+            left: 6%;
+            right: 6%;
+            bottom: 16px;
+            width: 88%;
+            accent-color: var(--accent);
+            z-index: 2;
+        }
+
+        .rite, .vow {
+            text-align: left;
+            padding: 18px 16px;
+            min-height: 148px;
+            transition: transform 200ms ease, border-color 200ms ease, background 200ms ease, box-shadow 200ms ease;
+        }
+
+        .rite strong, .vow strong {
+            margin: 8px 0;
+            color: var(--ink-strong);
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+        }
+
+        .vows { display: grid; gap: 12px; }
+
+        .rite.on, .vow.on {
+            border-color: rgba(24, 189, 120, 0.5);
+            background:
+                linear-gradient(160deg, rgba(24, 189, 120, 0.16), transparent 72%),
+                var(--surface-strong);
+        }
+
+        .rite.on small, .vow.on small { color: var(--accent-strong); }
+
+        .pulse-wrap, .stars {
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: var(--surface);
+            box-shadow: 0 12px 35px rgba(29, 76, 60, 0.04);
+        }
+
+        .pulse-wrap { padding: 8px 8px 0; }
+        svg.pulse { width: 100%; height: auto; display: block; }
+
+        .pulse path#line {
+            fill: none;
+            stroke: url(#greenStroke);
+            stroke-width: 3;
+            stroke-linecap: round;
+        }
+
+        .chapter.play .pulse path#line {
+            stroke-dasharray: var(--len);
+            stroke-dashoffset: var(--len);
+            animation: dash 1.6s ease forwards;
+        }
+
+        .stars {
+            position: relative;
+            height: min(420px, 56vh);
+            overflow: hidden;
+            background:
+                radial-gradient(circle at 50% 42%, rgba(24, 189, 120, 0.16), transparent 42%),
+                var(--surface);
+        }
+
+        .star {
+            position: absolute;
+            width: 132px;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .star i {
+            display: block;
+            width: 10px;
+            height: 10px;
+            margin: 0 auto 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            box-shadow: 0 0 0 6px var(--accent-soft);
+        }
+
+        .star.on i {
+            background: var(--accent-strong);
+            box-shadow: 0 0 0 8px rgba(24, 189, 120, 0.22);
+        }
+
+        .star span { color: var(--ink); font-size: 13px; font-weight: 700; }
+
+        .constellation {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .finale { text-align: left; position: relative; }
+
+        .sun {
+            width: 92px;
+            height: 92px;
+            margin-bottom: 18px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 38% 34%, #fff, var(--accent) 46%, var(--accent-strong) 78%);
+            box-shadow: 0 0 0 16px var(--accent-soft), 0 20px 50px rgba(24, 189, 120, 0.28);
+            opacity: 0;
+            transform: translateY(16px) scale(0.92);
+        }
+
+        .chapter.play .sun { animation: sunrise 900ms ease forwards; }
+
+        .finale h2 { max-width: 760px; }
+        .finale .slot { max-width: 640px; margin-top: 8px; font-size: 17px; }
+        .again { margin-top: 26px; }
+
+        .toast {
+            left: 50%;
+            bottom: 26px;
+            padding: 10px 16px;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: var(--surface-strong);
+            color: var(--ink-strong);
+            box-shadow: var(--shadow);
+            opacity: 0;
+            pointer-events: none;
+            transform: translate(-50%, 12px);
+            transition: opacity 240ms ease, transform 240ms ease;
+        }
+
+        .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+        :focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 3px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes pulse-glow {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.06); }
+        }
+        @keyframes drift {
+            from { transform: translate3d(0, 0, 0); }
+            to { transform: translate3d(36px, 24px, 0); }
+        }
+        @keyframes rise-in { to { opacity: 1; transform: none; } }
+        @keyframes draw { to { width: min(220px, 46%); } }
+        @keyframes dash { to { stroke-dashoffset: 0; } }
+        @keyframes sunrise { to { opacity: 1; transform: none; } }
+
+        @media (max-width: 900px) {
+            .chapter { padding: 88px 18px 78px; }
+            .cover, .stats, .rites { grid-template-columns: 1fr 1fr; }
+            .cover { gap: 18px; }
+            .panel { min-height: 360px; }
+            .visual-avatar { width: min(168px, 52%); }
+            .orb-ring { width: 210px; height: 210px; margin: -122px 0 0 -105px; }
+            .months { grid-template-columns: repeat(3, 1fr); }
+            .rail {
+                top: auto;
+                bottom: 14px;
+                left: 0;
+                right: 0;
+                transform: none;
+                flex-direction: row;
+                justify-content: center;
+            }
+            .rail button span { display: none; }
+            .wipe { height: 360px; }
+            h1 { font-size: clamp(40px, 12vw, 64px); }
+        }
+
+        @media (max-width: 640px) {
+            .topbar { padding: 0 14px; }
+            .brand span:last-child { display: none; }
+            .stats, .rites, .cover { grid-template-columns: 1fr; }
+            .panel { min-height: 280px; }
+            .months { grid-template-columns: repeat(2, 1fr); }
+            h2 { font-size: 32px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation: none !important;
+                transition: none !important;
+            }
+            .lines p, .sun, .rule { opacity: 1; transform: none; width: min(220px, 46%); }
+        }
+    </style>
+</head>
+<body data-ch="0">
+    <div class="ambient ambient-one" aria-hidden="true"></div>
+    <div class="ambient ambient-two" aria-hidden="true"></div>
+    <canvas id="field" aria-hidden="true"></canvas>
+
+    <header class="topbar">
+        <a class="brand" href="../../../index.html">
+            <span class="brand-mark">BY</span>
+            <span>Bryan Yang</span>
+        </a>
+        <div class="nav-links">
+            <span class="year-chip">2026 · 模板</span>
+            <button class="sound" id="sound" type="button" aria-pressed="false">声音</button>
+        </div>
+    </header>
+    <nav class="rail" id="rail" aria-label="章节"></nav>
+    <div class="toast" id="toast" role="status"></div>
+
+    <main id="deck">
+        <section class="chapter is-on" data-name="序章">
+            <div class="sheet cover">
+                <div>
+                    <p class="eyebrow">Year in review · 2026</p>
+                    <h1 id="cover-title">我成为人生的救赎</h1>
+                    <p class="sub" id="cover-sub"></p>
+                    <div class="hero-actions">
+                        <button class="button button-primary" id="ignite" type="button">开始这一年</button>
+                    </div>
+                    <p class="hint">滚动，或按方向键</p>
+                </div>
+                <aside class="panel" aria-hidden="true">
+                    <div class="visual-topline">
+                        <span>Selected signals</span>
+                        <span>2026</span>
+                    </div>
+                    <img class="visual-avatar" src="https://avatars.githubusercontent.com/u/66861267?v=4" alt="" width="220" height="220">
+                    <div class="visual-grid"></div>
+                    <span class="orb-ring"></span>
+                    <div class="visual-caption">
+                        <span class="visual-dot"></span>
+                        <span>Still here</span>
+                        <span class="visual-caption-line"></span>
+                    </div>
+                </aside>
+            </div>
+        </section>
+
+        <section class="chapter" data-name="主题">
+            <div class="sheet">
+                <p class="eyebrow">The theme</p>
+                <div class="lines" id="lines"></div>
+                <div class="rule"></div>
+            </div>
+        </section>
+
+        <section class="chapter" data-name="回望">
+            <div class="sheet">
+                <p class="eyebrow">Looking back</p>
+                <h2>先给这一年四个数字</h2>
+                <div class="stats" id="stats"></div>
+            </div>
+        </section>
+
+        <section class="chapter" data-name="十二月">
+            <div class="sheet">
+                <p class="eyebrow">Twelve months</p>
+                <h2>十二个月，还没写完</h2>
+                <p class="month-hint">向下滑动，或按 ↓，翻到下一月</p>
+                <article class="reader">
+                    <p class="eyebrow" id="reader-kicker">第 1 月</p>
+                    <h3 id="reader-name">崩塌</h3>
+                    <p class="slot" id="reader-copy">悲痛的一月，裁员通知到了。公司即将倒闭，只留最低成本运转。整个人生像一下子塌掉。我到处找自己错在哪，为什么被裁，为什么被抛弃，是不是真的不配这个市场。这个月只剩下对自己的质疑，和疯狂准备面试。失败我可以接受，但我一定要从失败里站起来。</p>
+                </article>
+                <div class="months" id="months"></div>
+            </div>
+        </section>
+
+        <section class="chapter" data-name="裂与光">
+            <div class="sheet">
+                <p class="eyebrow">Before / after</p>
+                <h2>把后来拖过来</h2>
+                <div class="wipe" id="wipe">
+                    <div class="pane pane-before">
+                        <h3>曾经</h3>
+                        <p class="slot" id="before-copy"></p>
+                    </div>
+                    <div class="pane pane-after">
+                        <h3>后来</h3>
+                        <p class="slot" id="after-copy"></p>
+                    </div>
+                    <input id="wipe-range" type="range" min="12" max="88" value="48" aria-label="在曾经和后来之间拖动">
+                </div>
+            </div>
+        </section>
+
+        <section class="chapter" data-name="六处">
+            <div class="sheet">
+                <p class="eyebrow">Six places</p>
+                <h2>把自己留下来的六个地方</h2>
+                <p class="slot" style="margin-bottom: 14px">点一下，标出这一处。句子留着，等你换成自己的。</p>
+                <div class="rites" id="rites"></div>
+            </div>
+        </section>
+
+        <section class="chapter" data-name="心跳">
+            <div class="sheet">
+                <p class="eyebrow">Pulse</p>
+                <h2>这一年的起伏</h2>
+                <div class="pulse-wrap">
+                    <svg class="pulse" viewBox="0 0 760 230" id="pulse" role="img" aria-label="十二个月的情绪曲线"></svg>
+                </div>
+            </div>
+        </section>
+
+        <section class="chapter" data-name="星图">
+            <div class="sheet">
+                <p class="eyebrow">What stayed</p>
+                <h2>还在手里的</h2>
+                <div class="stars" id="stars"></div>
+            </div>
+        </section>
+
+        <section class="chapter" data-name="誓言">
+            <div class="sheet">
+                <p class="eyebrow">Vows</p>
+                <h2>离开这一年之前</h2>
+                <div class="vows" id="vows"></div>
+            </div>
+        </section>
+
+        <section class="chapter" data-name="结尾">
+            <div class="sheet finale">
+                <div class="sun" aria-hidden="true"></div>
+                <p class="eyebrow">Close</p>
+                <h2 id="finale-title"></h2>
+                <p class="slot" id="finale-copy"></p>
+                <button class="again" id="again" type="button">再看一遍</button>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        /* =========================================================
+           2026 年度总结模板
+           改下面这一段就够了。界面和动效不用动。
+           ========================================================= */
+        const YEAR = {
+            title: "我成为人生的救赎",
+            subtitle: "这一年的主题先放在这里。界面跟首页同一套绿色，句子都还能换。",
+            lines: [
+                "没有人会从远处走来。",
+                "所以这一年，我自己走了回来。",
+                "我成为人生的救赎。"
+            ],
+            stats: [
+                { n: "365", label: "天。待填：你真正留下来的理由" },
+                { n: "12", label: "个月。待填：你回头看了几次" },
+                { n: "1", label: "个人。待填：站到自己这边的那个决定" },
+                { n: "∞", label: "次。待填：想消失，又把自己留下" }
+            ],
+            months: [
+                { name: "崩塌", copy: "悲痛的一月，裁员通知到了。公司即将倒闭，只留最低成本运转。整个人生像一下子塌掉。我到处找自己错在哪，为什么被裁，为什么被抛弃，是不是真的不配这个市场。这个月只剩下对自己的质疑，和疯狂准备面试。失败我可以接受，但我一定要从失败里站起来。" },
+                { name: "低头", copy: "二月模板：你在躲什么，又在护住什么。" },
+                { name: "裂缝", copy: "三月模板：第一道裂开的缝，光就是从这里进来的。" },
+                { name: "回头", copy: "四月模板：你第一次认真看自己的月份。" },
+                { name: "接住", copy: "五月模板：有一天，你把日子接住了。" },
+                { name: "无人", copy: "六月模板：没有观众的时候，你还在不在。" },
+                { name: "进光", copy: "七月模板：有什么东西终于照进来了。" },
+                { name: "站稳", copy: "八月模板：你开始能站在自己的决定上。" },
+                { name: "归还", copy: "九月模板：你把生活从别人的期待里要回来。" },
+                { name: "向前", copy: "十月模板：不再解释，只是往前。" },
+                { name: "不求救", copy: "十一月模板：你停止把拯救外包给别人。" },
+                { name: "点燃", copy: "十二月模板：这一年的印，盖在这里。" }
+            ],
+            before: "待填：那时候的你。疲惫、躲开、把自己放在最后。",
+            after: "待填：后来的你。还是同一个人，但手已经伸向自己。",
+            rites: [
+                { k: "身体", t: "待填：你怎样停止消耗自己。" },
+                { k: "工作", t: "待填：你在职业里守住的边界。" },
+                { k: "关系", t: "待填：你退出了什么，留下了谁。" },
+                { k: "钱", t: "待填：你第一次为以后留住的东西。" },
+                { k: "独处", t: "待填：一个人的夜里，你没有再惩罚自己。" },
+                { k: "创作", t: "待填：你做出来、并且没有丢掉的东西。" }
+            ],
+            pulse: [24, 22, 30, 38, 46, 34, 52, 58, 63, 70, 78, 88],
+            pulseWords: ["崩塌", "低头", "裂缝", "回头", "接住", "无人", "进光", "站稳", "归还", "向前", "不求救", "点燃"],
+            stars: [
+                { name: "想感谢的人", x: 22, y: 34, note: "待填：名字可以不写，写下他做了什么。" },
+                { name: "陪着我的生命", x: 48, y: 24, note: "待填：一只猫，一条鱼，或另一个人。" },
+                { name: "一座城市", x: 74, y: 40, note: "待填：这一年你的脚站在哪里。" },
+                { name: "一份工作", x: 62, y: 70, note: "待填：它拿走了什么，又还给你什么。" },
+                { name: "一个习惯", x: 30, y: 68, note: "待填：你没有放下、于是把自己留住的事。" }
+            ],
+            vows: [
+                "我不再把自己交出去等救。",
+                "我允许这一年不完美，但不允许再消失。",
+                "走进下一年时，我还站在自己这边。"
+            ],
+            finaleTitle: "救赎不是被等来的",
+            finale: "待填：用一句属于你的话，关上 2026。模板先留在这里：我没有等谁。我成为了那只手。"
+        };
+
+        const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const chapters = [...document.querySelectorAll(".chapter")];
+        const monthChapter = chapters.findIndex((chapter) => chapter.dataset.name === "十二月");
+        const rail = document.getElementById("rail");
+        let index = 0;
+        let monthCursor = 0;
+        let progress = 0;
+        let lockUntil = 0;
+        let soundOn = false;
+        let audioCtx = null;
+
+        const title = document.getElementById("cover-title");
+        const mark = "救赎";
+        if (YEAR.title.endsWith(mark)) {
+            title.innerHTML = `${YEAR.title.slice(0, -mark.length)}<span class="accent-word">${mark}</span>`;
+        } else {
+            title.textContent = YEAR.title;
+        }
+        document.getElementById("cover-sub").textContent = YEAR.subtitle;
+        document.getElementById("lines").innerHTML = YEAR.lines.map((line) => `<p>${line}</p>`).join("");
+        document.getElementById("before-copy").textContent = YEAR.before;
+        document.getElementById("after-copy").textContent = YEAR.after;
+        const finaleTitle = document.getElementById("finale-title");
+        if (YEAR.finaleTitle.includes("救赎")) {
+            finaleTitle.innerHTML = YEAR.finaleTitle.replace("救赎", `<span class="accent-word">救赎</span>`);
+        } else {
+            finaleTitle.textContent = YEAR.finaleTitle;
+        }
+        document.getElementById("finale-copy").textContent = YEAR.finale;
+
+        document.getElementById("stats").innerHTML = YEAR.stats.map((item) => `
+            <article class="stat">
+                <b data-n="${item.n}">${item.n === "∞" ? "∞" : "0"}</b>
+                <span>${item.label}</span>
+            </article>
+        `).join("");
+
+        const readerName = document.getElementById("reader-name");
+        const readerCopy = document.getElementById("reader-copy");
+        const readerKicker = document.getElementById("reader-kicker");
+        document.getElementById("months").innerHTML = YEAR.months.map((month, i) => `
+            <button class="glass${i === 0 ? " on" : ""}" type="button" data-i="${i}" tabindex="-1">
+                <em>${i + 1}月</em>
+                <strong>${month.name}</strong>
+            </button>
+        `).join("");
+
+        function showMonth(i) {
+            monthCursor = i;
+            document.querySelectorAll("#months .glass").forEach((el) => {
+                el.classList.toggle("on", Number(el.dataset.i) === i);
+            });
+            readerKicker.textContent = `第 ${i + 1} 月`;
+            readerName.textContent = YEAR.months[i].name;
+            readerCopy.textContent = YEAR.months[i].copy;
+            const sheet = chapters[monthChapter]?.querySelector(".sheet");
+            if (sheet) sheet.scrollTop = 0;
+        }
+
+        function stepMonth(dir) {
+            const next = monthCursor + dir;
+            if (monthChapter < 0 || next < 0 || next >= YEAR.months.length) return false;
+            showMonth(next);
+            return true;
+        }
+
+        showMonth(0);
+
+        document.getElementById("months").addEventListener("click", (event) => {
+            const button = event.target.closest(".glass");
+            if (!button) return;
+            showMonth(Number(button.dataset.i));
+        });
+
+        document.getElementById("rites").innerHTML = YEAR.rites.map((rite, i) => `
+            <button class="rite" type="button" data-i="${i}">
+                <small>0${i + 1}</small>
+                <strong>${rite.k}</strong>
+                <span class="slot">${rite.t}</span>
+            </button>
+        `).join("");
+
+        document.getElementById("rites").addEventListener("click", (event) => {
+            const button = event.target.closest(".rite");
+            if (!button) return;
+            button.classList.toggle("on");
+            burst(button.getBoundingClientRect());
+            if (button.classList.contains("on")) toast(`已记下 · ${YEAR.rites[button.dataset.i].k}`);
+        });
+
+        document.getElementById("vows").innerHTML = YEAR.vows.map((vow, i) => `
+            <button class="vow" type="button">
+                <small>0${i + 1} · 点击确认</small>
+                <strong>${vow}</strong>
+            </button>
+        `).join("");
+
+        document.getElementById("vows").addEventListener("click", (event) => {
+            const button = event.target.closest(".vow");
+            if (!button) return;
+            button.classList.add("on");
+            button.querySelector("small").textContent = "已确认";
+            burst(button.getBoundingClientRect());
+        });
+
+        const pulse = document.getElementById("pulse");
+        const width = 760;
+        const height = 230;
+        const pad = 28;
+        const step = (width - pad * 2) / (YEAR.pulse.length - 1);
+        const points = YEAR.pulse.map((value, i) => [
+            pad + step * i,
+            height - pad - (value / 100) * (height - pad * 2)
+        ]);
+        let d = `M ${points[0][0]} ${points[0][1]}`;
+        for (let i = 1; i < points.length; i += 1) {
+            const mid = (points[i - 1][0] + points[i][0]) / 2;
+            d += ` C ${mid} ${points[i - 1][1]}, ${mid} ${points[i][1]}, ${points[i][0]} ${points[i][1]}`;
+        }
+        const area = `${d} L ${points.at(-1)[0]} ${height - 8} L ${points[0][0]} ${height - 8} Z`;
+        pulse.innerHTML = `
+            <defs>
+                <linearGradient id="greenStroke" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0" stop-color="#8ba097"/>
+                    <stop offset="0.4" stop-color="#18bd78"/>
+                    <stop offset="1" stop-color="#07965b"/>
+                </linearGradient>
+                <linearGradient id="greenFill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stop-color="#18bd78" stop-opacity="0.28"/>
+                    <stop offset="1" stop-color="#18bd78" stop-opacity="0"/>
+                </linearGradient>
+            </defs>
+            <path d="${area}" fill="url(#greenFill)" stroke="none"></path>
+            <path id="line" d="${d}"></path>
+            ${points.map((point, i) => `
+                <g transform="translate(${point[0]} ${point[1]})">
+                    <circle r="4.5" fill="#18bd78"></circle>
+                    <text y="22" text-anchor="middle" fill="#8ba097" font-size="11" font-family="ui-monospace, monospace">${i + 1}</text>
+                    <text y="-12" text-anchor="middle" fill="#07965b" font-size="11">${YEAR.pulseWords[i]}</text>
+                </g>
+            `).join("")}
+        `;
+
+        const stars = document.getElementById("stars");
+        const linePoints = YEAR.stars.map((star) => `${star.x},${star.y}`).join(" ");
+        stars.innerHTML = `
+            <svg class="constellation" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                <polyline points="${linePoints}" fill="none" stroke="rgba(24,189,120,.55)" stroke-width="0.35"></polyline>
+            </svg>
+            ${YEAR.stars.map((star, i) => `
+                <button class="star" type="button" style="left:${star.x}%;top:${star.y}%" data-i="${i}">
+                    <i></i>
+                    <span>${star.name}</span>
+                </button>
+            `).join("")}
+        `;
+        stars.addEventListener("click", (event) => {
+            const button = event.target.closest(".star");
+            if (!button) return;
+            stars.querySelectorAll(".star").forEach((el) => el.classList.toggle("on", el === button));
+            toast(YEAR.stars[button.dataset.i].note);
+            burst(button.getBoundingClientRect());
+        });
+
+        chapters.forEach((chapter, i) => {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.setAttribute("aria-label", chapter.dataset.name);
+            if (i === 0) button.setAttribute("aria-current", "true");
+            const label = document.createElement("span");
+            label.textContent = chapter.dataset.name;
+            button.append(label);
+            button.addEventListener("click", () => go(i));
+            rail.append(button);
+        });
+
+        function activate(next) {
+            index = next;
+            progress = chapters.length === 1 ? 1 : next / (chapters.length - 1);
+            chapters.forEach((chapter, i) => {
+                chapter.classList.toggle("is-on", i === next);
+                chapter.classList.remove("play");
+            });
+            document.body.dataset.ch = String(next);
+            [...rail.children].forEach((button, i) => {
+                if (i === next) button.setAttribute("aria-current", "true");
+                else button.removeAttribute("aria-current");
+            });
+            requestAnimationFrame(() => chapters[next].classList.add("play"));
+            if (next === 2) countStats();
+            if (next === 6) {
+                const line = document.getElementById("line");
+                if (line) line.style.setProperty("--len", `${line.getTotalLength()}`);
+            }
+        }
+
+        function go(next) {
+            next = Math.max(0, Math.min(chapters.length - 1, next));
+            const now = performance.now();
+            if (next === index || now < lockUntil) return;
+            const from = index;
+            lockUntil = now + 560;
+            activate(next);
+            if (soundOn) blip();
+            if (next === monthChapter) showMonth(from === monthChapter + 1 ? YEAR.months.length - 1 : 0);
+        }
+
+        function countStats() {
+            document.querySelectorAll(".stat b").forEach((node) => {
+                const raw = node.dataset.n;
+                if (raw === "∞") {
+                    node.textContent = "∞";
+                    return;
+                }
+                const target = Number(raw);
+                const start = performance.now();
+                const tick = (now) => {
+                    const t = Math.min(1, (now - start) / 900);
+                    node.textContent = String(Math.round(target * (1 - Math.pow(1 - t, 3))));
+                    if (t < 1) requestAnimationFrame(tick);
+                };
+                requestAnimationFrame(tick);
+            });
+        }
+
+        const range = document.getElementById("wipe-range");
+        const wipe = document.getElementById("wipe");
+        const paintWipe = () => wipe.style.setProperty("--cut", `${range.value}%`);
+        range.addEventListener("input", paintWipe);
+        paintWipe();
+
+        document.getElementById("ignite").addEventListener("click", () => {
+            burst(document.getElementById("ignite").getBoundingClientRect());
+            go(1);
+        });
+        document.getElementById("again").addEventListener("click", () => go(0));
+
+        function advance(step) {
+            if (performance.now() < lockUntil) return;
+            if (index === monthChapter && stepMonth(step)) {
+                lockUntil = performance.now() + 560;
+                if (soundOn) blip();
+                return;
+            }
+            go(index + step);
+        }
+
+        let wheel = 0;
+        window.addEventListener("wheel", (event) => {
+            const sheet = chapters[index].querySelector(".sheet");
+            const dir = Math.sign(event.deltaY);
+            if (index !== monthChapter && sheet && sheet.scrollHeight > sheet.clientHeight + 8) {
+                const atTop = sheet.scrollTop <= 4;
+                const atBottom = sheet.scrollTop + sheet.clientHeight >= sheet.scrollHeight - 4;
+                if ((dir > 0 && !atBottom) || (dir < 0 && !atTop)) return;
+            }
+            event.preventDefault();
+            wheel += event.deltaY;
+            if (Math.abs(wheel) < 36) return;
+            const step = wheel > 0 ? 1 : -1;
+            wheel = 0;
+            advance(step);
+        }, { passive: false });
+
+        window.addEventListener("keydown", (event) => {
+            if (event.target.closest("input, textarea")) return;
+            if (["ArrowDown", "PageDown", " "].includes(event.key)) {
+                event.preventDefault();
+                advance(1);
+            } else if (["ArrowUp", "PageUp"].includes(event.key)) {
+                event.preventDefault();
+                advance(-1);
+            } else if (event.key === "Home") {
+                event.preventDefault();
+                go(0);
+            } else if (event.key === "End") {
+                event.preventDefault();
+                go(chapters.length - 1);
+            }
+        });
+
+        let touchY = null;
+        window.addEventListener("touchstart", (event) => {
+            touchY = event.touches[0].clientY;
+        }, { passive: true });
+        window.addEventListener("touchend", (event) => {
+            if (touchY == null) return;
+            const dy = touchY - event.changedTouches[0].clientY;
+            touchY = null;
+            if (Math.abs(dy) < 46) return;
+            advance(dy > 0 ? 1 : -1);
+        }, { passive: true });
+
+        const canvas = document.getElementById("field");
+        const ctx = canvas.getContext("2d");
+        let widthPx = 0;
+        let heightPx = 0;
+        const motes = [];
+
+        function resize() {
+            const ratio = Math.min(devicePixelRatio || 1, 2);
+            widthPx = window.innerWidth;
+            heightPx = window.innerHeight;
+            canvas.width = Math.floor(widthPx * ratio);
+            canvas.height = Math.floor(heightPx * ratio);
+            canvas.style.width = `${widthPx}px`;
+            canvas.style.height = `${heightPx}px`;
+            ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+        }
+
+        function makeMote(bursting, x, y) {
+            const angle = Math.random() * Math.PI * 2;
+            const speed = bursting ? Math.random() * 2.4 + 0.6 : 0;
+            return {
+                x: x ?? Math.random() * widthPx,
+                y: y ?? Math.random() * heightPx,
+                r: Math.random() * 2.2 + 0.6,
+                v: Math.random() * 0.28 + 0.06,
+                drift: Math.random() * 0.22 - 0.11,
+                alpha: bursting ? 0.7 : Math.random() * 0.22 + 0.06,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                life: bursting ? 36 + Math.random() * 18 : 0,
+                bursting
+            };
+        }
+
+        function burst(rect) {
+            if (reduce) return;
+            const x = rect.left + rect.width / 2;
+            const y = rect.top + rect.height / 2;
+            for (let i = 0; i < 16; i += 1) motes.push(makeMote(true, x, y));
+        }
+
+        function frame() {
+            ctx.clearRect(0, 0, widthPx, heightPx);
+            for (let i = motes.length - 1; i >= 0; i -= 1) {
+                const mote = motes[i];
+                if (mote.bursting) {
+                    mote.x += mote.vx;
+                    mote.y += mote.vy;
+                    mote.vx *= 0.96;
+                    mote.vy *= 0.96;
+                    mote.life -= 1;
+                    mote.alpha *= 0.96;
+                    if (mote.life <= 0) {
+                        motes.splice(i, 1);
+                        continue;
+                    }
+                } else {
+                    mote.x += mote.drift;
+                    mote.y -= mote.v;
+                    if (mote.y < -8) mote.y = heightPx + 8;
+                    if (mote.x < 0) mote.x = widthPx;
+                    if (mote.x > widthPx) mote.x = 0;
+                }
+                ctx.beginPath();
+                ctx.fillStyle = `rgba(24, 189, 120, ${mote.alpha})`;
+                ctx.arc(mote.x, mote.y, mote.r, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            requestAnimationFrame(frame);
+        }
+
+        function toast(message) {
+            const node = document.getElementById("toast");
+            node.textContent = message;
+            node.classList.add("show");
+            clearTimeout(toast.timer);
+            toast.timer = setTimeout(() => node.classList.remove("show"), 2200);
+        }
+
+        function ensureAudio() {
+            if (!audioCtx) audioCtx = new AudioContext();
+            if (audioCtx.state === "suspended") audioCtx.resume();
+            return audioCtx;
+        }
+
+        function blip() {
+            const ctxAudio = ensureAudio();
+            const osc = ctxAudio.createOscillator();
+            const gain = ctxAudio.createGain();
+            osc.type = "sine";
+            osc.frequency.value = 392 + index * 16;
+            gain.gain.setValueAtTime(0.0001, ctxAudio.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.025, ctxAudio.currentTime + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.0001, ctxAudio.currentTime + 0.22);
+            osc.connect(gain).connect(ctxAudio.destination);
+            osc.start();
+            osc.stop(ctxAudio.currentTime + 0.24);
+        }
+
+        document.getElementById("sound").addEventListener("click", (event) => {
+            soundOn = !soundOn;
+            event.currentTarget.setAttribute("aria-pressed", String(soundOn));
+            event.currentTarget.textContent = soundOn ? "声音 开" : "声音";
+            if (soundOn) blip();
+        });
+
+        window.addEventListener("resize", resize);
+        resize();
+        for (let i = 0; i < 36; i += 1) motes.push(makeMote(false));
+        if (!reduce) requestAnimationFrame(frame);
+
+        const params = new URLSearchParams(location.search);
+        const start = Number(params.get("c"));
+        if (Number.isInteger(start) && start > 0 && start < chapters.length) activate(start);
+        else activate(0);
+    </script>
+</body>
+</html>
