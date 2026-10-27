@@ -540,26 +540,55 @@
             font-size: 15px;
         }
 
-        .reader {
+        .reader-stage {
+            position: relative;
             margin: 0 0 12px;
-            padding: 16px 18px;
-            min-height: 96px;
+            overflow: hidden;
+            border-radius: var(--radius);
+        }
+
+        .reader {
+            margin: 0;
+            padding: 22px 26px 26px;
+            min-height: 220px;
+            will-change: transform;
+        }
+
+        .reader-stage.is-sliding .reader,
+        .reader-stage.is-sliding .reader-ghost {
+            transition: transform 780ms cubic-bezier(.16, .84, .28, 1), opacity 780ms ease !important;
+        }
+
+        .reader-ghost {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            margin: 0;
+            pointer-events: none;
+            z-index: 2;
         }
 
         .reader .eyebrow {
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-family: var(--sans);
-            font-size: 28px;
+            font-size: 18px;
             font-weight: 800;
-            letter-spacing: -0.04em;
+            letter-spacing: -0.03em;
             text-transform: none;
         }
         .reader h3 {
-            margin: 4px 0 6px;
+            margin: 0 0 14px;
             color: var(--ink-strong);
-            font-size: 24px;
+            font-size: clamp(32px, 3.4vw, 44px);
             font-weight: 800;
-            letter-spacing: -0.04em;
+            letter-spacing: -0.05em;
+        }
+        .reader .slot {
+            color: var(--ink-strong);
+            font-size: clamp(22px, 2.3vw, 30px);
+            font-weight: 600;
+            line-height: 1.65;
         }
 
         .wipe {
@@ -863,11 +892,13 @@
                 <p class="eyebrow">Twelve months</p>
                 <h2>十二个月，还没写完</h2>
                 <p class="month-hint">向下滑动，或按 ↓，翻到下一月</p>
-                <article class="reader">
-                    <p class="eyebrow" id="reader-kicker">第 1 月</p>
-                    <h3 id="reader-name">崩塌</h3>
-                    <p class="slot" id="reader-copy">悲痛的一月，裁员通知到了。公司即将倒闭，只留最低成本运转。整个人生像一下子塌掉。我到处找自己错在哪，为什么被裁，为什么被抛弃，是不是真的不配这个市场。这个月只剩下对自己的质疑，和疯狂准备面试。失败我可以接受，但我一定要从失败里站起来。</p>
-                </article>
+                <div class="reader-stage">
+                    <article class="reader">
+                        <p class="eyebrow" id="reader-kicker">第 1 月</p>
+                        <h3 id="reader-name">崩塌</h3>
+                        <p class="slot" id="reader-copy">悲痛的一月，裁员通知到了。公司即将倒闭，只留最低成本运转。整个人生像一下子塌掉。我到处找自己错在哪，为什么被裁，为什么被抛弃，是不是真的不配这个市场。这个月只剩下对自己的质疑，和疯狂准备面试。失败我可以接受，但我一定要从失败里站起来。</p>
+                    </article>
+                </div>
                 <div class="months" id="months"></div>
             </div>
         </section>
@@ -957,7 +988,7 @@
             ],
             months: [
                 { name: "崩塌", copy: "悲痛的一月，裁员通知到了。公司即将倒闭，只留最低成本运转。整个人生像一下子塌掉。我到处找自己错在哪，为什么被裁，为什么被抛弃，是不是真的不配这个市场。这个月只剩下对自己的质疑，和疯狂准备面试。失败我可以接受，但我一定要从失败里站起来。" },
-                { name: "低头", copy: "二月模板：你在躲什么，又在护住什么。" },
+                { name: "崩溃", copy: "带着失业的沉重回到故乡过年。在家的每一天都很累，像完成任务一样把日子过完，也会想起小时候不好的经历。我其实很不想回家。过完年去了新工作，并不满意，月底就辞了。我讨厌这种恶意压榨。加班我可以接受，无效的加班我坚决拒绝。至今还讨厌那个老板的一句话：必须两周只放一天假，要不心都散了。拜托，我也是需要生活的。" },
                 { name: "裂缝", copy: "三月模板：第一道裂开的缝，光就是从这里进来的。" },
                 { name: "回头", copy: "四月模板：你第一次认真看自己的月份。" },
                 { name: "接住", copy: "五月模板：有一天，你把日子接住了。" },
@@ -980,7 +1011,7 @@
                 { k: "创作", t: "待填：你做出来、并且没有丢掉的东西。" }
             ],
             pulse: [24, 22, 30, 38, 46, 34, 52, 58, 63, 70, 78, 88],
-            pulseWords: ["崩塌", "低头", "裂缝", "回头", "接住", "无人", "进光", "站稳", "归还", "向前", "不求救", "点燃"],
+            pulseWords: ["崩塌", "崩溃", "裂缝", "回头", "接住", "无人", "进光", "站稳", "归还", "向前", "不求救", "点燃"],
             stars: [
                 { name: "想感谢的人", x: 22, y: 34, note: "待填：名字可以不写，写下他做了什么。" },
                 { name: "陪着我的生命", x: 48, y: 24, note: "待填：一只猫，一条鱼，或另一个人。" },
@@ -1044,7 +1075,10 @@
             </button>
         `).join("");
 
-        function showMonth(i) {
+        const reader = document.querySelector(".reader");
+        const readerStage = document.querySelector(".reader-stage");
+
+        function paintMonth(i) {
             monthCursor = i;
             document.querySelectorAll("#months .glass").forEach((el) => {
                 el.classList.toggle("on", Number(el.dataset.i) === i);
@@ -1056,10 +1090,53 @@
             if (sheet) sheet.scrollTop = 0;
         }
 
+        function showMonth(i, dir = 0) {
+            if (!dir || i === monthCursor) {
+                paintMonth(i);
+                return;
+            }
+            readerStage.querySelectorAll(".reader-ghost").forEach((el) => el.remove());
+            const ghost = reader.cloneNode(true);
+            ghost.querySelectorAll("[id]").forEach((el) => el.removeAttribute("id"));
+            ghost.classList.add("reader-ghost");
+            ghost.setAttribute("aria-hidden", "true");
+            readerStage.appendChild(ghost);
+
+            const distance = Math.max(readerStage.offsetHeight, 168);
+            const leave = dir > 0 ? -distance : distance;
+            readerStage.classList.remove("is-sliding");
+            ghost.style.transition = "none";
+            reader.style.transition = "none";
+            ghost.style.transform = "translateY(0)";
+            ghost.style.opacity = "1";
+            paintMonth(i);
+            reader.style.transform = `translateY(${-leave}px)`;
+            reader.style.opacity = "0";
+            readerStage.offsetHeight;
+
+            requestAnimationFrame(() => {
+                readerStage.classList.add("is-sliding");
+                ghost.style.transition = "";
+                reader.style.transition = "";
+                ghost.style.transform = `translateY(${leave}px)`;
+                ghost.style.opacity = "0";
+                reader.style.transform = "translateY(0)";
+                reader.style.opacity = "1";
+            });
+
+            window.setTimeout(() => {
+                if (ghost.isConnected) ghost.remove();
+                reader.style.transform = "";
+                reader.style.opacity = "";
+                reader.style.transition = "";
+                readerStage.classList.remove("is-sliding");
+            }, 820);
+        }
+
         function stepMonth(dir) {
             const next = monthCursor + dir;
             if (monthChapter < 0 || next < 0 || next >= YEAR.months.length) return false;
-            showMonth(next);
+            showMonth(next, dir);
             return true;
         }
 
@@ -1068,7 +1145,9 @@
         document.getElementById("months").addEventListener("click", (event) => {
             const button = event.target.closest(".glass");
             if (!button) return;
-            showMonth(Number(button.dataset.i));
+            const next = Number(button.dataset.i);
+            if (next === monthCursor) return;
+            showMonth(next, next > monthCursor ? 1 : -1);
         });
 
         document.getElementById("rites").innerHTML = YEAR.rites.map((rite, i) => `
@@ -1237,7 +1316,7 @@
         function advance(step) {
             if (performance.now() < lockUntil) return;
             if (index === monthChapter && stepMonth(step)) {
-                lockUntil = performance.now() + 560;
+                lockUntil = performance.now() + 820;
                 if (soundOn) blip();
                 return;
             }
