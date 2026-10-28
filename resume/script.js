@@ -17,7 +17,7 @@
  * under the License.
  */
 
-const EMAIL = 'y51288033@outlook.com';
+const EMAIL = 'bryanyang0225@gmail.com';
 const root = document.documentElement;
 const themeMeta = document.querySelector('meta[name="theme-color"]');
 const copyButton = document.getElementById('copy-email');

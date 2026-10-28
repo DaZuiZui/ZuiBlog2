@@ -599,7 +599,7 @@
             <div class="info-item">
                 <div class="label">✉️ Email</div>
                 <div class="value">
-                    <span id="email">y51288033@outlook.com</span>
+                    <span id="email">bryanyang0225@gmail.com</span>
                     <button class="copy-btn" onclick="copyEmail()">
                         <span class="copy-text">复制</span>
                     </button>
