@@ -612,8 +612,8 @@
                 <div class="value">
                     <div class="status-indicator">
                         <span class="status-dot"></span>
-                        <span class="status-text">在职·考虑新机会</span>
-                        <div class="tooltip">Currently employed, happy to explore new roles.</div>
+                        <span class="status-text">在职，暂不考虑新的机会</span>
+                        <div class="tooltip">Currently employed, not considering new opportunities.</div>
                     </div>
                 </div>
             </div>
