@@ -783,6 +783,217 @@
         @keyframes draw { to { width: min(220px, 46%); } }
         @keyframes dash { to { stroke-dashoffset: 0; } }
         @keyframes sunrise { to { opacity: 1; transform: none; } }
+        @keyframes city-in { to { opacity: 1; transform: none; } }
+        @keyframes spine-grow { to { transform: scaleY(1); } }
+        @keyframes emo-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .city-sheet {
+            width: min(860px, 100%);
+        }
+
+        .city-head {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 24px;
+            margin-bottom: 8px;
+        }
+
+        .city-sheet .eyebrow { margin-bottom: 8px; }
+
+        .city-sheet h2 {
+            margin-bottom: 6px;
+            font-size: clamp(30px, 3vw, 42px);
+        }
+
+        .city-sheet .month-hint {
+            margin: 0;
+            color: var(--ink);
+            font-size: 16px;
+            font-weight: 650;
+            line-height: 1.45;
+        }
+
+        .city-count {
+            margin: 0;
+            color: var(--accent-strong);
+            font-size: 68px;
+            font-weight: 800;
+            letter-spacing: -0.07em;
+            line-height: 0.8;
+            text-align: right;
+        }
+
+        .city-count span {
+            display: block;
+            margin-top: 8px;
+            color: var(--muted);
+            font-family: var(--mono);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.16em;
+        }
+
+        .city-board {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .city-spine {
+            position: absolute;
+            top: 40px;
+            bottom: 40px;
+            left: 20px;
+            width: 4px;
+            border-radius: 999px;
+            background: linear-gradient(180deg, #7dE7b5, var(--accent) 18%, var(--accent-strong));
+            box-shadow: 0 0 0 7px rgba(24, 189, 120, 0.14);
+            transform: scaleY(0);
+            transform-origin: top center;
+            z-index: 0;
+        }
+
+        .chapter.play .city-spine {
+            animation: spine-grow 900ms cubic-bezier(.16, .84, .28, 1) forwards;
+        }
+
+        .city-plane {
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 4;
+            font-size: 28px;
+            line-height: 1;
+            filter: drop-shadow(0 8px 10px rgba(7, 150, 91, 0.35));
+            pointer-events: none;
+        }
+
+        .stop {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: 40px 52px minmax(0, 1fr);
+            gap: 12px;
+            align-items: center;
+            min-height: 56px;
+            padding: 4px 16px 4px 34px;
+            border: 1px solid rgba(24, 189, 120, 0.24);
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.94);
+            box-shadow: 0 10px 26px rgba(28, 75, 57, 0.07);
+            opacity: 0;
+            transform: translateX(28px);
+            transition: background 280ms ease, border-color 280ms ease, box-shadow 280ms ease;
+        }
+
+        .chapter.play .stop {
+            animation: city-in 640ms cubic-bezier(.16, .84, .28, 1) forwards;
+            animation-delay: calc(var(--i) * 70ms);
+        }
+
+        .stop.is-here {
+            border-color: rgba(7, 150, 91, 0.55);
+            background: linear-gradient(90deg, rgba(24, 189, 120, 0.18), #fff 58%);
+            box-shadow: 0 14px 32px rgba(24, 189, 120, 0.16);
+        }
+
+        .stop .dot {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            width: 12px;
+            height: 12px;
+            margin-top: -6px;
+            border: 3px solid var(--accent-strong);
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(24, 189, 120, 0.16);
+            z-index: 2;
+        }
+
+        .stop.is-here .dot {
+            background: var(--accent);
+            box-shadow: 0 0 0 6px rgba(24, 189, 120, 0.22);
+        }
+
+        .stop .idx {
+            color: var(--accent-strong);
+            font-family: var(--mono);
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-align: right;
+        }
+
+        .stop .mark {
+            display: grid;
+            place-items: center;
+            width: 52px;
+            height: 52px;
+            border: 3px solid var(--accent-strong);
+            border-radius: 50%;
+            background:
+                radial-gradient(circle at 32% 28%, #fff, #e7f8ef 72%);
+            box-shadow: 0 0 0 6px rgba(24, 189, 120, 0.14);
+            font-size: 26px;
+            line-height: 1;
+            transition: transform 280ms ease, box-shadow 280ms ease;
+        }
+
+        .stop.is-here .mark {
+            transform: scale(1.06);
+            box-shadow: 0 0 0 8px rgba(24, 189, 120, 0.24);
+        }
+
+        .chapter.play .stop .emo {
+            animation: emo-float 2.8s ease-in-out infinite;
+            animation-delay: calc(var(--i) * 160ms);
+        }
+
+        .stop-copy {
+            min-width: 0;
+        }
+
+        .stop-title {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+        }
+
+        .stop strong {
+            color: var(--ink-strong);
+            font-size: clamp(22px, 2.2vw, 28px);
+            font-weight: 800;
+            letter-spacing: -0.045em;
+            line-height: 1.1;
+        }
+
+        .stop .when {
+            padding: 2px 8px;
+            border-radius: 999px;
+            background: var(--accent-soft);
+            color: var(--accent-strong);
+            font-family: var(--mono);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            white-space: nowrap;
+        }
+
+        .stop em {
+            display: block;
+            margin-top: 2px;
+            color: var(--ink);
+            font-style: normal;
+            font-size: 16px;
+            font-weight: 650;
+            line-height: 1.45;
+        }
 
         @media (max-width: 900px) {
             .chapter { padding: 88px 18px 78px; }
@@ -792,6 +1003,10 @@
             .visual-avatar { width: min(168px, 52%); }
             .orb-ring { width: 210px; height: 210px; margin: -122px 0 0 -105px; }
             .months { grid-template-columns: repeat(3, 1fr); }
+            .city-head { align-items: flex-start; }
+            .city-count { font-size: 52px; }
+            .city-spine, .stop .dot { left: 15px; }
+            .stop { padding-left: 34px; }
             .rail {
                 top: auto;
                 bottom: 14px;
@@ -821,6 +1036,8 @@
                 transition: none !important;
             }
             .lines p, .sun, .rule { opacity: 1; transform: none; width: min(220px, 46%); }
+            .stop { opacity: 1; transform: none; }
+            .city-spine { transform: none; }
         }
     </style>
 </head>
@@ -900,6 +1117,20 @@
                     </article>
                 </div>
                 <div class="months" id="months"></div>
+            </div>
+        </section>
+
+        <section class="chapter" data-name="城市">
+            <div class="sheet city-sheet">
+                <div class="city-head">
+                    <div>
+                        <p class="eyebrow">2026 · Cities</p>
+                        <h2>走过的城市</h2>
+                        <p class="month-hint">从深圳出发，到吉隆坡。这一年真正落过脚的地方。</p>
+                    </div>
+                    <p class="city-count">08<span>STOPS</span></p>
+                </div>
+                <div class="city-board" id="city-board"></div>
             </div>
         </section>
 
@@ -989,16 +1220,26 @@
             months: [
                 { name: "崩塌", copy: "悲痛的一月，裁员通知到了。公司即将倒闭，只留最低成本运转。整个人生像一下子塌掉。我到处找自己错在哪，为什么被裁，为什么被抛弃，是不是真的不配这个市场。这个月只剩下对自己的质疑，和疯狂准备面试。失败我可以接受，但我一定要从失败里站起来。" },
                 { name: "崩溃", copy: "带着失业的沉重回到故乡过年。在家的每一天都很累，像完成任务一样把日子过完，也会想起小时候不好的经历。我其实很不想回家。过完年去了新工作，并不满意，月底就辞了。我讨厌这种恶意压榨。加班我可以接受，无效的加班我坚决拒绝。至今还讨厌那个老板的一句话：必须两周只放一天假，要不心都散了。拜托，我也是需要生活的。" },
-                { name: "裂缝", copy: "三月模板：第一道裂开的缝，光就是从这里进来的。" },
-                { name: "回头", copy: "四月模板：你第一次认真看自己的月份。" },
-                { name: "接住", copy: "五月模板：有一天，你把日子接住了。" },
-                { name: "无人", copy: "六月模板：没有观众的时候，你还在不在。" },
-                { name: "进光", copy: "七月模板：有什么东西终于照进来了。" },
-                { name: "站稳", copy: "八月模板：你开始能站在自己的决定上。" },
-                { name: "归还", copy: "九月模板：你把生活从别人的期待里要回来。" },
-                { name: "向前", copy: "十月模板：不再解释，只是往前。" },
+                { name: "裂缝中的阳光", copy: "三月，我收到一份满意的 offer，薪水涨了很多。老板听了我的经历，特别欣赏我。这家公司给了很大的自由。我们一起做出一个非常稳定的项目。我成长很大，认知也抬高了很多。" },
+                { name: "心情低落", copy: "四月，我去了成都旅游。这一趟并不那么开心，心情五味杂陈。还好工作比较顺利。" },
+                { name: "绝望", copy: "五月，我和一个很好的伙计吵了起来。后来有好转。这个月整体平平无奇。" },
+                { name: "解放", copy: "六月，工作比较顺利。情感上也松了下来。我自己也在认真把事情做好。" },
+                { name: "难受", copy: "七月没有什么大事，工作依旧安安稳稳。家里来了新成员，一只睡鼠。它越狱以后把家弄得一团糟，很多珍贵的纪念品都被破坏了。这几个月，花枝鼠也把温馨的出租屋弄得不成样子。学位证书甚至也被睡鼠咬坏了。那一刻我很难受。从这以后我一直问自己，我真的还爱养动物吗。下班以后，我好像更想休息。心情很差。" },
+                { name: "巅峰", copy: "八月，存款到了自己定下的目标。心情大好，事业也特别顺利，顺利到我想把这个月封成这一年的巅峰。只是偶尔看见被弄乱的出租屋，还是很难受。我下定决心，年末搬家。" },
+                { name: "认清自我", copy: "九月平平无奇，去了北京。这个月的事让我更认清自己，也知道自己想要什么。我最信任的人，却一点点在耍我。我也因此长大了一点：不要轻易相信任何人。" },
+                { name: "复杂", copy: "十月，存款突破了自己定下的新目标，可喜可贺。可我还是被当成傻子一样骗了。也有一件开心的事：这个月，我有了一个约定。十月还回了黑龙江，当了伴郎，见到大学的玩伴。心情很复杂。" },
                 { name: "不求救", copy: "十一月模板：你停止把拯救外包给别人。" },
                 { name: "点燃", copy: "十二月模板：这一年的印，盖在这里。" }
+            ],
+            cities: [
+                { emoji: "🏙️", name: "深圳", when: "起点", line: "继续从这里出发。" },
+                { emoji: "🌃", name: "香港", when: "这一年", line: "走过。" },
+                { emoji: "❄️", name: "哈尔滨", when: "2月", line: "回到故乡。" },
+                { emoji: "🐼", name: "成都", when: "4月", line: "去旅游。" },
+                { emoji: "🏯", name: "北京", when: "9月", line: "去了一趟。" },
+                { emoji: "🎡", name: "天津", when: "10月", line: "这一站。" },
+                { emoji: "⛸️", name: "哈尔滨", when: "10月", line: "回黑龙江，当了伴郎。" },
+                { emoji: "🌴", name: "吉隆坡", when: "11月", line: "马来西亚。" }
             ],
             before: "待填：那时候的你。疲惫、躲开、把自己放在最后。",
             after: "待填：后来的你。还是同一个人，但手已经伸向自己。",
@@ -1011,7 +1252,7 @@
                 { k: "创作", t: "待填：你做出来、并且没有丢掉的东西。" }
             ],
             pulse: [24, 22, 30, 38, 46, 34, 52, 58, 63, 70, 78, 88],
-            pulseWords: ["崩塌", "崩溃", "裂缝", "回头", "接住", "无人", "进光", "站稳", "归还", "向前", "不求救", "点燃"],
+            pulseWords: ["崩塌", "崩溃", "阳光", "低落", "绝望", "解放", "难受", "巅峰", "认清", "复杂", "不求救", "点燃"],
             stars: [
                 { name: "想感谢的人", x: 22, y: 34, note: "待填：名字可以不写，写下他做了什么。" },
                 { name: "陪着我的生命", x: 48, y: 24, note: "待填：一只猫，一条鱼，或另一个人。" },
@@ -1142,6 +1383,75 @@
 
         showMonth(0);
 
+        const cityBoard = document.getElementById("city-board");
+        cityBoard.innerHTML = `
+            <div class="city-spine" aria-hidden="true"></div>
+            <span class="city-plane" id="city-plane" aria-hidden="true">✈️</span>
+            ${YEAR.cities.map((city, i) => `
+                <article class="stop${i === 0 ? " is-here" : ""}" style="--i:${i}">
+                    <span class="dot" aria-hidden="true"></span>
+                    <span class="idx">${String(i + 1).padStart(2, "0")}</span>
+                    <span class="mark"><span class="emo">${city.emoji}</span></span>
+                    <div class="stop-copy">
+                        <div class="stop-title">
+                            <strong>${city.name}</strong>
+                            <span class="when">${city.when}</span>
+                        </div>
+                        <em>${city.line}</em>
+                    </div>
+                </article>
+            `).join("")}
+        `;
+
+        let cityFlight = 0;
+
+        function flyCities() {
+            const plane = document.getElementById("city-plane");
+            const spine = cityBoard.querySelector(".city-spine");
+            const cards = [...cityBoard.querySelectorAll(".stop")];
+            const board = cityBoard.getBoundingClientRect();
+            if (!plane || cards.length < 2 || board.height < 8) return;
+            const route = cards.map((card) => {
+                const dot = card.querySelector(".dot").getBoundingClientRect();
+                return {
+                    x: dot.left + dot.width / 2 - board.left,
+                    y: dot.top + dot.height / 2 - board.top
+                };
+            });
+            if (spine && route.length > 1) {
+                spine.style.top = `${route[0].y}px`;
+                spine.style.bottom = "auto";
+                spine.style.height = `${route[route.length - 1].y - route[0].y}px`;
+                spine.style.left = `${route[0].x - 2}px`;
+            }
+            if (reduce) {
+                plane.style.display = "none";
+                return;
+            }
+            const token = ++cityFlight;
+            const cityIndex = String(chapters.findIndex((chapter) => chapter.dataset.name === "城市"));
+            plane.style.display = "block";
+            const start = performance.now();
+            const tick = (now) => {
+                if (token !== cityFlight || document.body.dataset.ch !== cityIndex) return;
+                const elapsed = Math.max(0, now - start);
+                const t = (elapsed % 7200) / 7200;
+                const pos = t * (route.length - 1);
+                const stopIndex = Math.max(0, Math.min(route.length - 2, Math.floor(pos)));
+                const local = pos - stopIndex;
+                const from = route[stopIndex];
+                const to = route[stopIndex + 1];
+                const x = from.x + (to.x - from.x) * local;
+                const y = from.y + (to.y - from.y) * local;
+                const angle = Math.atan2(to.y - from.y, to.x - from.x) * 180 / Math.PI;
+                plane.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%) rotate(${angle - 45}deg)`;
+                const here = local > 0.55 ? stopIndex + 1 : stopIndex;
+                cards.forEach((card, n) => card.classList.toggle("is-here", n === here));
+                requestAnimationFrame(tick);
+            };
+            requestAnimationFrame(tick);
+        }
+
         document.getElementById("months").addEventListener("click", (event) => {
             const button = event.target.closest(".glass");
             if (!button) return;
@@ -1266,7 +1576,8 @@
             });
             requestAnimationFrame(() => chapters[next].classList.add("play"));
             if (next === 2) countStats();
-            if (next === 6) {
+            if (chapters[next]?.dataset.name === "城市") flyCities();
+            if (chapters[next]?.dataset.name === "心跳") {
                 const line = document.getElementById("line");
                 if (line) line.style.setProperty("--len", `${line.getTotalLength()}`);
             }
@@ -1384,6 +1695,7 @@
             canvas.style.width = `${widthPx}px`;
             canvas.style.height = `${heightPx}px`;
             ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+            if (chapters[index]?.dataset.name === "城市") flyCities();
         }
 
         function makeMote(bursting, x, y) {
