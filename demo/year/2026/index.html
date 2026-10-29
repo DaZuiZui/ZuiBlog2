@@ -1978,7 +1978,7 @@
             };
             const tick = (now) => {
                 if (token !== cityFlight || document.body.dataset.ch !== cityIndex) return;
-                const elapsed = (now - start) % cycle;
+                const elapsed = Math.max(0, now - start) % cycle;
                 if (elapsed >= travel) {
                     const u = (elapsed - travel) / resetMs;
                     const last = route[route.length - 1];
@@ -1991,10 +1991,14 @@
                         mark(0);
                     }
                 } else {
-                    const leg = Math.min(route.length - 2, Math.floor(elapsed / unit));
+                    const leg = Math.min(route.length - 2, Math.max(0, Math.floor(elapsed / unit)));
                     const localMs = elapsed - leg * unit;
                     const from = route[leg];
                     const to = route[leg + 1];
+                    if (!from || !to) {
+                        requestAnimationFrame(tick);
+                        return;
+                    }
                     if (localMs < legMs) {
                         const eased = easeInOut(localMs / legMs);
                         const x = from.x + (to.x - from.x) * eased + Math.sin(eased * Math.PI) * bow;
