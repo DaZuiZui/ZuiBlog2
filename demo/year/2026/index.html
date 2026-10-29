@@ -447,7 +447,7 @@
         .stats { grid-template-columns: repeat(4, 1fr); }
         .rites { grid-template-columns: repeat(3, 1fr); }
 
-        .stat, .rite, .vow, .reader, .glass {
+        .stat, .rite, .vow, .glass {
             border: 1px solid var(--line);
             border-radius: var(--radius);
             background: var(--surface);
@@ -474,17 +474,56 @@
 
         .stat span { display: block; margin-top: 14px; color: var(--muted); line-height: 1.6; }
 
+        .chapter[data-name="十二月"] .sheet {
+            align-self: stretch;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .month-head { flex: none; }
+        .month-head .eyebrow { margin-bottom: 6px; }
+        .month-head h2 {
+            margin-bottom: 4px;
+            font-size: clamp(28px, 3vw, 40px);
+        }
+
+        .month-top {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .month-progress {
+            margin: 0 0 6px;
+            color: var(--accent-strong);
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.06em;
+            line-height: 1;
+        }
+
+        .month-progress span {
+            color: var(--faint);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
         .months {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
-            gap: 10px;
+            gap: 8px;
+            flex: none;
+            margin-top: 10px;
         }
 
         .glass {
-            min-height: 92px;
-            padding: 12px 12px 14px;
-            text-align: left;
-            transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
+            min-height: 74px;
+            padding: 8px 6px 9px;
+            text-align: center;
+            transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease, background 200ms ease;
         }
 
         .glass:hover, .glass.on, .rite:hover, .vow:hover {
@@ -493,24 +532,25 @@
             transform: translateY(-3px);
         }
 
+        .glass-emo {
+            display: block;
+            font-size: 22px;
+            line-height: 1;
+        }
+
+        .glass.on .glass-emo { animation: emo-float 2.2s ease-in-out infinite; }
+
         .glass em, .glass strong, .rite strong, .vow strong { display: block; font-style: normal; }
         .glass em {
-            display: inline-flex;
-            width: fit-content;
-            margin-bottom: 2px;
-            padding: 3px 8px;
-            border-radius: 999px;
-            background: var(--accent-soft);
+            display: block;
+            margin: 3px 0 0;
             color: var(--accent-strong);
-            font-size: 13px;
+            font-size: 11px;
             font-weight: 800;
             letter-spacing: 0;
             line-height: 1.2;
         }
-        .glass.on em {
-            background: var(--accent);
-            color: #fff;
-        }
+        .glass.on em { color: var(--accent-strong); }
         .rite small, .vow small {
             color: var(--faint);
             font-family: var(--mono);
@@ -519,11 +559,12 @@
         }
 
         .glass strong {
-            margin-top: 8px;
+            margin-top: 1px;
             color: var(--ink-strong);
-            font-size: 16px;
+            font-size: 13px;
             font-weight: 800;
             letter-spacing: -0.04em;
+            line-height: 1.25;
         }
 
         .glass.on {
@@ -535,60 +576,268 @@
         .glass.on strong, .rite.on strong { color: var(--accent-strong); }
 
         .month-hint {
-            margin: -4px 0 14px;
+            margin: 0 0 10px;
             color: var(--muted);
-            font-size: 15px;
+            font-size: 14px;
         }
 
-        .reader-stage {
+        .month-stage {
             position: relative;
-            margin: 0 0 12px;
+            flex: 1 1 auto;
+            min-height: 0;
             overflow: hidden;
-            border-radius: var(--radius);
+            border-radius: 22px;
         }
 
-        .reader {
-            margin: 0;
-            padding: 22px 26px 26px;
-            min-height: 220px;
-            will-change: transform;
-        }
-
-        .reader-stage.is-sliding .reader,
-        .reader-stage.is-sliding .reader-ghost {
-            transition: transform 780ms cubic-bezier(.16, .84, .28, 1), opacity 780ms ease !important;
-        }
-
-        .reader-ghost {
+        .month-page {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            margin: 0;
-            pointer-events: none;
-            z-index: 2;
+            inset: 0;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            background:
+                linear-gradient(165deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.4)),
+                var(--surface-strong);
+            box-shadow: 0 18px 50px rgba(28, 75, 57, 0.08);
+            --sky: #d7ebe3;
+            --sky-deep: #8fb8aa;
+            --maccent: #07965b;
         }
 
-        .reader .eyebrow {
-            margin-bottom: 6px;
-            font-family: var(--sans);
-            font-size: 18px;
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            text-transform: none;
+        .month-stage.is-sliding .month-page {
+            transition: transform 680ms cubic-bezier(.16, .84, .28, 1), opacity 680ms ease;
         }
-        .reader h3 {
-            margin: 0 0 14px;
+
+        .month-page[data-tone="1"] { --sky: #d5dee8; --sky-deep: #8ea0b5; --maccent: #4d6484; }
+        .month-page[data-tone="2"] { --sky: #e7f1f8; --sky-deep: #b7cddd; --maccent: #6d8eae; }
+        .month-page[data-tone="3"] { --sky: #e7f6df; --sky-deep: #f3c9d4; --maccent: #3f9a62; }
+        .month-page[data-tone="4"] { --sky: #e4eaf0; --sky-deep: #b7c5d4; --maccent: #6d8498; }
+        .month-page[data-tone="5"] { --sky: #f6e4ea; --sky-deep: #d7a8b8; --maccent: #b15474; }
+        .month-page[data-tone="6"] { --sky: #fff4d8; --sky-deep: #d7f3e4; --maccent: #d39a22; }
+        .month-page[data-tone="7"] { --sky: #e3ebf2; --sky-deep: #c5d0dc; --maccent: #7d90a4; }
+        .month-page[data-tone="8"] { --sky: #fff6cf; --sky-deep: #f0d48a; --maccent: #d3921a; }
+        .month-page[data-tone="9"] { --sky: #e5f3ea; --sky-deep: #b7d2c4; --maccent: #2f8f68; }
+        .month-page[data-tone="10"] { --sky: #f8ead4; --sky-deep: #e7c49a; --maccent: #c47a32; }
+        .month-page[data-tone="11"] { --sky: #e5f3f8; --sky-deep: #9ec9dc; --maccent: #2f7da8; }
+        .month-page[data-tone="12"] { --sky: #ffe7cf; --sky-deep: #f3c07a; --maccent: #e06a2c; }
+
+        .month-layout {
+            display: grid;
+            grid-template-columns: minmax(220px, 0.82fr) minmax(0, 1.18fr);
+            grid-template-rows: minmax(0, 1fr);
+            height: 100%;
+        }
+
+        .month-visual {
+            position: relative;
+            overflow: hidden;
+            min-height: 100%;
+            background:
+                radial-gradient(90% 70% at 50% 8%, rgba(255, 255, 255, 0.95), transparent 46%),
+                linear-gradient(180deg, var(--sky), var(--sky-deep));
+        }
+
+        .month-sky, .halo, .ground { position: absolute; pointer-events: none; }
+        .month-sky { inset: 0; }
+
+        .halo {
+            left: 50%;
+            top: 42%;
+            width: 210px;
+            height: 210px;
+            margin: -105px 0 0 -105px;
+            border-radius: 50%;
+            opacity: 0.55;
+            background: radial-gradient(circle, color-mix(in srgb, var(--maccent) 28%, white), transparent 68%);
+        }
+
+        .ground {
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 24%;
+            background: linear-gradient(to top, color-mix(in srgb, var(--maccent) 28%, transparent), transparent);
+        }
+
+        .hero-pop {
+            position: absolute;
+            left: 50%;
+            top: 42%;
+            z-index: 2;
+            transform: translate(-50%, -50%);
+        }
+
+        .month-page.is-turn .hero-pop { animation: hero-pop 680ms cubic-bezier(.16, .84, .28, 1) both; }
+
+        .hero-emoji {
+            display: block;
+            font-size: clamp(84px, 9vw, 128px);
+            line-height: 1;
+            filter: drop-shadow(0 16px 18px rgba(28, 52, 44, 0.16));
+        }
+
+        .month-watermark {
+            position: absolute;
+            right: 8%;
+            bottom: 8%;
+            z-index: 2;
+            color: var(--maccent);
+            font-family: var(--mono);
+            font-size: clamp(42px, 5vw, 68px);
+            font-weight: 800;
+            letter-spacing: -0.06em;
+            line-height: 1;
+            opacity: 0.28;
+        }
+
+        .flake {
+            position: absolute;
+            z-index: 1;
+            font-size: 22px;
+            line-height: 1;
+            animation: emo-float 3.6s ease-in-out infinite;
+            animation-delay: calc(var(--n) * -0.45s);
+        }
+        .flake:nth-child(1) { left: 12%; top: 16%; }
+        .flake:nth-child(2) { left: 74%; top: 12%; font-size: 28px; }
+        .flake:nth-child(3) { left: 28%; top: 62%; }
+        .flake:nth-child(4) { left: 82%; top: 48%; font-size: 18px; }
+        .flake:nth-child(5) { left: 48%; top: 18%; }
+        .flake:nth-child(6) { left: 16%; top: 40%; font-size: 16px; }
+        .flake:nth-child(7) { left: 62%; top: 70%; }
+
+        .month-page[data-motion="snow"] .flake,
+        .month-page[data-motion="bloom"] .flake,
+        .month-page[data-motion="leaf"] .flake,
+        .month-page[data-motion="rain"] .flake {
+            top: -8%;
+            animation-name: fall-y;
+            animation-timing-function: linear;
+            animation-duration: 6.2s;
+        }
+        .month-page[data-motion="bloom"] .flake { animation-duration: 8s; }
+        .month-page[data-motion="rain"] .flake { animation-duration: 1.5s; font-size: 16px; }
+        .month-page[data-motion="leaf"] .flake { animation-name: leaf-fall; animation-duration: 7s; }
+
+        .month-page[data-motion="storm"] .month-visual::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: transparent;
+            animation: lightning 4.6s infinite;
+            pointer-events: none;
+        }
+        .month-page[data-motion="storm"] .hero-emoji { animation: shake 0.48s ease-in-out infinite; }
+
+        .month-page[data-motion="sun"] .halo,
+        .month-page[data-motion="peak"] .halo {
+            opacity: 1;
+            background: repeating-conic-gradient(from 0deg, color-mix(in srgb, var(--maccent) 42%, transparent) 0 8deg, transparent 8deg 22deg);
+            animation: spin 26s linear infinite;
+        }
+        .month-page[data-motion="sun"] .hero-emoji,
+        .month-page[data-motion="peak"] .hero-emoji { animation: pulse-glow 2.6s ease-in-out infinite; }
+
+        .month-page[data-motion="heart"] .flake { animation-name: heart-beat; animation-duration: 1.35s; }
+        .month-page[data-motion="heart"] .hero-emoji { animation: heart-beat 1.05s ease-in-out infinite; }
+
+        .month-page[data-motion="fish"] .flake,
+        .month-page[data-motion="wave"] .flake { animation-name: wave-drift; animation-duration: 3.8s; }
+        .month-page[data-motion="fish"] .hero-emoji { animation: swim 3.6s ease-in-out infinite; }
+        .month-page[data-motion="wave"] .ground { height: 36%; }
+
+        .month-page[data-motion="fire"] .flake {
+            top: auto;
+            bottom: 6%;
+            animation-name: rise-y;
+            animation-duration: 2.6s;
+            animation-timing-function: ease-out;
+        }
+        .month-page[data-motion="fire"] .hero-emoji { animation: pulse-glow 1.6s ease-in-out infinite; }
+
+        .month-page[data-motion="sparkle"] .flake { animation-name: twinkle; animation-duration: 1.7s; }
+        .month-page[data-motion="sparkle"] .halo,
+        .month-page[data-motion="bloom"] .halo {
+            opacity: 0.9;
+            background: radial-gradient(circle, color-mix(in srgb, var(--maccent) 34%, white), transparent 68%);
+        }
+
+        .month-page[data-motion="compass"] .halo {
+            opacity: 1;
+            border: 1px dashed color-mix(in srgb, var(--maccent) 70%, white);
+            background:
+                linear-gradient(var(--maccent), var(--maccent)) center / 2px 70% no-repeat,
+                linear-gradient(90deg, var(--maccent), var(--maccent)) center / 70% 2px no-repeat;
+            animation: spin 18s linear infinite;
+        }
+
+        .month-copy {
+            min-height: 0;
+            overflow: auto;
+            padding: 22px 26px 20px;
+        }
+
+        .month-kicker {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .month-kicker .eyebrow { margin: 0; }
+
+        .season-pill {
+            padding: 2px 8px;
+            border-radius: 999px;
+            background: color-mix(in srgb, var(--maccent) 16%, white);
+            color: var(--maccent);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .month-copy h3 {
+            margin: 0 0 10px;
             color: var(--ink-strong);
-            font-size: clamp(32px, 3.4vw, 44px);
+            font-size: clamp(28px, 3vw, 40px);
             font-weight: 800;
             letter-spacing: -0.05em;
         }
-        .reader .slot {
+
+        .month-copy .slot {
+            color: var(--ink);
+            font-size: clamp(16px, 1.5vw, 18px);
+            font-weight: 550;
+            line-height: 1.75;
+        }
+
+        .month-arrow {
+            position: absolute;
+            top: 50%;
+            z-index: 5;
+            width: 36px;
+            height: 36px;
+            margin-top: -18px;
+            border: 1px solid var(--line);
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.86);
             color: var(--ink-strong);
-            font-size: clamp(22px, 2.3vw, 30px);
-            font-weight: 600;
-            line-height: 1.65;
+            font-size: 22px;
+            line-height: 1;
+            box-shadow: 0 8px 20px rgba(28, 75, 57, 0.08);
+        }
+        .month-arrow-prev { left: 10px; }
+        .month-arrow-next { right: 10px; }
+        .month-arrow:hover { border-color: var(--accent); color: var(--accent-strong); }
+        .month-arrow:disabled { opacity: 0.28; cursor: default; }
+
+        .month-streak {
+            position: absolute;
+            left: 24%;
+            top: 36%;
+            z-index: 6;
+            font-size: 42px;
+            pointer-events: none;
+            animation: streak-across 680ms ease forwards;
         }
 
         .wipe {
@@ -789,6 +1038,57 @@
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-5px); }
         }
+        @keyframes hero-pop {
+            from { transform: translate(-50%, -42%) scale(0.72); }
+            to { transform: translate(-50%, -50%) scale(1); }
+        }
+        @keyframes fall-y {
+            0% { transform: translateY(-12%) rotate(0deg); opacity: 0; }
+            12% { opacity: 1; }
+            100% { transform: translateY(460%) rotate(180deg); opacity: 0.2; }
+        }
+        @keyframes leaf-fall {
+            0% { transform: translate3d(0, -10%, 0) rotate(0deg); opacity: 0; }
+            15% { opacity: 1; }
+            100% { transform: translate3d(28px, 460%, 0) rotate(220deg); opacity: 0.15; }
+        }
+        @keyframes rise-y {
+            0% { transform: translateY(18px) scale(0.8); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translateY(-220px) scale(1.15); opacity: 0; }
+        }
+        @keyframes wave-drift {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(16px); }
+        }
+        @keyframes swim {
+            0%, 100% { transform: translateX(-8px) rotate(-6deg); }
+            50% { transform: translateX(10px) rotate(6deg); }
+        }
+        @keyframes heart-beat {
+            0%, 100% { transform: scale(1); }
+            40% { transform: scale(1.16); }
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.25; transform: scale(0.7) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1.2) rotate(18deg); }
+        }
+        @keyframes lightning {
+            0%, 86%, 100% { background: transparent; }
+            88% { background: rgba(255, 255, 255, 0.55); }
+            90% { background: transparent; }
+            92% { background: rgba(255, 255, 255, 0.28); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0) rotate(0deg); }
+            25% { transform: translateX(-3px) rotate(-2deg); }
+            75% { transform: translateX(3px) rotate(2deg); }
+        }
+        @keyframes streak-across {
+            from { transform: translate(-20px, 10px) scale(0.6); opacity: 0; }
+            30% { opacity: 1; }
+            to { transform: translate(90px, -36px) scale(1.2); opacity: 0; }
+        }
 
         .city-sheet {
             width: min(860px, 100%);
@@ -867,10 +1167,11 @@
             left: 0;
             top: 0;
             z-index: 4;
-            font-size: 28px;
+            font-size: 30px;
             line-height: 1;
             filter: drop-shadow(0 8px 10px rgba(7, 150, 91, 0.35));
             pointer-events: none;
+            will-change: transform, opacity;
         }
 
         .stop {
@@ -888,12 +1189,12 @@
             box-shadow: 0 10px 26px rgba(28, 75, 57, 0.07);
             opacity: 0;
             transform: translateX(28px);
-            transition: background 280ms ease, border-color 280ms ease, box-shadow 280ms ease;
+            transition: background 460ms ease, border-color 460ms ease, box-shadow 460ms ease;
         }
 
         .chapter.play .stop {
-            animation: city-in 640ms cubic-bezier(.16, .84, .28, 1) forwards;
-            animation-delay: calc(var(--i) * 70ms);
+            animation: city-in 720ms cubic-bezier(.16, .84, .28, 1) forwards;
+            animation-delay: calc(var(--i) * 48ms);
         }
 
         .stop.is-here {
@@ -995,6 +1296,132 @@
             line-height: 1.45;
         }
 
+        .podium {
+            display: grid;
+            grid-template-columns: 1.18fr 0.9fr 0.9fr;
+            gap: 16px;
+            align-items: end;
+        }
+
+        .game-card {
+            position: relative;
+            overflow: hidden;
+            min-height: 250px;
+            padding: 26px 26px 24px;
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            background:
+                linear-gradient(165deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.46)),
+                var(--surface-strong);
+            box-shadow: 0 16px 40px rgba(28, 75, 57, 0.08);
+            opacity: 0;
+            transform: translateY(22px);
+        }
+
+        .game-card.is-first {
+            min-height: 330px;
+            border-color: rgba(211, 154, 34, 0.45);
+            background:
+                radial-gradient(80% 70% at 88% 0%, rgba(243, 192, 122, 0.55), transparent 58%),
+                linear-gradient(165deg, #fffaf0, #fff);
+        }
+
+        .game-card.is-second {
+            border-color: rgba(125, 144, 164, 0.4);
+            background:
+                radial-gradient(80% 70% at 90% 0%, rgba(197, 208, 220, 0.7), transparent 60%),
+                linear-gradient(165deg, #f7f9fb, #fff);
+        }
+
+        .game-card.is-third {
+            border-color: rgba(176, 112, 62, 0.38);
+            background:
+                radial-gradient(80% 70% at 90% 0%, rgba(214, 156, 104, 0.42), transparent 60%),
+                linear-gradient(165deg, #fff6ef, #fff);
+        }
+
+        .chapter.play .game-card {
+            animation: city-in 720ms cubic-bezier(.16, .84, .28, 1) forwards;
+        }
+
+        .chapter.play .game-card.is-second { animation-delay: 120ms; }
+        .chapter.play .game-card.is-third { animation-delay: 240ms; }
+
+        .game-rank {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 22px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(211, 154, 34, 0.16);
+            color: #9a6410;
+            font-family: var(--mono);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+        }
+
+        .game-card.is-second .game-rank {
+            background: rgba(125, 144, 164, 0.16);
+            color: #52697e;
+        }
+
+        .game-card.is-third .game-rank {
+            background: rgba(176, 112, 62, 0.16);
+            color: #8a5528;
+        }
+
+        .game-logo-plate {
+            display: grid;
+            place-items: center start;
+            height: 148px;
+            margin: 0 0 18px;
+            padding: 14px 18px;
+            border-radius: 16px;
+            background:
+                radial-gradient(80% 90% at 80% 20%, rgba(255, 255, 255, 0.08), transparent 60%),
+                #121614;
+        }
+
+        .game-card.is-second .game-logo-plate { height: 112px; }
+        .game-card.is-third .game-logo-plate { height: 100px; }
+
+        .game-logo {
+            display: block;
+            max-width: 100%;
+            max-height: 120px;
+            object-fit: contain;
+            object-position: left center;
+        }
+
+        .game-card.is-second .game-logo { max-height: 84px; }
+        .game-card.is-third .game-logo { max-height: 72px; }
+
+        .game-card h3 {
+            margin: 0;
+            color: var(--ink-strong);
+            font-size: clamp(26px, 2.4vw, 40px);
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            line-height: 1.1;
+        }
+
+        .game-card .tag {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--accent-strong);
+            font-size: 16px;
+            font-weight: 750;
+        }
+
+        .game-card p {
+            margin-top: 12px;
+            color: var(--ink);
+            font-size: 16px;
+            font-weight: 600;
+        }
+
         @media (max-width: 900px) {
             .chapter { padding: 88px 18px 78px; }
             .cover, .stats, .rites { grid-template-columns: 1fr 1fr; }
@@ -1002,11 +1429,17 @@
             .panel { min-height: 360px; }
             .visual-avatar { width: min(168px, 52%); }
             .orb-ring { width: 210px; height: 210px; margin: -122px 0 0 -105px; }
-            .months { grid-template-columns: repeat(3, 1fr); }
+            .months { grid-template-columns: repeat(4, 1fr); }
+            .month-layout { grid-template-columns: 1fr; grid-template-rows: 148px minmax(0, 1fr); }
+            .month-visual { min-height: 0; }
+            .hero-emoji { font-size: 72px; }
+            .month-copy { padding: 16px 18px 14px; }
             .city-head { align-items: flex-start; }
             .city-count { font-size: 52px; }
             .city-spine, .stop .dot { left: 15px; }
             .stop { padding-left: 34px; }
+            .podium { grid-template-columns: 1fr; }
+            .game-card, .game-card.is-first { min-height: 0; }
             .rail {
                 top: auto;
                 bottom: 14px;
@@ -1026,7 +1459,11 @@
             .brand span:last-child { display: none; }
             .stats, .rites, .cover { grid-template-columns: 1fr; }
             .panel { min-height: 280px; }
-            .months { grid-template-columns: repeat(2, 1fr); }
+            .months { grid-template-columns: repeat(4, 1fr); }
+            .glass strong { font-size: 12px; }
+            .month-layout { grid-template-rows: 112px minmax(0, 1fr); }
+            .month-visual { min-height: 0; }
+            .hero-emoji { font-size: 60px; }
             h2 { font-size: 32px; }
         }
 
@@ -1036,7 +1473,7 @@
                 transition: none !important;
             }
             .lines p, .sun, .rule { opacity: 1; transform: none; width: min(220px, 46%); }
-            .stop { opacity: 1; transform: none; }
+            .stop, .game-card { opacity: 1; transform: none; }
             .city-spine { transform: none; }
         }
     </style>
@@ -1106,15 +1543,19 @@
 
         <section class="chapter" data-name="十二月">
             <div class="sheet">
-                <p class="eyebrow">Twelve months</p>
-                <h2>十二个月，还没写完</h2>
-                <p class="month-hint">向下滑动，或按 ↓，翻到下一月</p>
-                <div class="reader-stage">
-                    <article class="reader">
-                        <p class="eyebrow" id="reader-kicker">第 1 月</p>
-                        <h3 id="reader-name">崩塌</h3>
-                        <p class="slot" id="reader-copy">悲痛的一月，裁员通知到了。公司即将倒闭，只留最低成本运转。整个人生像一下子塌掉。我到处找自己错在哪，为什么被裁，为什么被抛弃，是不是真的不配这个市场。这个月只剩下对自己的质疑，和疯狂准备面试。失败我可以接受，但我一定要从失败里站起来。</p>
-                    </article>
+                <div class="month-head">
+                    <div class="month-top">
+                        <div>
+                            <p class="eyebrow">Twelve months</p>
+                            <h2>十二个月</h2>
+                        </div>
+                        <p class="month-progress" id="month-progress">01<span> / 12</span></p>
+                    </div>
+                    <p class="month-hint">点一个月份，或按 ↓，翻开那一页</p>
+                </div>
+                <div class="month-stage" id="month-stage">
+                    <button class="month-arrow month-arrow-prev" id="month-prev" type="button" aria-label="上一月">‹</button>
+                    <button class="month-arrow month-arrow-next" id="month-next" type="button" aria-label="下一月">›</button>
                 </div>
                 <div class="months" id="months"></div>
             </div>
@@ -1128,9 +1569,18 @@
                         <h2>走过的城市</h2>
                         <p class="month-hint">从深圳出发，到吉隆坡。这一年真正落过脚的地方。</p>
                     </div>
-                    <p class="city-count">08<span>STOPS</span></p>
+                    <p class="city-count">09<span>STOPS</span></p>
                 </div>
                 <div class="city-board" id="city-board"></div>
+            </div>
+        </section>
+
+        <section class="chapter" data-name="游戏">
+            <div class="sheet">
+                <p class="eyebrow">Games of the year</p>
+                <h2>年度最佳游戏</h2>
+                <p class="month-hint">这一年打开最多的三款。</p>
+                <div class="podium" id="podium"></div>
             </div>
         </section>
 
@@ -1218,28 +1668,34 @@
                 { n: "∞", label: "次。待填：想消失，又把自己留下" }
             ],
             months: [
-                { name: "崩塌", copy: "悲痛的一月，裁员通知到了。公司即将倒闭，只留最低成本运转。整个人生像一下子塌掉。我到处找自己错在哪，为什么被裁，为什么被抛弃，是不是真的不配这个市场。这个月只剩下对自己的质疑，和疯狂准备面试。失败我可以接受，但我一定要从失败里站起来。" },
-                { name: "崩溃", copy: "带着失业的沉重回到故乡过年。在家的每一天都很累，像完成任务一样把日子过完，也会想起小时候不好的经历。我其实很不想回家。过完年去了新工作，并不满意，月底就辞了。我讨厌这种恶意压榨。加班我可以接受，无效的加班我坚决拒绝。至今还讨厌那个老板的一句话：必须两周只放一天假，要不心都散了。拜托，我也是需要生活的。" },
-                { name: "裂缝中的阳光", copy: "三月，我收到一份满意的 offer，薪水涨了很多。老板听了我的经历，特别欣赏我。这家公司给了很大的自由。我们一起做出一个非常稳定的项目。我成长很大，认知也抬高了很多。" },
-                { name: "心情低落", copy: "四月，我去了成都旅游。这一趟并不那么开心，心情五味杂陈。还好工作比较顺利。" },
-                { name: "绝望", copy: "五月，我和一个很好的伙计吵了起来。后来有好转。这个月整体平平无奇。" },
-                { name: "解放", copy: "六月，工作比较顺利。情感上也松了下来。我自己也在认真把事情做好。" },
-                { name: "难受", copy: "七月没有什么大事，工作依旧安安稳稳。家里来了新成员，一只睡鼠。它越狱以后把家弄得一团糟，很多珍贵的纪念品都被破坏了。这几个月，花枝鼠也把温馨的出租屋弄得不成样子。学位证书甚至也被睡鼠咬坏了。那一刻我很难受。从这以后我一直问自己，我真的还爱养动物吗。下班以后，我好像更想休息。心情很差。" },
-                { name: "巅峰", copy: "八月，存款到了自己定下的目标。心情大好，事业也特别顺利，顺利到我想把这个月封成这一年的巅峰。只是偶尔看见被弄乱的出租屋，还是很难受。我下定决心，年末搬家。" },
-                { name: "认清自我", copy: "九月平平无奇，去了北京。这个月的事让我更认清自己，也知道自己想要什么。我最信任的人，却一点点在耍我。我也因此长大了一点：不要轻易相信任何人。" },
-                { name: "复杂", copy: "十月，存款突破了自己定下的新目标，可喜可贺。可我还是被当成傻子一样骗了。也有一件开心的事：这个月，我有了一个约定。十月还回了黑龙江，当了伴郎，见到大学的玩伴。心情很复杂。" },
-                { name: "不求救", copy: "十一月模板：你停止把拯救外包给别人。" },
-                { name: "点燃", copy: "十二月模板：这一年的印，盖在这里。" }
+                { name: "崩塌", emoji: "💔", season: "深冬", motion: "storm", floats: ["💔", "⛈️", "📉", "🌧️", "🖤"], copy: "悲痛的一月，裁员通知到了。公司即将倒闭，只留最低成本运转。整个人生像一下子塌掉。我到处找自己错在哪，为什么被裁，为什么被抛弃，是不是真的不配这个市场。这个月只剩下对自己的质疑，和疯狂准备面试。失败我可以接受，但我一定要从失败里站起来。" },
+                { name: "崩溃", emoji: "🧧", season: "春节", motion: "snow", floats: ["🧧", "❄️", "🏮", "🥟", "🎆"], copy: "带着失业的沉重回到故乡过年。在家的每一天都很累，像完成任务一样把日子过完，也会想起小时候不好的经历。我其实很不想回家。过完年去了新工作，并不满意，月底就辞了。我讨厌这种恶意压榨。加班我可以接受，无效的加班我坚决拒绝。至今还讨厌那个老板的一句话：必须两周只放一天假，要不心都散了。拜托，我也是需要生活的。" },
+                { name: "裂缝中的阳光", emoji: "🌱", season: "初春", motion: "bloom", floats: ["🌸", "🌱", "✨", "🌷", "🍀"], copy: "三月，我收到一份满意的 offer，薪水涨了很多。老板听了我的经历，特别欣赏我。这家公司给了很大的自由。我们一起做出一个非常稳定的项目。我成长很大，认知也抬高了很多。" },
+                { name: "心情低落", emoji: "🌧️", season: "清明", motion: "rain", floats: ["🌧️", "☔", "🐼", "💧", "🌫️"], copy: "四月，我去了成都旅游。这一趟并不那么开心，心情五味杂陈。还好工作比较顺利。" },
+                { name: "绝望", emoji: "🥀", season: "暮春", motion: "heart", floats: ["🥀", "💔", "🌧️", "😔"], copy: "五月，我和一个很好的伙计吵了起来。后来有好转。这个月整体平平无奇。" },
+                { name: "解放", emoji: "☀️", season: "初夏", motion: "sun", floats: ["☀️", "🌊", "✨", "🍋", "🪁"], copy: "六月，工作比较顺利。情感上也松了下来。我自己也在认真把事情做好。" },
+                { name: "难受", emoji: "🐹", season: "盛夏", motion: "wave", floats: ["🐹", "🐭", "🏠", "💭", "🌙"], copy: "七月没有什么大事，工作依旧安安稳稳。家里来了新成员，一只睡鼠。它越狱以后把家弄得一团糟，很多珍贵的纪念品都被破坏了。这几个月，花枝鼠也把温馨的出租屋弄得不成样子。学位证书甚至也被睡鼠咬坏了。那一刻我很难受。从这以后我一直问自己，我真的还爱养动物吗。下班以后，我好像更想休息。心情很差。" },
+                { name: "巅峰", emoji: "🏆", season: "盛夏", motion: "peak", floats: ["🏆", "💰", "✨", "🌟", "🚀"], copy: "八月，存款到了自己定下的目标。心情大好，事业也特别顺利，顺利到我想把这个月封成这一年的巅峰。只是偶尔看见被弄乱的出租屋，还是很难受。我下定决心，年末搬家。" },
+                { name: "认清自我", emoji: "🧭", season: "初秋", motion: "compass", floats: ["🧭", "🍂", "🏯", "🍃"], copy: "九月平平无奇，去了北京。这个月的事让我更认清自己，也知道自己想要什么。我最信任的人，却一点点在耍我。我也因此长大了一点：不要轻易相信任何人。" },
+                { name: "复杂", emoji: "🍂", season: "深秋", motion: "leaf", floats: ["🍂", "🍁", "💰", "🥂", "🧣"], copy: "十月，存款突破了自己定下的新目标，可喜可贺。这个月也涨薪了，我很开心，我的能力得到了认可。可我还是被当成傻子一样骗了。也有一件开心的事：这个月，我有了一个约定。十月还回了黑龙江，当了伴郎，见到大学的玩伴。心情很复杂。" },
+                { name: "不求救", emoji: "🐠", season: "初冬", motion: "fish", floats: ["🐠", "🌴", "🌊", "✈️", "✨"], copy: "十一月模板：你停止把拯救外包给别人。" },
+                { name: "点燃", emoji: "🔥", season: "年末", motion: "fire", floats: ["🔥", "🎆", "✨", "🕯️", "🌟"], copy: "十二月模板：这一年的印，盖在这里。" }
             ],
             cities: [
                 { emoji: "🏙️", name: "深圳", when: "起点", line: "继续从这里出发。" },
                 { emoji: "🌃", name: "香港", when: "这一年", line: "走过。" },
                 { emoji: "❄️", name: "哈尔滨", when: "2月", line: "回到故乡。" },
                 { emoji: "🐼", name: "成都", when: "4月", line: "去旅游。" },
+                { emoji: "🌸", name: "广州", when: "5月", line: "这一站。" },
                 { emoji: "🏯", name: "北京", when: "9月", line: "去了一趟。" },
                 { emoji: "🎡", name: "天津", when: "10月", line: "这一站。" },
                 { emoji: "⛸️", name: "哈尔滨", when: "10月", line: "回黑龙江，当了伴郎。" },
                 { emoji: "🌴", name: "吉隆坡", when: "11月", line: "马来西亚。" }
+            ],
+            games: [
+                { place: "年度最佳", logo: "../../../image/games/destroyer-logo.jpg", name: "桌面破坏神", tag: "挂机 ARPG", line: "这一年的第一名。" },
+                { place: "第二名", logo: "../../../image/games/rust-logo.png", name: "Rust", tag: "生存", line: "这一年的第二名。" },
+                { place: "第三名", logo: "../../../image/games/cs-logo.png", name: "CS:GO", tag: "射击", line: "这一年的第三名。" }
             ],
             before: "待填：那时候的你。疲惫、躲开、把自己放在最后。",
             after: "待填：后来的你。还是同一个人，但手已经伸向自己。",
@@ -1306,75 +1762,124 @@
             </article>
         `).join("");
 
-        const readerName = document.getElementById("reader-name");
-        const readerCopy = document.getElementById("reader-copy");
-        const readerKicker = document.getElementById("reader-kicker");
+        const monthStage = document.getElementById("month-stage");
+        const monthProgress = document.getElementById("month-progress");
+        const monthPrev = document.getElementById("month-prev");
+        const monthNext = document.getElementById("month-next");
+
         document.getElementById("months").innerHTML = YEAR.months.map((month, i) => `
-            <button class="glass${i === 0 ? " on" : ""}" type="button" data-i="${i}" tabindex="-1">
+            <button class="glass${i === 0 ? " on" : ""}" type="button" data-i="${i}">
+                <span class="glass-emo" aria-hidden="true">${month.emoji || "✨"}</span>
                 <em>${i + 1}月</em>
                 <strong>${month.name}</strong>
             </button>
         `).join("");
 
-        const reader = document.querySelector(".reader");
-        const readerStage = document.querySelector(".reader-stage");
+        function monthPage(i) {
+            const month = YEAR.months[i];
+            const page = document.createElement("article");
+            page.className = "month-page";
+            page.dataset.tone = String(i + 1);
+            page.dataset.motion = month.motion || "sparkle";
+            page.innerHTML = `
+                <div class="month-layout">
+                    <div class="month-visual" aria-hidden="true">
+                        <div class="month-sky">
+                            <span class="halo"></span>
+                            ${(month.floats || []).map((emo, n) => `<span class="flake" style="--n:${n}">${emo}</span>`).join("")}
+                            <span class="ground"></span>
+                        </div>
+                        <span class="hero-pop"><span class="hero-emoji"></span></span>
+                        <span class="month-watermark">${String(i + 1).padStart(2, "0")}</span>
+                    </div>
+                    <div class="month-copy">
+                        <div class="month-kicker">
+                            <p class="eyebrow"></p>
+                            <span class="season-pill"></span>
+                        </div>
+                        <h3></h3>
+                        <p class="slot"></p>
+                    </div>
+                </div>
+            `;
+            page.querySelector(".hero-emoji").textContent = month.emoji || "✨";
+            page.querySelector(".eyebrow").textContent = `第 ${i + 1} 月`;
+            page.querySelector(".season-pill").textContent = month.season || "";
+            page.querySelector("h3").textContent = month.name;
+            page.querySelector(".slot").textContent = month.copy;
+            return page;
+        }
 
-        function paintMonth(i) {
+        function markMonth(i) {
             monthCursor = i;
             document.querySelectorAll("#months .glass").forEach((el) => {
-                el.classList.toggle("on", Number(el.dataset.i) === i);
+                const on = Number(el.dataset.i) === i;
+                el.classList.toggle("on", on);
+                if (on) el.setAttribute("aria-current", "true");
+                else el.removeAttribute("aria-current");
             });
-            readerKicker.textContent = `第 ${i + 1} 月`;
-            readerName.textContent = YEAR.months[i].name;
-            readerCopy.textContent = YEAR.months[i].copy;
-            const sheet = chapters[monthChapter]?.querySelector(".sheet");
-            if (sheet) sheet.scrollTop = 0;
+            monthProgress.innerHTML = `${String(i + 1).padStart(2, "0")}<span> / 12</span>`;
+            monthPrev.disabled = i === 0;
+            monthNext.disabled = i === YEAR.months.length - 1;
+        }
+
+        function paintMonth(i) {
+            markMonth(i);
+            monthStage.querySelectorAll(".month-page").forEach((el) => el.remove());
+            const page = monthPage(i);
+            monthStage.insertBefore(page, monthPrev);
+            requestAnimationFrame(() => page.classList.add("is-turn"));
         }
 
         function showMonth(i, dir = 0) {
-            if (!dir || i === monthCursor) {
+            const current = monthStage.querySelector(".month-page");
+            if (!dir || !current || i === monthCursor) {
                 paintMonth(i);
                 return;
             }
-            readerStage.querySelectorAll(".reader-ghost").forEach((el) => el.remove());
-            const ghost = reader.cloneNode(true);
-            ghost.querySelectorAll("[id]").forEach((el) => el.removeAttribute("id"));
-            ghost.classList.add("reader-ghost");
-            ghost.setAttribute("aria-hidden", "true");
-            readerStage.appendChild(ghost);
-
-            const distance = Math.max(readerStage.offsetHeight, 168);
+            const distance = Math.max(monthStage.offsetHeight, 180);
             const leave = dir > 0 ? -distance : distance;
-            readerStage.classList.remove("is-sliding");
-            ghost.style.transition = "none";
-            reader.style.transition = "none";
-            ghost.style.transform = "translateY(0)";
-            ghost.style.opacity = "1";
-            paintMonth(i);
-            reader.style.transform = `translateY(${-leave}px)`;
-            reader.style.opacity = "0";
-            readerStage.offsetHeight;
+            monthStage.classList.remove("is-sliding");
+            current.style.transition = "none";
+            const incoming = monthPage(i);
+            incoming.style.transition = "none";
+            incoming.style.transform = `translateY(${-leave}px)`;
+            incoming.style.opacity = "0";
+            monthStage.insertBefore(incoming, monthPrev);
+            markMonth(i);
+            monthStage.offsetHeight;
+            lockUntil = performance.now() + 760;
 
             requestAnimationFrame(() => {
-                readerStage.classList.add("is-sliding");
-                ghost.style.transition = "";
-                reader.style.transition = "";
-                ghost.style.transform = `translateY(${leave}px)`;
-                ghost.style.opacity = "0";
-                reader.style.transform = "translateY(0)";
-                reader.style.opacity = "1";
+                monthStage.classList.add("is-sliding");
+                current.style.transition = "";
+                incoming.style.transition = "";
+                current.style.transform = `translateY(${leave}px)`;
+                current.style.opacity = "0";
+                incoming.style.transform = "translateY(0)";
+                incoming.style.opacity = "1";
+                incoming.classList.add("is-turn");
+                if (!reduce) {
+                    const streak = document.createElement("span");
+                    streak.className = "month-streak";
+                    streak.textContent = YEAR.months[i].emoji || "✨";
+                    streak.setAttribute("aria-hidden", "true");
+                    monthStage.appendChild(streak);
+                    window.setTimeout(() => streak.remove(), 700);
+                }
             });
 
             window.setTimeout(() => {
-                if (ghost.isConnected) ghost.remove();
-                reader.style.transform = "";
-                reader.style.opacity = "";
-                reader.style.transition = "";
-                readerStage.classList.remove("is-sliding");
-            }, 820);
+                if (current.isConnected) current.remove();
+                incoming.style.transform = "";
+                incoming.style.opacity = "";
+                incoming.style.transition = "";
+                monthStage.classList.remove("is-sliding");
+            }, 720);
         }
 
         function stepMonth(dir) {
+            if (performance.now() < lockUntil) return false;
             const next = monthCursor + dir;
             if (monthChapter < 0 || next < 0 || next >= YEAR.months.length) return false;
             showMonth(next, dir);
@@ -1382,6 +1887,16 @@
         }
 
         showMonth(0);
+
+        document.getElementById("podium").innerHTML = YEAR.games.map((game, i) => `
+            <article class="game-card ${i === 0 ? "is-first" : i === 1 ? "is-second" : "is-third"}">
+                <span class="game-rank">${String(i + 1).padStart(2, "0")} · ${game.place}</span>
+                <span class="game-logo-plate"><img class="game-logo" src="${game.logo}" alt="${game.name}"></span>
+                <h3>${game.name}</h3>
+                <span class="tag">${game.tag}</span>
+                <p>${game.line}</p>
+            </article>
+        `).join("");
 
         const cityBoard = document.getElementById("city-board");
         cityBoard.innerHTML = `
@@ -1404,6 +1919,10 @@
         `;
 
         let cityFlight = 0;
+
+        function easeInOut(t) {
+            return t < 0.5 ? 2 * t * t : 1 - ((-2 * t + 2) ** 2) / 2;
+        }
 
         function flyCities() {
             const plane = document.getElementById("city-plane");
@@ -1430,23 +1949,63 @@
             }
             const token = ++cityFlight;
             const cityIndex = String(chapters.findIndex((chapter) => chapter.dataset.name === "城市"));
+            const legMs = 1080;
+            const holdMs = 360;
+            const resetMs = 640;
+            const unit = legMs + holdMs;
+            const travel = (route.length - 1) * unit;
+            const cycle = travel + resetMs;
+            const bow = 36;
+            let smoothAngle = null;
+            let hereNow = -1;
             plane.style.display = "block";
             const start = performance.now();
+            const place = (x, y, angle, opacity) => {
+                if (smoothAngle == null) smoothAngle = angle;
+                let delta = angle - smoothAngle;
+                while (delta > 180) delta -= 360;
+                while (delta < -180) delta += 360;
+                smoothAngle += delta * 0.2;
+                plane.style.opacity = String(opacity);
+                plane.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%) rotate(${smoothAngle + 45}deg)`;
+            };
+            const mark = (here) => {
+                if (here === hereNow) return;
+                hereNow = here;
+                cards.forEach((card, n) => card.classList.toggle("is-here", n === here));
+            };
             const tick = (now) => {
                 if (token !== cityFlight || document.body.dataset.ch !== cityIndex) return;
-                const elapsed = Math.max(0, now - start);
-                const t = (elapsed % 7200) / 7200;
-                const pos = t * (route.length - 1);
-                const stopIndex = Math.max(0, Math.min(route.length - 2, Math.floor(pos)));
-                const local = pos - stopIndex;
-                const from = route[stopIndex];
-                const to = route[stopIndex + 1];
-                const x = from.x + (to.x - from.x) * local;
-                const y = from.y + (to.y - from.y) * local;
-                const angle = Math.atan2(to.y - from.y, to.x - from.x) * 180 / Math.PI;
-                plane.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%) rotate(${angle - 45}deg)`;
-                const here = local > 0.55 ? stopIndex + 1 : stopIndex;
-                cards.forEach((card, n) => card.classList.toggle("is-here", n === here));
+                const elapsed = (now - start) % cycle;
+                if (elapsed >= travel) {
+                    const u = (elapsed - travel) / resetMs;
+                    const last = route[route.length - 1];
+                    if (u < 0.42) {
+                        place(last.x, last.y, 90, 1 - u / 0.42);
+                        mark(route.length - 1);
+                    } else {
+                        smoothAngle = null;
+                        place(route[0].x, route[0].y, 90, (u - 0.42) / 0.58);
+                        mark(0);
+                    }
+                } else {
+                    const leg = Math.min(route.length - 2, Math.floor(elapsed / unit));
+                    const localMs = elapsed - leg * unit;
+                    const from = route[leg];
+                    const to = route[leg + 1];
+                    if (localMs < legMs) {
+                        const eased = easeInOut(localMs / legMs);
+                        const x = from.x + (to.x - from.x) * eased + Math.sin(eased * Math.PI) * bow;
+                        const y = from.y + (to.y - from.y) * eased;
+                        const dx = (to.x - from.x) + Math.cos(eased * Math.PI) * Math.PI * bow;
+                        const dy = to.y - from.y;
+                        place(x, y, Math.atan2(dy, dx) * 180 / Math.PI, 1);
+                        mark(eased > 0.64 ? leg + 1 : leg);
+                    } else {
+                        place(to.x, to.y, Math.atan2(to.y - from.y, to.x - from.x) * 180 / Math.PI, 1);
+                        mark(leg + 1);
+                    }
+                }
                 requestAnimationFrame(tick);
             };
             requestAnimationFrame(tick);
@@ -1456,9 +2015,11 @@
             const button = event.target.closest(".glass");
             if (!button) return;
             const next = Number(button.dataset.i);
-            if (next === monthCursor) return;
+            if (next === monthCursor || performance.now() < lockUntil) return;
             showMonth(next, next > monthCursor ? 1 : -1);
         });
+        monthPrev.addEventListener("click", () => stepMonth(-1));
+        monthNext.addEventListener("click", () => stepMonth(1));
 
         document.getElementById("rites").innerHTML = YEAR.rites.map((rite, i) => `
             <button class="rite" type="button" data-i="${i}">
@@ -1591,7 +2152,10 @@
             lockUntil = now + 560;
             activate(next);
             if (soundOn) blip();
-            if (next === monthChapter) showMonth(from === monthChapter + 1 ? YEAR.months.length - 1 : 0);
+            if (next === monthChapter) {
+                const land = from === monthChapter + 1 ? YEAR.months.length - 1 : 0;
+                showMonth(land, land === monthCursor ? 0 : (land > monthCursor ? 1 : -1));
+            }
         }
 
         function countStats() {
@@ -1638,7 +2202,14 @@
         window.addEventListener("wheel", (event) => {
             const sheet = chapters[index].querySelector(".sheet");
             const dir = Math.sign(event.deltaY);
-            if (index !== monthChapter && sheet && sheet.scrollHeight > sheet.clientHeight + 8) {
+            if (index === monthChapter) {
+                const copy = monthStage.querySelector(".month-copy");
+                if (copy && copy.scrollHeight > copy.clientHeight + 8) {
+                    const atTop = copy.scrollTop <= 4;
+                    const atBottom = copy.scrollTop + copy.clientHeight >= copy.scrollHeight - 4;
+                    if ((dir > 0 && !atBottom) || (dir < 0 && !atTop)) return;
+                }
+            } else if (sheet && sheet.scrollHeight > sheet.clientHeight + 8) {
                 const atTop = sheet.scrollTop <= 4;
                 const atBottom = sheet.scrollTop + sheet.clientHeight >= sheet.scrollHeight - 4;
                 if ((dir > 0 && !atBottom) || (dir < 0 && !atTop)) return;
@@ -1659,6 +2230,12 @@
             } else if (["ArrowUp", "PageUp"].includes(event.key)) {
                 event.preventDefault();
                 advance(-1);
+            } else if (event.key === "ArrowRight" && index === monthChapter) {
+                event.preventDefault();
+                stepMonth(1);
+            } else if (event.key === "ArrowLeft" && index === monthChapter) {
+                event.preventDefault();
+                stepMonth(-1);
             } else if (event.key === "Home") {
                 event.preventDefault();
                 go(0);
