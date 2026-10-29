@@ -1300,7 +1300,7 @@
             display: grid;
             grid-template-columns: 1.18fr 0.9fr 0.9fr;
             gap: 16px;
-            align-items: end;
+            align-items: stretch;
         }
 
         .game-card {
@@ -1373,30 +1373,32 @@
         }
 
         .game-logo-plate {
-            display: grid;
-            place-items: center start;
-            height: 148px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 132px;
             margin: 0 0 18px;
-            padding: 14px 18px;
+            padding: 16px 18px;
             border-radius: 16px;
             background:
-                radial-gradient(80% 90% at 80% 20%, rgba(255, 255, 255, 0.08), transparent 60%),
+                radial-gradient(80% 90% at 50% 0%, rgba(255, 255, 255, 0.08), transparent 62%),
                 #121614;
         }
 
-        .game-card.is-second .game-logo-plate { height: 112px; }
-        .game-card.is-third .game-logo-plate { height: 100px; }
-
         .game-logo {
             display: block;
-            max-width: 100%;
-            max-height: 120px;
+            width: 100%;
+            height: auto;
+            max-height: 78px;
             object-fit: contain;
-            object-position: left center;
+            object-position: center;
         }
 
-        .game-card.is-second .game-logo { max-height: 84px; }
-        .game-card.is-third .game-logo { max-height: 72px; }
+        .game-logo-plate.is-title .game-logo {
+            width: auto;
+            max-width: 78%;
+            max-height: 108px;
+        }
 
         .game-card h3 {
             margin: 0;
@@ -1693,9 +1695,9 @@
                 { emoji: "🌴", name: "吉隆坡", when: "11月", line: "马来西亚。" }
             ],
             games: [
-                { place: "年度最佳", logo: "../../../image/games/destroyer-logo.jpg", name: "桌面破坏神", tag: "挂机 ARPG", line: "这一年的第一名。" },
-                { place: "第二名", logo: "../../../image/games/rust-logo.png", name: "Rust", tag: "生存", line: "这一年的第二名。" },
-                { place: "第三名", logo: "../../../image/games/cs-logo.png", name: "CS:GO", tag: "射击", line: "这一年的第三名。" }
+                { place: "年度最佳", mark: "is-title", logo: "../../../image/games/destroyer-logo.jpg", name: "桌面破坏神", tag: "挂机 ARPG", line: "这一年的第一名。" },
+                { place: "第二名", mark: "is-word", logo: "../../../image/games/rust-logo.png", name: "Rust", tag: "生存", line: "这一年的第二名。" },
+                { place: "第三名", mark: "is-word", logo: "../../../image/games/cs-logo.png", name: "CS:GO", tag: "射击", line: "这一年的第三名。" }
             ],
             before: "待填：那时候的你。疲惫、躲开、把自己放在最后。",
             after: "待填：后来的你。还是同一个人，但手已经伸向自己。",
@@ -1891,7 +1893,7 @@
         document.getElementById("podium").innerHTML = YEAR.games.map((game, i) => `
             <article class="game-card ${i === 0 ? "is-first" : i === 1 ? "is-second" : "is-third"}">
                 <span class="game-rank">${String(i + 1).padStart(2, "0")} · ${game.place}</span>
-                <span class="game-logo-plate"><img class="game-logo" src="${game.logo}" alt="${game.name}"></span>
+                <span class="game-logo-plate ${game.mark}"><img class="game-logo" src="${game.logo}" alt="${game.name}"></span>
                 <h3>${game.name}</h3>
                 <span class="tag">${game.tag}</span>
                 <p>${game.line}</p>
