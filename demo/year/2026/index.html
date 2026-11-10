@@ -1316,6 +1316,176 @@
             height: 100%;
         }
 
+        .next-road {
+            position: relative;
+            margin-top: 8px;
+            padding-top: 58px;
+        }
+
+        .next-road::before {
+            content: "";
+            position: absolute;
+            top: 24px;
+            left: 8%;
+            right: 8%;
+            height: 2px;
+            border-radius: 2px;
+            background: linear-gradient(90deg, #9eb0cc, #7dffc3 52%, #f3c46a);
+            transform: scaleX(0);
+            transform-origin: left;
+        }
+
+        .chapter.play .next-road::before {
+            animation: road-draw 2.2s ease forwards;
+        }
+
+        .next-goals {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+
+        .year-walker {
+            position: absolute;
+            top: 2px;
+            left: 6%;
+            z-index: 2;
+            font-size: 34px;
+            line-height: 1;
+            filter: drop-shadow(0 8px 12px rgba(24, 40, 70, 0.28));
+            opacity: 0;
+        }
+
+        .chapter.play .year-walker {
+            opacity: 1;
+            animation: walk-year 2.2s ease forwards;
+        }
+
+        .year-walker.swap { animation: walker-swap 460ms ease; }
+
+        .goal {
+            min-height: 228px;
+            padding: 22px 20px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 22px;
+            background:
+                radial-gradient(80% 60% at 20% 0%, rgba(158, 176, 204, 0.28), transparent 60%),
+                #17241f;
+            color: #f4fff9;
+            opacity: 0;
+            transform: translateY(18px);
+            transition: background 700ms ease, border-color 700ms ease, color 700ms ease, box-shadow 700ms ease;
+        }
+
+        .goal-stage {
+            position: relative;
+            height: 108px;
+            margin-bottom: 8px;
+        }
+
+        .goal b {
+            position: absolute;
+            left: 0;
+            top: 22px;
+            z-index: 1;
+            display: grid;
+            place-items: center;
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+            font-size: 40px;
+            font-weight: 500;
+            line-height: 1;
+            filter: grayscale(1);
+            opacity: 0.55;
+        }
+
+        .goal em {
+            position: absolute;
+            left: 28px;
+            top: 42px;
+            z-index: 2;
+            font-size: 22px;
+            font-style: normal;
+            line-height: 1;
+            opacity: 0;
+        }
+
+        .goal small {
+            color: #b7ffe2;
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.16em;
+        }
+
+        .goal strong {
+            display: block;
+            margin-top: 6px;
+            color: #fff;
+            font-size: 28px;
+            letter-spacing: -0.045em;
+        }
+
+        .goal span {
+            display: block;
+            margin-top: 8px;
+            color: rgba(244, 255, 249, 0.74);
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.55;
+        }
+
+        .chapter.play .goal {
+            animation: goal-in 680ms cubic-bezier(.16, .84, .28, 1) forwards;
+        }
+
+        .chapter.play .goal:nth-child(2) { animation-delay: 90ms; }
+        .chapter.play .goal:nth-child(3) { animation-delay: 180ms; }
+
+        .goal.lit b {
+            filter: none;
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.72);
+            animation: emoji-pop 680ms cubic-bezier(.16, 1.2, .32, 1) both, emoji-float 2.8s 680ms ease-in-out infinite;
+        }
+
+        .goal.lit em { animation: satellite 760ms ease forwards; }
+        .goal.lit em:nth-child(2) { --x: 62px; --y: -28px; animation-delay: 80ms; }
+        .goal.lit em:nth-child(3) { --x: 78px; --y: 8px; animation-delay: 160ms; }
+        .goal.lit em:nth-child(4) { --x: 48px; --y: 34px; animation-delay: 240ms; }
+
+        .goal.lit:nth-child(1) {
+            border-color: rgba(158, 176, 204, 0.45);
+            background:
+                radial-gradient(90% 70% at 12% 0%, rgba(214, 226, 255, 0.95), transparent 58%),
+                linear-gradient(180deg, #f7f9ff, #fff);
+            box-shadow: 0 18px 36px rgba(90, 110, 150, 0.14);
+        }
+
+        .goal.lit:nth-child(2) {
+            border-color: rgba(24, 189, 120, 0.35);
+            background:
+                radial-gradient(90% 70% at 12% 0%, rgba(185, 255, 224, 0.85), transparent 58%),
+                linear-gradient(180deg, #f3fff8, #fff);
+            box-shadow: 0 18px 36px rgba(24, 189, 120, 0.14);
+        }
+
+        .goal.lit:nth-child(3) {
+            border-color: rgba(211, 154, 34, 0.4);
+            background:
+                radial-gradient(90% 70% at 12% 0%, rgba(255, 226, 166, 0.95), transparent 58%),
+                linear-gradient(180deg, #fffaf0, #fff);
+            box-shadow: 0 18px 36px rgba(180, 130, 40, 0.16);
+        }
+
+        .goal.lit strong { color: var(--ink-strong); }
+        .goal.lit span { color: var(--ink); }
+        .goal.lit:nth-child(1) small { color: #5d7094; }
+        .goal.lit:nth-child(2) small { color: var(--accent-strong); }
+        .goal.lit:nth-child(3) small { color: #9a6410; }
+
         .finale { text-align: left; position: relative; }
 
         .sun {
@@ -1385,6 +1555,30 @@
             to { opacity: 1; }
         }
         @keyframes spine-grow { to { transform: scaleY(1); } }
+        @keyframes goal-in { to { opacity: 1; transform: none; } }
+        @keyframes road-draw { to { transform: scaleX(1); } }
+        @keyframes walk-year {
+            from { left: 6%; transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+            to { left: 86%; transform: translateY(0); }
+        }
+        @keyframes walker-swap {
+            0% { transform: translateY(4px) scale(0.7); }
+            60% { transform: translateY(-8px) scale(1.18); }
+            100% { transform: none; }
+        }
+        @keyframes emoji-pop {
+            0% { transform: scale(0.45); }
+            65% { transform: scale(1.14); }
+            100% { transform: scale(1); }
+        }
+        @keyframes emoji-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-7px); }
+        }
+        @keyframes satellite {
+            to { opacity: 1; transform: translate(var(--x), var(--y)); }
+        }
         @keyframes emo-float {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-5px); }
@@ -1941,6 +2135,9 @@
             .city-count { font-size: 52px; }
             .city-spine, .stop .dot { left: 15px; }
             .stop { padding-left: 34px; }
+            .next-road { padding-top: 0; }
+            .next-road::before, .year-walker { display: none; }
+            .next-goals { grid-template-columns: 1fr; }
             .podium { grid-template-columns: 1fr; }
             .game-card, .game-card.is-first { min-height: 0; }
             .rail {
@@ -1977,7 +2174,11 @@
                 transition: none !important;
             }
             .lines p, .sun, .rule { opacity: 1; transform: none; width: min(220px, 46%); }
-            .stop, .game-card { opacity: 1; transform: none; }
+            .stop, .game-card, .goal { opacity: 1; transform: none; }
+            .next-road::before { transform: none; }
+            .year-walker { display: none; }
+            .goal em { opacity: 1; transform: translate(var(--x), var(--y)); }
+            .goal.lit b { transform: none; filter: none; opacity: 1; }
             .city-spine { transform: none; }
         }
     </style>
@@ -2143,6 +2344,18 @@
             </div>
         </section>
 
+        <section class="chapter" data-name="明年">
+            <div class="sheet">
+                <p class="eyebrow">2027</p>
+                <h2>明年的目标</h2>
+                <p class="slot" style="margin-bottom: 14px">先睡好。再走远一点。事业也要站得更稳。</p>
+                <div class="next-road" id="next-road">
+                    <span class="year-walker" id="year-walker" aria-hidden="true">🌙</span>
+                    <div class="next-goals" id="next-goals"></div>
+                </div>
+            </div>
+        </section>
+
         <section class="chapter" data-name="结尾">
             <div class="sheet finale">
                 <div class="sun" aria-hidden="true"></div>
@@ -2211,6 +2424,11 @@
                 { k: "出国", e: "✈️", t: "十一月去了吉隆坡。脚第一次迈出自己熟悉的地方，这一趟是给自己的。" },
                 { k: "心理素质", e: "🌊", t: "裁员、压榨、被骗，都接住了。心没有散。比年初稳，也比年初硬。" },
                 { k: "戒烟", e: "🚭", t: "烟戒掉了。少了一件消耗自己的事，这一口留给以后。" }
+            ],
+            next: [
+                { k: "睡觉", e: "🌙", bits: ["😴", "🛏️", "✨"], t: "正常地睡。把夜里还给自己。" },
+                { k: "新的国家", e: "🌏", bits: ["✈️", "🗺️", "🌴"], t: "再探索一个新的国家。脚还要往外迈。" },
+                { k: "事业", e: "☀️", bits: ["💼", "📈", "🏆"], t: "事业更加稳定。站稳了，再往前。" }
             ],
             pulse: [24, 22, 30, 38, 46, 34, 52, 58, 63, 70, 78, 88],
             pulseWords: ["崩塌", "崩溃", "阳光", "低落", "绝望", "解放", "难受", "巅峰", "认清", "复杂", "不求救", "点燃"],
@@ -2680,6 +2898,40 @@
             burst(button.getBoundingClientRect());
         });
 
+        document.getElementById("next-goals").innerHTML = YEAR.next.map((goal, i) => `
+            <article class="goal">
+                <div class="goal-stage" aria-hidden="true">
+                    <b>${goal.e}</b>
+                    ${goal.bits.map((bit) => `<em>${bit}</em>`).join("")}
+                </div>
+                <small>2027 · 0${i + 1}</small>
+                <strong>${goal.k}</strong>
+                <span>${goal.t}</span>
+            </article>
+        `).join("");
+
+        let nextShow = 0;
+        const yearWalker = document.getElementById("year-walker");
+
+        function lightNext() {
+            nextShow += 1;
+            const token = nextShow;
+            const cards = [...document.querySelectorAll("#next-goals .goal")];
+            cards.forEach((card) => card.classList.remove("lit"));
+            yearWalker.textContent = "🌙";
+            cards.forEach((card, i) => {
+                setTimeout(() => {
+                    if (token !== nextShow) return;
+                    if (!document.querySelector('.chapter[data-name="明年"]')?.classList.contains("play")) return;
+                    card.classList.add("lit");
+                    yearWalker.textContent = YEAR.next[i].e;
+                    yearWalker.classList.remove("swap");
+                    void yearWalker.offsetWidth;
+                    yearWalker.classList.add("swap");
+                }, 640 + i * 720);
+            });
+        }
+
         const pulse = document.getElementById("pulse");
         const width = 760;
         const height = 230;
@@ -2767,6 +3019,7 @@
             if (next === 2) countStats();
             if (chapters[next]?.dataset.name === "城市") flyCities();
             if (chapters[next]?.dataset.name === "六处") igniteRites();
+            if (chapters[next]?.dataset.name === "明年") lightNext();
             if (chapters[next]?.dataset.name === "心跳") {
                 const line = document.getElementById("line");
                 if (line) line.style.setProperty("--len", `${line.getTotalLength()}`);
