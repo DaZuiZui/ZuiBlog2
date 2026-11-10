@@ -915,6 +915,344 @@
 
         .rite.on small, .vow.on small { color: var(--accent-strong); }
 
+        .rite-stage {
+            position: relative;
+            overflow: hidden;
+            border-radius: 22px;
+        }
+
+        .chapter[data-name="六处"] .rites {
+            grid-template-columns: repeat(6, 1fr);
+            gap: 16px;
+        }
+
+        .chapter[data-name="六处"] .rite:nth-child(-n+3) { grid-column: span 2; }
+        .chapter[data-name="六处"] .rite:nth-child(n+4) { grid-column: span 3; }
+
+        .chapter[data-name="六处"] .rite {
+            --rx: 0deg;
+            --ry: 0deg;
+            position: relative;
+            overflow: hidden;
+            min-height: 248px;
+            padding: 22px 22px 46px;
+            isolation: isolate;
+            filter: saturate(0.12) brightness(0.9);
+            transform: perspective(800px) rotateX(var(--rx)) rotateY(var(--ry));
+            transition: transform 180ms ease, filter 280ms ease, box-shadow 280ms ease, border-color 280ms ease, background 280ms ease;
+        }
+
+        .rite-sheen {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            border-radius: inherit;
+            pointer-events: none;
+        }
+
+        .rite-sheen::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(115deg, transparent 28%, rgba(255, 255, 255, 0.86) 48%, transparent 66%);
+            transform: translateX(-130%);
+        }
+
+        .rite-ring {
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1.5px;
+            pointer-events: none;
+            opacity: 0;
+        }
+
+        .rite-orb {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            place-items: center;
+            width: 84px;
+            height: 84px;
+            margin-bottom: 14px;
+        }
+
+        .rite-orb::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background:
+                radial-gradient(circle at 36% 30%, #fff, rgba(186, 245, 214, 0.8) 34%, rgba(24, 189, 120, 0.16) 70%);
+            box-shadow: inset 0 0 0 1px rgba(24, 189, 120, 0.28);
+        }
+
+        .rite-orbit {
+            position: absolute;
+            inset: -10px;
+            border-radius: 50%;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .rite-orbit::before, .rite-orbit::after {
+            content: "";
+            position: absolute;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 0 10px #7dffc3, 0 0 18px rgba(24, 189, 120, 0.8);
+        }
+
+        .rite-orbit::before { top: 0; left: 50%; margin-left: -3px; }
+        .rite-orbit::after { bottom: 8px; left: 6px; width: 5px; height: 5px; }
+
+        .chapter[data-name="六处"] .rite-emo {
+            position: relative;
+            z-index: 1;
+            display: block;
+            font-size: 32px;
+            line-height: 1;
+            transform-origin: center bottom;
+        }
+
+        .chapter[data-name="六处"] .rite small {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+        }
+
+        .chapter.play[data-name="六处"] .rite {
+            animation: trophy-in 680ms cubic-bezier(.16, .84, .28, 1) backwards;
+        }
+
+        .chapter.play[data-name="六处"] .rite:nth-child(1) { animation-delay: 40ms; }
+        .chapter.play[data-name="六处"] .rite:nth-child(2) { animation-delay: 120ms; }
+        .chapter.play[data-name="六处"] .rite:nth-child(3) { animation-delay: 200ms; }
+        .chapter.play[data-name="六处"] .rite:nth-child(4) { animation-delay: 280ms; }
+        .chapter.play[data-name="六处"] .rite:nth-child(5) { animation-delay: 360ms; }
+
+        .chapter.play[data-name="六处"] .rite-emo {
+            animation: trophy-pop 760ms cubic-bezier(.16, 1.35, .3, 1) both;
+        }
+
+        .chapter.play[data-name="六处"] .rite:nth-child(1) .rite-emo { animation-delay: 120ms; }
+        .chapter.play[data-name="六处"] .rite:nth-child(2) .rite-emo { animation-delay: 200ms; }
+        .chapter.play[data-name="六处"] .rite:nth-child(3) .rite-emo { animation-delay: 280ms; }
+        .chapter.play[data-name="六处"] .rite:nth-child(4) .rite-emo { animation-delay: 360ms; }
+        .chapter.play[data-name="六处"] .rite:nth-child(5) .rite-emo { animation-delay: 440ms; }
+
+        .chapter.play[data-name="六处"] .rite-sheen::before { animation: rite-shine 980ms ease forwards; }
+        .chapter.play[data-name="六处"] .rite:nth-child(2) .rite-sheen::before { animation-delay: 140ms; }
+        .chapter.play[data-name="六处"] .rite:nth-child(3) .rite-sheen::before { animation-delay: 220ms; }
+        .chapter.play[data-name="六处"] .rite:nth-child(4) .rite-sheen::before { animation-delay: 300ms; }
+        .chapter.play[data-name="六处"] .rite:nth-child(5) .rite-sheen::before { animation-delay: 380ms; }
+
+        .rite-mark {
+            position: absolute;
+            right: 6px;
+            bottom: -18px;
+            z-index: 0;
+            color: transparent;
+            font-size: 108px;
+            font-weight: 800;
+            letter-spacing: -0.08em;
+            line-height: 1;
+            -webkit-text-stroke: 1px rgba(38, 58, 52, 0.14);
+            pointer-events: none;
+        }
+
+        .rite-charge {
+            position: absolute;
+            left: 18px;
+            right: 18px;
+            bottom: 16px;
+            z-index: 2;
+            height: 3px;
+            overflow: hidden;
+            border-radius: 99px;
+            background: rgba(24, 189, 120, 0.16);
+        }
+
+        .rite-charge i {
+            display: block;
+            width: 0;
+            height: 100%;
+            background: linear-gradient(90deg, #06784a, #d8ffe9);
+            box-shadow: 0 0 14px #7dffc3;
+            transition: width 520ms cubic-bezier(.16, .84, .24, 1);
+        }
+
+        .rite-status {
+            position: relative;
+            z-index: 1;
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--faint);
+            font-family: var(--mono);
+            font-size: 11px;
+            font-style: normal;
+            letter-spacing: 0.18em;
+        }
+
+        .chapter[data-name="六处"] .rite.charging .rite-charge i,
+        .chapter[data-name="六处"] .rite.on .rite-charge i { width: 100%; }
+
+        .chapter[data-name="六处"] .rite.on {
+            filter: none;
+            transform: perspective(800px) rotateX(var(--rx)) rotateY(var(--ry)) translateY(-8px);
+            border-color: rgba(125, 255, 195, 0.72);
+            background:
+                radial-gradient(80% 80% at 0% 0%, rgba(125, 255, 195, 0.38), transparent 52%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(232, 255, 244, 0.88));
+            box-shadow:
+                0 0 0 1px rgba(125, 255, 195, 0.55),
+                0 0 42px rgba(24, 189, 120, 0.34),
+                0 24px 50px rgba(24, 189, 120, 0.22);
+        }
+
+        .chapter[data-name="六处"] .rite.on .rite-mark {
+            color: rgba(24, 189, 120, 0.14);
+            -webkit-text-stroke: 0;
+        }
+
+        .chapter[data-name="六处"] .rite.on .rite-status { color: var(--accent-strong); }
+
+        .rite-stage.armed::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            z-index: 6;
+            width: 90px;
+            height: 90px;
+            margin: -45px 0 0 -45px;
+            border: 2px solid rgba(210, 255, 234, 0.95);
+            border-radius: 50%;
+            box-shadow: 0 0 28px rgba(24, 189, 120, 0.7), inset 0 0 18px rgba(125, 255, 195, 0.45);
+            pointer-events: none;
+            animation: grid-boom 880ms ease-out forwards;
+        }
+
+        .chapter[data-name="六处"] .rite.on .rite-ring {
+            opacity: 1;
+            background: conic-gradient(from var(--spin), transparent 0deg, #fff 28deg, #7dffc3 78deg, transparent 140deg, transparent 210deg, rgba(24, 189, 120, 0.9) 250deg, transparent 300deg);
+            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            animation: ring-spin 2.2s linear infinite;
+        }
+
+        .chapter[data-name="六处"] .rite.on .rite-sheen::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 42%;
+            background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.42), transparent);
+            animation: rite-scan 2.6s ease-in-out infinite;
+        }
+
+        .chapter[data-name="六处"] .rite.on .rite-orbit {
+            opacity: 1;
+            animation: orbit 3.2s linear infinite;
+        }
+
+        .chapter[data-name="六处"] .rite.on .rite-orb::before {
+            animation: orb-breathe 2.2s ease-in-out infinite;
+        }
+
+        .chapter[data-name="六处"] .rite:not(.on) .rite-emo {
+            filter: grayscale(1);
+            opacity: 0.42;
+        }
+
+        .chapter[data-name="六处"] .rite.on .rite-emo {
+            animation: pride-float 2.2s ease-in-out infinite;
+            filter: drop-shadow(0 0 12px rgba(24, 189, 120, 0.7));
+            opacity: 1;
+        }
+
+        .chapter[data-name="六处"] .rite.on .rite-orb::after {
+            content: "";
+            position: absolute;
+            inset: -16px;
+            border: 1px dashed rgba(125, 255, 195, 0.85);
+            border-radius: 50%;
+            animation: orbit 7s linear infinite reverse;
+        }
+
+        .chapter[data-name="六处"] .rite.hit {
+            animation: rite-hit 460ms ease;
+        }
+
+        .chapter[data-name="六处"] .rite.touch {
+            animation: rite-touch 640ms ease;
+        }
+
+        .rite-ripple, .rite-spark, .rite-streak, .rite-flash { position: absolute; pointer-events: none; }
+
+        .rite-flash {
+            inset: 0;
+            z-index: 3;
+            border-radius: inherit;
+            background: radial-gradient(circle at 22% 24%, rgba(255, 255, 255, 0.92), rgba(125, 255, 195, 0.35) 36%, transparent 68%);
+            animation: flash-fade 720ms ease-out forwards;
+        }
+
+        .rite-ripple {
+            inset: 0;
+            border-radius: 50%;
+            border: 1.5px solid rgba(185, 255, 224, 0.9);
+            box-shadow: 0 0 12px rgba(24, 189, 120, 0.55);
+            animation: rite-ripple 900ms ease-out forwards;
+        }
+
+        .rite-spark {
+            left: 50%;
+            top: 50%;
+            width: 6px;
+            height: 6px;
+            margin: -3px 0 0 -3px;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 0 12px #7dffc3;
+            animation: spark-out 860ms ease-out forwards;
+        }
+
+        .rite-streak {
+            left: 50%;
+            top: 50%;
+            width: 22px;
+            height: 2px;
+            border-radius: 2px;
+            background: linear-gradient(90deg, #fff, rgba(125, 255, 195, 0.15));
+            transform-origin: left center;
+            animation: streak-out 760ms ease-out forwards;
+        }
+
+        .rite-flash.is-soft {
+            background: radial-gradient(circle at 28% 22%, rgba(255, 255, 255, 0.28), rgba(24, 189, 120, 0.08) 40%, transparent 68%);
+            animation-duration: 980ms;
+        }
+
+        .rite-ripple.is-soft {
+            border-width: 1px;
+            border-color: rgba(24, 189, 120, 0.32);
+            box-shadow: none;
+            animation-duration: 1200ms;
+        }
+
+        .rite-spark.is-soft {
+            width: 4px;
+            height: 4px;
+            margin: -2px 0 0 -2px;
+            background: rgba(143, 214, 184, 0.9);
+            box-shadow: 0 0 6px rgba(24, 189, 120, 0.28);
+            animation-duration: 1100ms;
+        }
+
         .pulse-wrap, .stars {
             border: 1px solid var(--line);
             border-radius: var(--radius);
@@ -1037,6 +1375,59 @@
         @keyframes emo-float {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-5px); }
+        }
+        @property --spin {
+            syntax: "<angle>";
+            inherits: false;
+            initial-value: 0deg;
+        }
+        @keyframes trophy-in {
+            from { opacity: 0; transform: translateY(22px) scale(0.94); }
+            to { opacity: 1; transform: none; }
+        }
+        @keyframes trophy-pop {
+            0% { opacity: 0; transform: translateY(10px) scale(0.4) rotate(-8deg); }
+            65% { opacity: 1; transform: translateY(-6px) scale(1.18) rotate(4deg); }
+            100% { opacity: 1; transform: none; }
+        }
+        @keyframes rite-shine { to { transform: translateX(130%); } }
+        @keyframes pride-float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-7px) scale(1.08); }
+        }
+        @keyframes ring-spin { to { --spin: 360deg; } }
+        @keyframes orbit { to { transform: rotate(360deg); } }
+        @keyframes rite-scan {
+            0% { top: -46%; }
+            100% { top: 120%; }
+        }
+        @keyframes flash-fade { to { opacity: 0; } }
+        @keyframes orb-breathe {
+            0%, 100% { box-shadow: 0 0 0 8px rgba(24, 189, 120, 0.14), 0 0 24px rgba(24, 189, 120, 0.35); }
+            50% { box-shadow: 0 0 0 16px rgba(24, 189, 120, 0.08), 0 0 42px rgba(125, 255, 195, 0.55); }
+        }
+        @keyframes rite-ripple {
+            to { transform: scale(2.6); opacity: 0; }
+        }
+        @keyframes spark-out {
+            to { transform: translate(var(--x), var(--y)) scale(0.15); opacity: 0; }
+        }
+        @keyframes streak-out {
+            from { opacity: 1; transform: rotate(var(--a)) translateX(10px) scaleX(0.35); }
+            to { opacity: 0; transform: rotate(var(--a)) translateX(var(--d)) scaleX(1.15); }
+        }
+        @keyframes grid-boom {
+            to { transform: scale(11); opacity: 0; }
+        }
+        @keyframes rite-hit {
+            0% { transform: perspective(800px) rotateX(var(--rx)) rotateY(var(--ry)) translateY(-8px) scale(1); }
+            40% { transform: perspective(800px) rotateX(var(--rx)) rotateY(var(--ry)) translateY(-14px) scale(1.035); }
+            100% { transform: perspective(800px) rotateX(var(--rx)) rotateY(var(--ry)) translateY(-8px) scale(1); }
+        }
+        @keyframes rite-touch {
+            0% { transform: perspective(800px) rotateX(var(--rx)) rotateY(var(--ry)) translateY(-8px); }
+            45% { transform: perspective(800px) rotateX(var(--rx)) rotateY(var(--ry)) translateY(-11px); }
+            100% { transform: perspective(800px) rotateX(var(--rx)) rotateY(var(--ry)) translateY(-8px); }
         }
         @keyframes hero-pop {
             from { transform: translate(-50%, -42%) scale(0.72); }
@@ -1459,7 +1850,8 @@
         @media (max-width: 640px) {
             .topbar { padding: 0 14px; }
             .brand span:last-child { display: none; }
-            .stats, .rites, .cover { grid-template-columns: 1fr; }
+            .stats, .rites, .cover, .chapter[data-name="六处"] .rites { grid-template-columns: 1fr; }
+            .chapter[data-name="六处"] .rite { grid-column: auto; }
             .panel { min-height: 280px; }
             .months { grid-template-columns: repeat(4, 1fr); }
             .glass strong { font-size: 12px; }
@@ -1607,9 +1999,11 @@
         <section class="chapter" data-name="六处">
             <div class="sheet">
                 <p class="eyebrow">Six places</p>
-                <h2>把自己留下来的六个地方</h2>
-                <p class="slot" style="margin-bottom: 14px">点一下，标出这一处。这是今年留下来的六件成就。</p>
-                <div class="rites" id="rites"></div>
+                <h2>今年我留下的五件事</h2>
+                <p class="slot" style="margin-bottom: 14px">存款到了，工作满意了，人也走出去了。心比年初稳，烟也放下了。</p>
+                <div class="rite-stage" id="rite-stage">
+                    <div class="rites" id="rites"></div>
+                </div>
             </div>
         </section>
 
@@ -1702,12 +2096,11 @@
             before: "待填：那时候的你。疲惫、躲开、把自己放在最后。",
             after: "待填：后来的你。还是同一个人，但手已经伸向自己。",
             rites: [
-                { k: "存款", t: "八月到了自己定下的目标。十月又突破了新的一档。钱，这一次是为自己留下来的。" },
-                { k: "工作", t: "三月拿到满意的 offer，薪水涨了很多。做出一个稳定的项目，十月又涨了薪。" },
-                { k: "出国", t: "十一月去了吉隆坡。脚第一次迈出自己熟悉的地方，这一趟是给自己的。" },
-                { k: "站起来", t: "一月裁员，公司要倒。我没有把自己判出局，去准备面试，要从失败里站起来。" },
-                { k: "认清人", t: "最信任的人在耍我，十月还被当成傻子骗过。我长大了一点：不轻易相信任何人。" },
-                { k: "还在", t: "回黑龙江当了伴郎，见了大学玩伴，也有了一个约定。房子再乱，我还站在自己这边。" }
+                { k: "存款", e: "💰", t: "八月到了自己定下的目标。十月又突破了新的一档。钱，这一次是为自己留下来的。" },
+                { k: "工作", e: "💼", t: "三月拿到满意的 offer，薪水涨了很多。做出一个稳定的项目，十月又涨了薪。" },
+                { k: "出国", e: "✈️", t: "十一月去了吉隆坡。脚第一次迈出自己熟悉的地方，这一趟是给自己的。" },
+                { k: "心理素质", e: "🌊", t: "裁员、压榨、被骗，都接住了。心没有散。比年初稳，也比年初硬。" },
+                { k: "戒烟", e: "🚭", t: "烟戒掉了。少了一件消耗自己的事，这一口留给以后。" }
             ],
             pulse: [24, 22, 30, 38, 46, 34, 52, 58, 63, 70, 78, 88],
             pulseWords: ["崩塌", "崩溃", "阳光", "低落", "绝望", "解放", "难受", "巅峰", "认清", "复杂", "不求救", "点燃"],
@@ -2029,18 +2422,134 @@
 
         document.getElementById("rites").innerHTML = YEAR.rites.map((rite, i) => `
             <button class="rite" type="button" data-i="${i}">
+                <span class="rite-sheen" aria-hidden="true"></span>
+                <span class="rite-ring" aria-hidden="true"></span>
+                <span class="rite-mark" aria-hidden="true">0${i + 1}</span>
+                <span class="rite-orb" aria-hidden="true">
+                    <span class="rite-orbit"></span>
+                    <span class="rite-emo">${rite.e}</span>
+                </span>
                 <small>0${i + 1}</small>
                 <strong>${rite.k}</strong>
                 <span class="slot">${rite.t}</span>
+                <em class="rite-status">STANDBY</em>
+                <span class="rite-charge" aria-hidden="true"><i></i></span>
             </button>
         `).join("");
+
+        let riteShow = 0;
+        const riteStage = document.getElementById("rite-stage");
+
+        function celebrate(button, soft) {
+            if (!soft) burst(button.getBoundingClientRect());
+            if (reduce) return;
+            const orb = button.querySelector(".rite-orb");
+            const stamp = String(performance.now());
+            const flash = document.createElement("span");
+            flash.className = soft ? "rite-flash is-soft" : "rite-flash";
+            flash.dataset.stamp = stamp;
+            button.append(flash);
+            const ripples = soft ? [0] : [0, 120];
+            ripples.forEach((delay) => {
+                const ripple = document.createElement("span");
+                ripple.className = soft ? "rite-ripple is-soft" : "rite-ripple";
+                ripple.dataset.stamp = stamp;
+                ripple.style.animationDelay = `${delay}ms`;
+                orb.append(ripple);
+            });
+            const count = soft ? 6 : 14;
+            for (let i = 0; i < count; i += 1) {
+                const angle = (Math.PI * 2 * i) / count - Math.PI / 2;
+                const spark = document.createElement("span");
+                const dist = soft ? 36 + (i % 2) * 10 : 62 + (i % 3) * 18;
+                spark.className = soft ? "rite-spark is-soft" : "rite-spark";
+                spark.dataset.stamp = stamp;
+                spark.style.setProperty("--x", `${Math.cos(angle) * dist}px`);
+                spark.style.setProperty("--y", `${Math.sin(angle) * dist}px`);
+                if (!soft && i % 2 === 0) spark.style.background = "#b9ffe0";
+                orb.append(spark);
+                if (soft) continue;
+                const streak = document.createElement("span");
+                streak.className = "rite-streak";
+                streak.dataset.stamp = stamp;
+                streak.style.setProperty("--a", `${angle}rad`);
+                streak.style.setProperty("--d", `${48 + (i % 3) * 18}px`);
+                orb.append(streak);
+            }
+            setTimeout(() => {
+                button.querySelectorAll(`[data-stamp="${stamp}"]`).forEach((node) => node.remove());
+                orb.querySelectorAll(`[data-stamp="${stamp}"]`).forEach((node) => node.remove());
+            }, soft ? 1300 : 1200);
+        }
+
+        function riteStillHere(token) {
+            return token === riteShow && document.querySelector('.chapter[data-name="六处"]')?.classList.contains("play");
+        }
+
+        function igniteRites() {
+            riteShow += 1;
+            const token = riteShow;
+            riteStage.classList.remove("armed");
+            const cards = [...document.querySelectorAll("#rites .rite")];
+            cards.forEach((card) => {
+                card.classList.remove("on", "charging", "hit");
+                card.querySelector(".rite-status").textContent = "STANDBY";
+            });
+            cards.forEach((card, i) => {
+                const start = 700 + i * 620;
+                setTimeout(() => {
+                    if (!riteStillHere(token)) return;
+                    card.classList.add("charging");
+                }, start);
+                setTimeout(() => {
+                    if (!riteStillHere(token)) return;
+                    card.classList.add("on");
+                    card.querySelector(".rite-status").textContent = "LIVE";
+                    celebrate(card);
+                    if (i === cards.length - 1) {
+                        setTimeout(() => {
+                            if (!riteStillHere(token)) return;
+                            riteStage.classList.add("armed");
+                        }, 160);
+                    }
+                }, start + 540);
+            });
+        }
+
+        document.getElementById("rites").addEventListener("mousemove", (event) => {
+            const button = event.target.closest(".rite");
+            document.querySelectorAll("#rites .rite").forEach((card) => {
+                if (card !== button) {
+                    card.style.setProperty("--rx", "0deg");
+                    card.style.setProperty("--ry", "0deg");
+                    return;
+                }
+                const rect = card.getBoundingClientRect();
+                const px = (event.clientX - rect.left) / rect.width - 0.5;
+                const py = (event.clientY - rect.top) / rect.height - 0.5;
+                card.style.setProperty("--ry", `${(px * 9).toFixed(2)}deg`);
+                card.style.setProperty("--rx", `${(-py * 9).toFixed(2)}deg`);
+            });
+        });
+
+        document.getElementById("rites").addEventListener("mouseleave", () => {
+            document.querySelectorAll("#rites .rite").forEach((card) => {
+                card.style.setProperty("--rx", "0deg");
+                card.style.setProperty("--ry", "0deg");
+            });
+        });
 
         document.getElementById("rites").addEventListener("click", (event) => {
             const button = event.target.closest(".rite");
             if (!button) return;
-            button.classList.toggle("on");
-            burst(button.getBoundingClientRect());
-            if (button.classList.contains("on")) toast(`已记下 · ${YEAR.rites[button.dataset.i].k}`);
+            const rite = YEAR.rites[button.dataset.i];
+            button.classList.add("on", "charging");
+            button.classList.remove("touch");
+            void button.offsetWidth;
+            button.classList.add("touch");
+            button.querySelector(".rite-status").textContent = "LIVE";
+            celebrate(button, true);
+            toast(`${rite.e} ${rite.k}`);
         });
 
         document.getElementById("vows").innerHTML = YEAR.vows.map((vow, i) => `
@@ -2144,6 +2653,7 @@
             requestAnimationFrame(() => chapters[next].classList.add("play"));
             if (next === 2) countStats();
             if (chapters[next]?.dataset.name === "城市") flyCities();
+            if (chapters[next]?.dataset.name === "六处") igniteRites();
             if (chapters[next]?.dataset.name === "心跳") {
                 const line = document.getElementById("line");
                 if (line) line.style.setProperty("--len", `${line.getTotalLength()}`);
