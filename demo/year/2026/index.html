@@ -1371,6 +1371,19 @@
         @keyframes dash { to { stroke-dashoffset: 0; } }
         @keyframes sunrise { to { opacity: 1; transform: none; } }
         @keyframes city-in { to { opacity: 1; transform: none; } }
+        @keyframes award-up {
+            from { opacity: 0; transform: translateY(64px); }
+            to { opacity: 1; transform: none; }
+        }
+        @keyframes medal-drop {
+            0% { opacity: 0; transform: translateY(-36px) rotate(-18deg); }
+            70% { opacity: 1; transform: translateY(3px) rotate(4deg); }
+            100% { opacity: 1; transform: none; }
+        }
+        @keyframes beam-on {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
         @keyframes spine-grow { to { transform: scaleY(1); } }
         @keyframes emo-float {
             0%, 100% { transform: translateY(0); }
@@ -1691,22 +1704,25 @@
             display: grid;
             grid-template-columns: 1.18fr 0.9fr 0.9fr;
             gap: 16px;
-            align-items: stretch;
+            align-items: end;
+            perspective: 1100px;
         }
 
         .game-card {
             position: relative;
             overflow: hidden;
             min-height: 250px;
-            padding: 26px 26px 24px;
+            padding: 26px 26px 28px;
             border: 1px solid var(--line);
-            border-radius: 24px;
+            border-radius: 24px 24px 12px 12px;
             background:
                 linear-gradient(165deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.46)),
                 var(--surface-strong);
             box-shadow: 0 16px 40px rgba(28, 75, 57, 0.08);
             opacity: 0;
-            transform: translateY(22px);
+            transform: translateY(36px);
+            transform-origin: center bottom;
+            transition: transform 280ms ease, box-shadow 280ms ease;
         }
 
         .game-card.is-first {
@@ -1731,12 +1747,106 @@
                 linear-gradient(165deg, #fff6ef, #fff);
         }
 
-        .chapter.play .game-card {
-            animation: city-in 720ms cubic-bezier(.16, .84, .28, 1) forwards;
+        .game-beam, .game-medal, .game-plinth { pointer-events: none; }
+
+        .game-beam {
+            position: absolute;
+            top: -30px;
+            left: 22%;
+            width: 56%;
+            height: 78%;
+            background: linear-gradient(180deg, rgba(243, 196, 92, 0.42), rgba(243, 196, 92, 0));
+            clip-path: polygon(42% 0, 58% 0, 100% 100%, 0 100%);
+            opacity: 0;
         }
 
-        .chapter.play .game-card.is-second { animation-delay: 120ms; }
-        .chapter.play .game-card.is-third { animation-delay: 240ms; }
+        .game-medal {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            z-index: 2;
+            display: grid;
+            place-items: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background:
+                radial-gradient(circle at 35% 30%, #fff6d4, #e2b34a 46%, #9a6410 78%);
+            color: #6d4708;
+            font-family: var(--mono);
+            font-size: 16px;
+            font-weight: 800;
+            box-shadow: 0 8px 16px rgba(154, 100, 16, 0.28), inset 0 0 0 4px rgba(255, 244, 210, 0.45);
+            opacity: 0;
+            transform: translateY(-28px) rotate(-16deg);
+        }
+
+        .game-card.is-second .game-medal {
+            width: 34px;
+            height: 34px;
+            font-size: 13px;
+            background: radial-gradient(circle at 35% 30%, #fff, #d5dee8 48%, #7d90a4 80%);
+            color: #3e5164;
+            box-shadow: 0 8px 16px rgba(82, 105, 126, 0.22), inset 0 0 0 4px rgba(255, 255, 255, 0.5);
+        }
+
+        .game-card.is-third .game-medal {
+            width: 34px;
+            height: 34px;
+            font-size: 13px;
+            background: radial-gradient(circle at 35% 30%, #ffe7d2, #d29a68 48%, #8a5528 80%);
+            color: #6a3d16;
+            box-shadow: 0 8px 16px rgba(138, 85, 40, 0.22), inset 0 0 0 4px rgba(255, 232, 210, 0.45);
+        }
+
+        .game-plinth {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 10px;
+            background: linear-gradient(90deg, #9a6410, #f3d48a 48%, #9a6410);
+        }
+
+        .game-card.is-second .game-plinth {
+            height: 7px;
+            background: linear-gradient(90deg, #7d90a4, #eef3f8 50%, #7d90a4);
+        }
+
+        .game-card.is-third .game-plinth {
+            height: 5px;
+            background: linear-gradient(90deg, #8a5528, #e7c2a2 50%, #8a5528);
+        }
+
+        .chapter.play .game-card {
+            opacity: 1;
+            transform: none;
+            animation: award-up 820ms cubic-bezier(.16, .9, .24, 1) backwards;
+        }
+
+        .chapter.play .game-card.is-third { animation-delay: 80ms; }
+        .chapter.play .game-card.is-second { animation-delay: 320ms; }
+        .chapter.play .game-card.is-first { animation-delay: 620ms; }
+
+        .chapter.play .game-medal {
+            opacity: 1;
+            transform: none;
+            animation: medal-drop 680ms cubic-bezier(.16, 1.15, .32, 1) backwards;
+        }
+
+        .chapter.play .game-card.is-third .game-medal { animation-delay: 460ms; }
+        .chapter.play .game-card.is-second .game-medal { animation-delay: 700ms; }
+        .chapter.play .game-card.is-first .game-medal { animation-delay: 1080ms; }
+
+        .chapter.play .game-card.is-first .game-beam {
+            opacity: 1;
+            animation: beam-on 900ms 1180ms ease backwards;
+        }
+
+        .chapter.play .game-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 22px 36px rgba(48, 38, 18, 0.12);
+        }
 
         .game-rank {
             display: inline-flex;
@@ -1973,7 +2083,7 @@
             <div class="sheet">
                 <p class="eyebrow">Games of the year</p>
                 <h2>年度最佳游戏</h2>
-                <p class="month-hint">这一年打开最多的三款。</p>
+                <p class="month-hint">铜，银，金。这一年打开最多的三款。</p>
                 <div class="podium" id="podium"></div>
             </div>
         </section>
@@ -2285,11 +2395,14 @@
 
         document.getElementById("podium").innerHTML = YEAR.games.map((game, i) => `
             <article class="game-card ${i === 0 ? "is-first" : i === 1 ? "is-second" : "is-third"}">
+                ${i === 0 ? '<span class="game-beam" aria-hidden="true"></span>' : ""}
+                <span class="game-medal" aria-hidden="true">${i + 1}</span>
                 <span class="game-rank">${String(i + 1).padStart(2, "0")} · ${game.place}</span>
                 <span class="game-logo-plate ${game.mark}"><img class="game-logo" src="${game.logo}" alt="${game.name}"></span>
                 <h3>${game.name}</h3>
                 <span class="tag">${game.tag}</span>
                 <p>${game.line}</p>
+                <span class="game-plinth" aria-hidden="true"></span>
             </article>
         `).join("");
 
