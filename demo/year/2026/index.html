@@ -447,7 +447,7 @@
         .stats { grid-template-columns: repeat(4, 1fr); }
         .rites { grid-template-columns: repeat(3, 1fr); }
 
-        .stat, .rite, .vow, .glass {
+        .stat, .rite, .glass {
             border: 1px solid var(--line);
             border-radius: var(--radius);
             background: var(--surface);
@@ -526,7 +526,7 @@
             transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease, background 200ms ease;
         }
 
-        .glass:hover, .glass.on, .rite:hover, .vow:hover {
+        .glass:hover, .glass.on, .rite:hover {
             border-color: rgba(24, 189, 120, 0.45);
             box-shadow: var(--shadow);
             transform: translateY(-3px);
@@ -540,7 +540,7 @@
 
         .glass.on .glass-emo { animation: emo-float 2.2s ease-in-out infinite; }
 
-        .glass em, .glass strong, .rite strong, .vow strong { display: block; font-style: normal; }
+        .glass em, .glass strong, .rite strong { display: block; font-style: normal; }
         .glass em {
             display: block;
             margin: 3px 0 0;
@@ -551,7 +551,7 @@
             line-height: 1.2;
         }
         .glass.on em { color: var(--accent-strong); }
-        .rite small, .vow small {
+        .rite small {
             color: var(--faint);
             font-family: var(--mono);
             font-size: 11px;
@@ -889,14 +889,14 @@
             z-index: 2;
         }
 
-        .rite, .vow {
+        .rite {
             text-align: left;
             padding: 18px 16px;
             min-height: 148px;
             transition: transform 200ms ease, border-color 200ms ease, background 200ms ease, box-shadow 200ms ease;
         }
 
-        .rite strong, .vow strong {
+        .rite strong {
             margin: 8px 0;
             color: var(--ink-strong);
             font-size: 22px;
@@ -904,16 +904,14 @@
             letter-spacing: -0.04em;
         }
 
-        .vows { display: grid; gap: 12px; }
-
-        .rite.on, .vow.on {
+        .rite.on {
             border-color: rgba(24, 189, 120, 0.5);
             background:
                 linear-gradient(160deg, rgba(24, 189, 120, 0.16), transparent 72%),
                 var(--surface-strong);
         }
 
-        .rite.on small, .vow.on small { color: var(--accent-strong); }
+        .rite.on small { color: var(--accent-strong); }
 
         .rite-stage {
             position: relative;
@@ -1253,7 +1251,7 @@
             animation-duration: 1100ms;
         }
 
-        .pulse-wrap, .stars {
+        .pulse-wrap {
             border: 1px solid var(--line);
             border-radius: var(--radius);
             background: var(--surface);
@@ -1274,46 +1272,6 @@
             stroke-dasharray: var(--len);
             stroke-dashoffset: var(--len);
             animation: dash 1.6s ease forwards;
-        }
-
-        .stars {
-            position: relative;
-            height: min(420px, 56vh);
-            overflow: hidden;
-            background:
-                radial-gradient(circle at 50% 42%, rgba(24, 189, 120, 0.16), transparent 42%),
-                var(--surface);
-        }
-
-        .star {
-            position: absolute;
-            width: 132px;
-            transform: translate(-50%, -50%);
-            text-align: center;
-        }
-
-        .star i {
-            display: block;
-            width: 10px;
-            height: 10px;
-            margin: 0 auto 8px;
-            border-radius: 50%;
-            background: var(--accent);
-            box-shadow: 0 0 0 6px var(--accent-soft);
-        }
-
-        .star.on i {
-            background: var(--accent-strong);
-            box-shadow: 0 0 0 8px rgba(24, 189, 120, 0.22);
-        }
-
-        .star span { color: var(--ink); font-size: 13px; font-weight: 700; }
-
-        .constellation {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
         }
 
         .next-road {
@@ -2328,22 +2286,6 @@
             </div>
         </section>
 
-        <section class="chapter" data-name="星图">
-            <div class="sheet">
-                <p class="eyebrow">What stayed</p>
-                <h2>还在手里的</h2>
-                <div class="stars" id="stars"></div>
-            </div>
-        </section>
-
-        <section class="chapter" data-name="誓言">
-            <div class="sheet">
-                <p class="eyebrow">Vows</p>
-                <h2>离开这一年之前</h2>
-                <div class="vows" id="vows"></div>
-            </div>
-        </section>
-
         <section class="chapter" data-name="明年">
             <div class="sheet">
                 <p class="eyebrow">2027</p>
@@ -2432,18 +2374,6 @@
             ],
             pulse: [24, 22, 30, 38, 46, 34, 52, 58, 63, 70, 78, 88],
             pulseWords: ["崩塌", "崩溃", "阳光", "低落", "绝望", "解放", "难受", "巅峰", "认清", "复杂", "不求救", "点燃"],
-            stars: [
-                { name: "想感谢的人", x: 22, y: 34, note: "待填：名字可以不写，写下他做了什么。" },
-                { name: "陪着我的生命", x: 48, y: 24, note: "待填：一只猫，一条鱼，或另一个人。" },
-                { name: "一座城市", x: 74, y: 40, note: "待填：这一年你的脚站在哪里。" },
-                { name: "一份工作", x: 62, y: 70, note: "待填：它拿走了什么，又还给你什么。" },
-                { name: "一个习惯", x: 30, y: 68, note: "待填：你没有放下、于是把自己留住的事。" }
-            ],
-            vows: [
-                "我不再把自己交出去等救。",
-                "我允许这一年不完美，但不允许再消失。",
-                "走进下一年时，我还站在自己这边。"
-            ],
             finaleTitle: "救赎不是被等来的",
             finale: "待填：用一句属于你的话，关上 2026。模板先留在这里：我没有等谁。我成为了那只手。"
         };
@@ -2883,21 +2813,6 @@
             toast(`${rite.e} ${rite.k}`);
         });
 
-        document.getElementById("vows").innerHTML = YEAR.vows.map((vow, i) => `
-            <button class="vow" type="button">
-                <small>0${i + 1} · 点击确认</small>
-                <strong>${vow}</strong>
-            </button>
-        `).join("");
-
-        document.getElementById("vows").addEventListener("click", (event) => {
-            const button = event.target.closest(".vow");
-            if (!button) return;
-            button.classList.add("on");
-            button.querySelector("small").textContent = "已确认";
-            burst(button.getBoundingClientRect());
-        });
-
         document.getElementById("next-goals").innerHTML = YEAR.next.map((goal, i) => `
             <article class="goal">
                 <div class="goal-stage" aria-hidden="true">
@@ -2969,27 +2884,6 @@
                 </g>
             `).join("")}
         `;
-
-        const stars = document.getElementById("stars");
-        const linePoints = YEAR.stars.map((star) => `${star.x},${star.y}`).join(" ");
-        stars.innerHTML = `
-            <svg class="constellation" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                <polyline points="${linePoints}" fill="none" stroke="rgba(24,189,120,.55)" stroke-width="0.35"></polyline>
-            </svg>
-            ${YEAR.stars.map((star, i) => `
-                <button class="star" type="button" style="left:${star.x}%;top:${star.y}%" data-i="${i}">
-                    <i></i>
-                    <span>${star.name}</span>
-                </button>
-            `).join("")}
-        `;
-        stars.addEventListener("click", (event) => {
-            const button = event.target.closest(".star");
-            if (!button) return;
-            stars.querySelectorAll(".star").forEach((el) => el.classList.toggle("on", el === button));
-            toast(YEAR.stars[button.dataset.i].note);
-            burst(button.getBoundingClientRect());
-        });
 
         chapters.forEach((chapter, i) => {
             const button = document.createElement("button");
