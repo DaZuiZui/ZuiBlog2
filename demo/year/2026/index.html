@@ -1523,6 +1523,11 @@
             to { opacity: 1; }
         }
         @keyframes spine-grow { to { transform: scaleY(1); } }
+        @keyframes city-ping { to { transform: scale(1.7); opacity: 0; } }
+        @keyframes city-dot {
+            0% { box-shadow: 0 0 0 0 rgba(24, 189, 120, 0.45); }
+            100% { box-shadow: 0 0 0 12px rgba(24, 189, 120, 0); }
+        }
         @keyframes goal-in { to { opacity: 1; transform: none; } }
         @keyframes road-draw { to { transform: scaleX(1); } }
         @keyframes walk-year {
@@ -1707,7 +1712,13 @@
             position: relative;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 8px;
+            margin-top: 14px;
+            padding: 16px 8px 8px 6px;
+            border-radius: 24px;
+            background:
+                radial-gradient(circle at 18% 0%, rgba(24, 189, 120, 0.16), transparent 18rem),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.46), rgba(255, 255, 255, 0.16));
         }
 
         .city-spine {
@@ -1715,10 +1726,9 @@
             top: 40px;
             bottom: 40px;
             left: 20px;
-            width: 4px;
+            width: 3px;
             border-radius: 999px;
-            background: linear-gradient(180deg, #7dE7b5, var(--accent) 18%, var(--accent-strong));
-            box-shadow: 0 0 0 7px rgba(24, 189, 120, 0.14);
+            background: repeating-linear-gradient(180deg, var(--accent) 0 9px, transparent 9px 16px);
             transform: scaleY(0);
             transform-origin: top center;
             z-index: 0;
@@ -1733,11 +1743,23 @@
             left: 0;
             top: 0;
             z-index: 4;
-            font-size: 30px;
+            font-size: 32px;
             line-height: 1;
-            filter: drop-shadow(0 8px 10px rgba(7, 150, 91, 0.35));
+            filter: drop-shadow(0 8px 10px rgba(7, 150, 91, 0.4));
             pointer-events: none;
             will-change: transform, opacity;
+        }
+
+        .city-plane::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            right: 78%;
+            width: 42px;
+            height: 2px;
+            border-radius: 2px;
+            background: linear-gradient(90deg, transparent, rgba(24, 189, 120, 0.85));
+            transform: translateY(-50%);
         }
 
         .stop {
@@ -1764,9 +1786,9 @@
         }
 
         .stop.is-here {
-            border-color: rgba(7, 150, 91, 0.55);
-            background: linear-gradient(90deg, rgba(24, 189, 120, 0.18), #fff 58%);
-            box-shadow: 0 14px 32px rgba(24, 189, 120, 0.16);
+            border-color: rgba(7, 150, 91, 0.62);
+            background: linear-gradient(90deg, rgba(125, 255, 195, 0.34), #fff 62%);
+            box-shadow: 0 16px 34px rgba(24, 189, 120, 0.2);
         }
 
         .stop .dot {
@@ -1786,6 +1808,7 @@
         .stop.is-here .dot {
             background: var(--accent);
             box-shadow: 0 0 0 6px rgba(24, 189, 120, 0.22);
+            animation: city-dot 1.3s ease-out infinite;
         }
 
         .stop .idx {
@@ -1798,6 +1821,7 @@
         }
 
         .stop .mark {
+            position: relative;
             display: grid;
             place-items: center;
             width: 52px;
@@ -1813,8 +1837,17 @@
         }
 
         .stop.is-here .mark {
-            transform: scale(1.06);
-            box-shadow: 0 0 0 8px rgba(24, 189, 120, 0.24);
+            transform: scale(1.1);
+            box-shadow: 0 0 0 8px rgba(24, 189, 120, 0.24), 0 0 22px rgba(24, 189, 120, 0.28);
+        }
+
+        .stop.is-here .mark::after {
+            content: "";
+            position: absolute;
+            inset: -7px;
+            border: 1.5px solid rgba(24, 189, 120, 0.7);
+            border-radius: 50%;
+            animation: city-ping 1.35s ease-out infinite;
         }
 
         .chapter.play .stop .emo {
@@ -2099,10 +2132,22 @@
             .month-visual { min-height: 0; }
             .hero-emoji { font-size: 72px; }
             .month-copy { padding: 16px 18px 14px; }
-            .city-head { align-items: flex-start; }
-            .city-count { font-size: 52px; }
-            .city-spine, .stop .dot { left: 15px; }
-            .stop { padding-left: 34px; }
+            .city-head { align-items: flex-start; gap: 12px; }
+            .city-count { font-size: 42px; }
+            .city-board { margin-top: 8px; padding: 8px 2px 4px 0; }
+            .city-spine, .stop .dot { left: 11px; }
+            .stop {
+                grid-template-columns: 44px minmax(0, 1fr);
+                gap: 10px;
+                min-height: 68px;
+                padding: 10px 12px 10px 28px;
+            }
+            .stop .idx { display: none; }
+            .stop .mark { width: 44px; height: 44px; font-size: 22px; }
+            .stop strong { font-size: 20px; }
+            .stop em { font-size: 14px; }
+            .city-plane { font-size: 26px; }
+            .city-plane::after { width: 26px; }
             .next-road { padding-top: 0; }
             .next-road::before, .year-walker { display: none; }
             .next-goals { grid-template-columns: 1fr; }
@@ -2622,7 +2667,7 @@
             const unit = legMs + holdMs;
             const travel = (route.length - 1) * unit;
             const cycle = travel + resetMs;
-            const bow = 36;
+            const bow = window.innerWidth < 900 ? 14 : 36;
             let smoothAngle = null;
             let hereNow = -1;
             plane.style.display = "block";
