@@ -1294,12 +1294,12 @@
         }
 
         .chapter.play .next-road::before {
-            animation: road-draw 2.2s ease forwards;
+            animation: road-draw 2.8s ease forwards;
         }
 
         .next-goals {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 14px;
         }
 
@@ -1316,7 +1316,7 @@
 
         .chapter.play .year-walker {
             opacity: 1;
-            animation: walk-year 2.2s ease forwards;
+            animation: walk-year 2.8s ease forwards;
         }
 
         .year-walker.swap { animation: walker-swap 460ms ease; }
@@ -1382,7 +1382,7 @@
             display: block;
             margin-top: 6px;
             color: #fff;
-            font-size: 28px;
+            font-size: 24px;
             letter-spacing: -0.045em;
         }
 
@@ -1401,6 +1401,7 @@
 
         .chapter.play .goal:nth-child(2) { animation-delay: 90ms; }
         .chapter.play .goal:nth-child(3) { animation-delay: 180ms; }
+        .chapter.play .goal:nth-child(4) { animation-delay: 270ms; }
 
         .goal.lit b {
             filter: none;
@@ -1438,11 +1439,20 @@
             box-shadow: 0 18px 36px rgba(180, 130, 40, 0.16);
         }
 
+        .goal.lit:nth-child(4) {
+            border-color: rgba(70, 120, 186, 0.4);
+            background:
+                radial-gradient(90% 70% at 12% 0%, rgba(196, 220, 255, 0.95), transparent 58%),
+                linear-gradient(180deg, #f4f8ff, #fff);
+            box-shadow: 0 18px 36px rgba(70, 110, 170, 0.16);
+        }
+
         .goal.lit strong { color: var(--ink-strong); }
         .goal.lit span { color: var(--ink); }
         .goal.lit:nth-child(1) small { color: #5d7094; }
         .goal.lit:nth-child(2) small { color: var(--accent-strong); }
         .goal.lit:nth-child(3) small { color: #9a6410; }
+        .goal.lit:nth-child(4) small { color: #3d6294; }
 
         .finale { text-align: left; position: relative; }
 
@@ -1518,7 +1528,7 @@
         @keyframes walk-year {
             from { left: 6%; transform: translateY(0); }
             50% { transform: translateY(-6px); }
-            to { left: 86%; transform: translateY(0); }
+            to { left: 88%; transform: translateY(0); }
         }
         @keyframes walker-swap {
             0% { transform: translateY(4px) scale(0.7); }
@@ -2290,7 +2300,7 @@
             <div class="sheet">
                 <p class="eyebrow">2027</p>
                 <h2>明年的目标</h2>
-                <p class="slot" style="margin-bottom: 14px">先睡好。再走远一点。事业也要站得更稳。</p>
+                <p class="slot" style="margin-bottom: 14px">先睡好。再走远一点。事业站稳，心也要比今年更强。</p>
                 <div class="next-road" id="next-road">
                     <span class="year-walker" id="year-walker" aria-hidden="true">🌙</span>
                     <div class="next-goals" id="next-goals"></div>
@@ -2370,7 +2380,8 @@
             next: [
                 { k: "睡觉", e: "🌙", bits: ["😴", "🛏️", "✨"], t: "正常地睡。把夜里还给自己。" },
                 { k: "新的国家", e: "🌏", bits: ["✈️", "🗺️", "🌴"], t: "再探索一个新的国家。脚还要往外迈。" },
-                { k: "事业", e: "☀️", bits: ["💼", "📈", "🏆"], t: "事业更加稳定。站稳了，再往前。" }
+                { k: "事业", e: "☀️", bits: ["💼", "📈", "🏆"], t: "事业更加稳定。站稳了，再往前。" },
+                { k: "心理素质", e: "🌊", bits: ["💪", "🪨", "🌿"], t: "比今年更强。事情来的时候，心还站得住。" }
             ],
             pulse: [24, 22, 30, 38, 46, 34, 52, 58, 63, 70, 78, 88],
             pulseWords: ["崩塌", "崩溃", "阳光", "低落", "绝望", "解放", "难受", "巅峰", "认清", "复杂", "不求救", "点燃"],
