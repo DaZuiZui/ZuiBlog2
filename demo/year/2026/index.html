@@ -2376,6 +2376,10 @@
                 <p class="eyebrow">Close</p>
                 <h2 id="finale-title"></h2>
                 <p class="slot" id="finale-copy"></p>
+                <div id="finale-goodnight" hidden>
+                    <p>晚安，杰米，祝你快乐。</p>
+                    <img class="finale-portrait" src="jamie-by-the-sea.webp" width="1080" height="1296" alt="杰米的海边纪念合成照：远处的沙滩、她的侧身，以及她望向镜头的模样。">
+                </div>
                 <button class="again" id="again" type="button">再看一遍</button>
                 <p class="photo-source">封面摄影 <a href="https://commons.wikimedia.org/wiki/File:The_Twins_SE_Asia_2019_(49171985716).jpg">James Kerwin · The Twins SE Asia 2019</a> · <a href="https://creativecommons.org/licenses/by/2.0/">CC BY 2.0</a> · 已裁切、压缩并添加光影</p>
             </div>
@@ -2501,7 +2505,7 @@
             pulse: [24, 22, 30, 38, 46, 34, 52, 58, 63, 70, 48, 88],
             pulseWords: ["崩塌", "崩溃", "阳光", "低落", "绝望", "解放", "难受", "巅峰", "认清", "复杂", "难安", "点燃"],
             finaleTitle: "救赎不是被等来的",
-            finale: "待填：用一句属于你的话，关上 2026。模板先留在这里：我没有等谁。我成为了那只手。"
+            finale: "我没有等谁。我成为了那只手。"
         };
 
         const motionPreference = matchMedia("(prefers-reduced-motion: reduce)");
@@ -3145,12 +3149,27 @@
         }
 
         const coverScene = document.querySelector(".cover-scene");
+        const goodnight = document.getElementById("finale-goodnight");
+        const topbar = document.querySelector(".topbar");
+        const visitedChapters = new Set();
         let scrollFrame = 0;
         function syncReadingPosition() {
             scrollFrame = 0;
             const threshold = Math.min(window.innerHeight * 0.38, 260);
+            const readingTop = topbar.getBoundingClientRect().bottom;
+            const viewportHeight = window.innerHeight - readingTop;
             let active = 0;
-            for (let i = 1; i < chapters.length && chapters[i].getBoundingClientRect().top <= threshold; i++) active = i;
+            let atFinale = false;
+            chapters.forEach((chapter, i) => {
+                const bounds = chapter.getBoundingClientRect();
+                if (bounds.top <= threshold) active = i;
+                const visible = Math.min(window.innerHeight, bounds.bottom) - Math.max(readingTop, bounds.top);
+                if (visible >= Math.min(viewportHeight, bounds.height) / 2) {
+                    visitedChapters.add(chapter);
+                    if (i === chapters.length - 1) atFinale = true;
+                }
+            });
+            if (atFinale && visitedChapters.size === chapters.length) goodnight.hidden = false;
             const distance = document.documentElement.scrollHeight - window.innerHeight;
             const fraction = distance > 0 ? Math.min(1, Math.max(0, window.scrollY / distance)) : 0;
             if (reduce) {
@@ -3200,7 +3219,11 @@
             burst(document.getElementById("ignite").getBoundingClientRect());
             go(1);
         });
-        document.getElementById("again").addEventListener("click", () => go(0));
+        document.getElementById("again").addEventListener("click", () => {
+            visitedChapters.clear();
+            goodnight.hidden = true;
+            go(0);
+        });
 
         chapters[monthChapter].addEventListener("keydown", event => {
             if (event.altKey || event.ctrlKey || event.metaKey) return;

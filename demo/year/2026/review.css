@@ -302,6 +302,13 @@ h2 { margin-bottom: 22px; font-size: 44px; line-height: 1.18; }
 .finale .eyebrow, .finale .accent-word { color: #d3efa8; }
 .finale h2 { color: #f5f5eb; font: 700 50px/1.25 var(--serif); }
 .finale .slot { color: #dae3d9; font-size: 16px; }
+#finale-goodnight { margin-top: 28px; }
+#finale-goodnight > p { color: #f6e1bf; font: 600 25px/1.6 var(--serif); }
+.finale-portrait { display: block; width: min(100%, 560px); height: auto; margin-top: 16px; }
+@media (prefers-reduced-motion: no-preference) {
+    #finale-goodnight:not([hidden]) { animation: finale-goodnight-in 1.4s ease-out both; }
+    @keyframes finale-goodnight-in { from { opacity: 0; } to { opacity: 1; } }
+}
 .again { background: transparent; color: #fff; min-height: 44px; border-color: #83a491; }
 .photo-source { margin-top: 40px; color: #d4e2d1; font-size: 12px; }
 .photo-source a { text-decoration: underline; text-underline-offset: 3px; }
