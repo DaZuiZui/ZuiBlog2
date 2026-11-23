@@ -1,0 +1,319 @@
+/* City itinerary */
+.chapter .city-sheet {
+    display: grid;
+    grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+    align-items: start;
+    gap: 48px;
+    width: min(1080px, 100%);
+}
+
+.city-head { display: block; margin: 0; }
+.city-sheet h2 { margin: 0 0 18px; font-size: 48px; }
+.city-sheet .month-hint { max-width: 24em; font-weight: 450; line-height: 1.7; }
+.city-count { margin: 28px 0 0; text-align: left; font-variant-numeric: tabular-nums; }
+.city-board { gap: 0; margin: 0; padding: 0 0 0 4px; background: none; }
+.stop, .stop.is-here {
+    min-height: 66px;
+    grid-template-columns: 1.6rem 2.4rem minmax(0,1fr);
+    gap: 14px;
+    padding: 10px 10px 10px 34px;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    opacity: 1;
+    transform: none;
+}
+.stop .idx { display: block; color: var(--muted); font-size: 12px; font-weight: 500; }
+.stop .mark, .stop.is-here .mark {
+    width: 38px;
+    height: 38px;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    font-size: 25px;
+}
+.stop.is-here .mark::after { content: none; }
+.stop .dot { left: 8px; width: 9px; height: 9px; margin-top: -4.5px; border-width: 2px; }
+.stop .stop-title { gap: 10px; flex-wrap: wrap; }
+.stop strong { font-size: 21px; }
+.stop em { font-size: 14px; color: var(--muted); font-weight: 450; }
+.stop .when { padding: 0; border-radius: 0; background: none; color: var(--muted); font-weight: 500; }
+.city-plane { font-size: 22px; }
+.chapter:not(.is-on) .city-plane { visibility: hidden; }
+.city-plane::after { width: 16px; }
+.city-spine { width: 2px; transform: none; }
+
+/* Annual game awards. Give the winner a full-width, uncropped cover. */
+.podium {
+    display: grid;
+    grid-template-columns: 1.45fr 1fr 1fr;
+    align-items: stretch;
+    gap: 12px;
+}
+.game-card, .game-card.is-first, .game-card.is-second, .game-card.is-third {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    padding: 18px 18px 24px;
+    border-radius: 8px;
+    background: #f9fbf8;
+    border: 1px solid var(--line);
+    box-shadow: none;
+    opacity: 1;
+    transform: none;
+}
+.game-card.is-first { background: #122d26; border-color: #122d26; }
+.game-rank, .game-card.is-second .game-rank, .game-card.is-third .game-rank {
+    align-self: flex-start;
+    margin: 0 0 16px;
+    padding: 0;
+    border-radius: 0;
+    background: none;
+    color: var(--muted);
+}
+.is-first .game-rank { color: #b1e995; }
+.game-medal, .game-plinth, .game-beam { display: none; }
+.game-logo-plate {
+    width: 100%;
+    aspect-ratio: 460 / 215;
+    height: auto;
+    margin-bottom: 18px;
+    padding: 14px;
+    border-radius: 4px;
+    background: #171c1a;
+    overflow: hidden;
+}
+.game-logo-plate.is-title { padding: 0; }
+.game-card.is-third .game-logo-plate { background: #a8b2b1; }
+.game-logo-plate .game-logo, .game-logo-plate.is-title .game-logo {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    object-fit: contain;
+}
+.game-card h3 { font-size: 30px; }
+.game-card p { margin-top: 6px; color: var(--muted); font-weight: 450; }
+.game-card .tag { margin-top: 8px; font: 650 13px var(--sans); }
+.game-card.is-first h3 { color: #fff; }
+.game-card.is-first p { color: #dce9e3; }
+.game-card.is-first .tag { color: #b1e995; }
+
+/* The comparison keeps the complete original captions below the drag surface. */
+.wipe {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 2.75;
+    min-height: 175px;
+    border-radius: 8px;
+    border: 0;
+    box-shadow: none;
+    isolation: isolate;
+}
+.pane { padding: 24px; align-content: start; }
+.pane h3 { margin: 0; font-size: 42px; line-height: 1.2; letter-spacing: 0; }
+.pane-before {
+    background:
+        repeating-linear-gradient(115deg, transparent 0 14px, #ffffff0b 14px 15px),
+        #25303a;
+}
+.pane-before h3 { color: #f2f1f1; }
+.pane-after {
+    text-align: right;
+    background:
+        repeating-linear-gradient(65deg, transparent 0 14px, #ffeab330 14px 15px),
+        #b4e996;
+}
+.pane-after h3 { color: #143b29; }
+.wipe::after {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 var(--cut);
+    width: 2px;
+    transform: translateX(-50%);
+    background: #fff;
+    pointer-events: none;
+}
+.wipe input {
+    left: 0;
+    top: 50%;
+    right: auto;
+    bottom: auto;
+    width: 100%;
+    height: 48px;
+    margin: 0;
+    transform: translateY(-50%);
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    cursor: ew-resize;
+    touch-action: pan-y;
+}
+.wipe input::-webkit-slider-runnable-track { background: transparent; }
+.wipe input::-moz-range-track { background: transparent; }
+.wipe input::-webkit-slider-thumb {
+    width: 46px;
+    height: 46px;
+    appearance: none;
+    -webkit-appearance: none;
+    border: 1px solid #193c32;
+    border-radius: 50%;
+    background: #fff;
+}
+.wipe input::-moz-range-thumb {
+    width: 44px;
+    height: 44px;
+    border: 1px solid #193c32;
+    border-radius: 50%;
+    background: #fff;
+}
+.wipe-handle {
+    position: absolute;
+    z-index: 3;
+    left: calc(23px + (100% - 46px) * var(--fraction));
+    top: 50%;
+    width: 46px;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #193c32;
+    font: 700 18px var(--sans);
+    pointer-events: none;
+}
+.wipe-notes { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 18px; }
+.wipe-notes p { display: grid; align-content: start; gap: 5px; font-size: 16px; line-height: 1.75; }
+.wipe-notes strong { color: var(--accent-strong); }
+
+/* Achievements */
+.chapter[data-name="六处"] .rites { gap: 12px; }
+.rite-stage { border-radius: 0; overflow: visible; }
+.chapter[data-name="六处"] .rite, .chapter[data-name="六处"] .rite.on {
+    min-width: 0;
+    min-height: 0;
+    padding: 22px 22px 29px;
+    border-radius: 8px;
+    filter: none;
+    box-shadow: none;
+}
+.chapter[data-name="六处"] .rite.on {
+    transform: perspective(800px) rotateX(var(--rx)) rotateY(var(--ry));
+    border-color: #98c8b2;
+    background: linear-gradient(135deg, #e1f4e7, #fbfcf8);
+}
+.rite-orb { width: 46px; height: 46px; margin-bottom: 8px; }
+.rite-orb::before { background: #edf6eb; box-shadow: none; }
+.chapter[data-name="六处"] .rite-emo { font-size: 25px; }
+.rite strong { margin: 0 0 6px; font-size: 22px; }
+.rite .slot { display: block; color: var(--ink); font-size: 15px; line-height: 1.7; }
+.rite-charge { left: 22px; right: 22px; bottom: 13px; height: 2px; }
+.rite-status,.rite-mark { display: none; }
+.chapter[data-name="六处"] .rite.on .rite-sheen::after,
+.chapter[data-name="六处"] .rite.on .rite-ring,
+.chapter[data-name="六处"] .rite.on .rite-orbit { display: none; }
+
+/* Responsive pulse chart and focusable month keys */
+.pulse-wrap { padding: 20px; border-radius: 8px; background: #142e28; box-shadow: none; color: #fff; }
+.pulse-readout { display: flex; gap: 12px; flex-wrap: wrap; align-items: baseline; }
+.pulse-readout span { font: 600 13px var(--mono); color: #b7d4c5; }
+.pulse-readout strong { font-size: 26px; line-height: 1.2; }
+.pulse-readout span:last-child { margin-left: auto; }
+svg.pulse { width: 100%; height: 170px; }
+.plot-grid { stroke: #ffffff24; stroke-width: 1; stroke-dasharray: 3 6; vector-effect: non-scaling-stroke; }
+.pulse path#line { stroke: #91e8b8; stroke-width: 2.5; vector-effect: non-scaling-stroke; }
+.pulse-point { fill: #99e7b9; stroke: #142e28; stroke-width: 2; vector-effect: non-scaling-stroke; }
+.pulse-point.selected { fill: #fff; stroke: #cdffaf; }
+.pulse-months { display: grid; grid-template-columns: repeat(12, minmax(0,1fr)); gap: 4px; }
+.pulse-months button {
+    display: grid; gap: 3px; place-content: center;
+    min-width: 0; min-height: 48px; padding: 4px 0;
+    color: #bcdbcd; border: 1px solid #426153; border-radius: 4px;
+    font: 500 12px var(--sans); line-height: 1.25;
+}
+.pulse-months button strong { color: white; font-size: 14px; }
+.pulse-months button[aria-pressed="true"] { background: #c5efae; border-color: #c5efae; }
+.pulse-months button[aria-pressed="true"], .pulse-months button[aria-pressed="true"] strong { color: #123b25; }
+.pulse-months button:focus-visible { outline: 2px solid #fff; outline-offset: 1px; }
+
+/* Next year */
+.next-goals { gap: 12px; }
+.goal { min-width: 0; min-height: 0; padding: 20px; border-radius: 8px; opacity: 1; transform: none; }
+.goal.lit:nth-child(n) { box-shadow: none; }
+.goal-stage { height: 100px; }
+.goal b { top: 12px; }
+.goal strong { font-size: 23px; }
+.goal span { font-weight: 450; line-height: 1.65; }
+
+@media (max-width: 900px) {
+    .chapter .city-sheet { grid-template-columns: minmax(0,.75fr) minmax(0,1.25fr); gap: 24px; }
+    .city-sheet h2 { font-size: 36px; }
+    .podium { grid-template-columns: 1.1fr 1fr 1fr; }
+    .game-card, .game-card.is-first, .game-card.is-second, .game-card.is-third { padding: 14px; }
+    .game-card h3 { font-size: 23px; }
+    .pulse-months { grid-template-columns: repeat(6,minmax(0,1fr)); }
+    .next-goals { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+
+@media (max-width: 640px) {
+    .chapter .city-sheet { display: block; }
+    .city-head { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 14px; }
+    .city-sheet h2 { margin-bottom: 10px; font-size: 32px; }
+    .city-sheet .month-hint { font-size: 15px; }
+    .city-count { margin: 0; font-size: 42px; text-align: right; }
+    .city-count span { font-size: 10px; }
+    .city-board { margin-top: 18px; }
+    .stop, .stop.is-here { grid-template-columns: 2rem minmax(0,1fr); gap: 10px; padding-left: 36px; }
+    .stop .idx { display: none; }
+    .stop strong { font-size: 20px; }
+    .podium { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .game-card.is-first { grid-column: 1/-1; }
+    .game-card h3 { font-size: 19px; }
+    .is-first h3 { font-size: 28px; }
+    .game-logo-plate { margin-bottom: 12px; padding: 8px; }
+    .game-rank { margin-bottom: 10px; font-size: 11px; }
+    .game-card p { font-size: 14px; }
+    .pane { padding: 16px; }
+    .pane h3 { font-size: 30px; }
+    .wipe-notes { grid-template-columns: 1fr; gap: 12px; }
+    .wipe-notes p { grid-template-columns: auto 1fr; gap: 14px; font-size: 15px; }
+    .chapter[data-name="六处"] .rites { grid-template-columns: 1fr; gap: 8px; }
+    .chapter[data-name="六处"] .rite:nth-child(n) {
+        grid-column: auto;
+        display: grid;
+        grid-template-columns: 40px minmax(0,1fr);
+        grid-template-rows: auto auto;
+        align-items: start;
+        column-gap: 14px;
+        padding: 16px 16px 22px;
+    }
+    .chapter[data-name="六处"] .rite small { position: static; grid-area: 1/1; align-self: end; text-align: center; }
+    .chapter[data-name="六处"] .rite-orb { grid-area: 2/1; width: 40px; height: 40px; margin: 0; }
+    .rite strong { grid-area: 1/2; }
+    .rite .slot { grid-area: 2/2; }
+    .pulse-wrap { padding: 14px 10px 10px; }
+    svg.pulse { height: 134px; }
+    .pulse-months { gap: 4px; }
+    .pulse-months button { min-height: 48px; }
+    .pulse-months button strong { font-size: 13px; }
+    .next-goals { gap: 8px; }
+    .goal { padding: 12px; }
+    .goal-stage { height: 82px; }
+    .goal b { width: 48px; height: 48px; top: 12px; font-size: 28px; }
+    .goal em { left: 7px; top: 30px; font-size: 14px; }
+    .goal strong { font-size: 20px; }
+    .goal span { font-size: 15px; }
+}
+
+@media (max-width: 359px) {
+    .pulse-months { grid-template-columns: repeat(4,minmax(0,1fr)); }
+    .goal.lit em:nth-child(3) { --x: 58px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .chapter.play .pulse path#line { stroke-dasharray: none; stroke-dashoffset: 0; }
+    .chapter[data-name="六处"] .rite.on { transform: none; }
+    .goal:not(.lit) em { opacity: 0; }
+}

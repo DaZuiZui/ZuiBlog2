@@ -2,8 +2,8 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#eff9ef">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#fcfdf9">
     <title>2026 年度总结 · 我成为人生的救赎</title>
     <style>
         :root {
@@ -2195,52 +2195,54 @@
             .city-spine { transform: none; }
         }
     </style>
+    <link rel="stylesheet" href="review.css">
+    <link rel="stylesheet" href="chapters.css">
 </head>
 <body data-ch="0">
-    <div class="ambient ambient-one" aria-hidden="true"></div>
-    <div class="ambient ambient-two" aria-hidden="true"></div>
     <canvas id="field" aria-hidden="true"></canvas>
 
     <header class="topbar">
-        <a class="brand" href="../../../index.html">
-            <span class="brand-mark">BY</span>
+        <a class="brand" href="../../../index.html" aria-label="Bryan Yang 首页">
+            <img class="brand-photo" src="avatar.webp" width="36" height="36" alt="">
             <span>Bryan Yang</span>
         </a>
         <div class="nav-links">
-            <span class="year-chip">2026 · 模板</span>
-            <button class="sound" id="sound" type="button" aria-pressed="false">声音</button>
+            <button class="sound" id="sound" type="button" aria-label="声音" title="声音" aria-pressed="false">
+                <svg class="ui-icon sound-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4.702a.7.7 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.7.7 0 0 0 11 19.298z" /><path d="m16.5 14.5 5-5" /><path d="m16.5 9.5 5 5" /></svg><svg class="ui-icon sound-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z" /><path d="M16 9a5 5 0 0 1 0 6" /><path d="M19.364 18.364a9 9 0 0 0 0-12.728" /></svg>
+            </button>
+            <button class="contents-toggle" id="contents-toggle" type="button" aria-haspopup="dialog" aria-controls="contents">
+                <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h.01" /><path d="M3 12h.01" /><path d="M3 19h.01" /><path d="M8 5h13" /><path d="M8 12h13" /><path d="M8 19h13" /></svg>
+                目录 <span id="chapter-counter">01 / 11</span>
+            </button>
         </div>
+        <div class="reading-progress" aria-hidden="true"></div>
     </header>
-    <nav class="rail" id="rail" aria-label="章节"></nav>
+    <dialog id="contents" aria-labelledby="contents-title">
+        <div class="contents-head">
+            <h2 id="contents-title">章节目录</h2>
+            <button id="contents-close" type="button" aria-label="关闭目录" title="关闭目录"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg></button>
+        </div>
+        <nav id="rail" aria-label="章节"></nav>
+    </dialog>
     <div class="toast" id="toast" role="status"></div>
 
     <main id="deck">
-        <section class="chapter is-on" data-name="序章">
+        <section class="chapter is-on" data-name="序章" id="cover">
+            <picture class="cover-image">
+                <source media="(max-width: 640px) and (orientation: portrait)" srcset="cover-mobile.webp">
+                <img class="cover-photo" src="cover.webp" width="1536" height="1024" alt="" fetchpriority="high">
+            </picture>
             <div class="sheet cover">
                 <div>
-                    <p class="eyebrow">Year in review · 2026</p>
+                    <p class="eyebrow">2026 年度总结 <span lang="en">Year in Review</span></p>
                     <h1 id="cover-title">我成为人生的救赎</h1>
                     <p class="sub" id="cover-sub"></p>
                     <div class="hero-actions">
-                        <button class="button button-primary" id="ignite" type="button">开始这一年</button>
+                        <button class="button button-primary" id="ignite" type="button">开始这一年 <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14" /><path d="m19 12-7 7-7-7" /></svg></button>
                     </div>
-                    <p class="hint">滚动，或按方向键</p>
                 </div>
-                <aside class="panel" aria-hidden="true">
-                    <div class="visual-topline">
-                        <span>Selected signals</span>
-                        <span>2026</span>
-                    </div>
-                    <img class="visual-avatar" src="https://avatars.githubusercontent.com/u/66861267?v=4" alt="" width="220" height="220">
-                    <div class="visual-grid"></div>
-                    <span class="orb-ring"></span>
-                    <div class="visual-caption">
-                        <span class="visual-dot"></span>
-                        <span>Still here</span>
-                        <span class="visual-caption-line"></span>
-                    </div>
-                </aside>
             </div>
+            <p class="cover-credit"><span>吉隆坡</span><span lang="en">Kuala Lumpur</span></p>
         </section>
 
         <section class="chapter" data-name="主题">
@@ -2267,15 +2269,19 @@
                             <p class="eyebrow">Twelve months</p>
                             <h2>十二个月</h2>
                         </div>
-                        <p class="month-progress" id="month-progress">01<span> / 12</span></p>
+                        <div class="month-toolbar">
+                            <p class="month-progress" id="month-progress">01<span> / 12</span></p>
+                            <div class="month-controls">
+                                <button class="month-arrow" id="month-prev" type="button" aria-label="上一月" title="上一月"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg></button>
+                                <button class="month-arrow" id="month-next" type="button" aria-label="下一月" title="下一月"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg></button>
+                            </div>
+                        </div>
                     </div>
-                    <p class="month-hint">点一个月份，或按 ↓，翻开那一页</p>
                 </div>
-                <div class="month-stage" id="month-stage">
-                    <button class="month-arrow month-arrow-prev" id="month-prev" type="button" aria-label="上一月">‹</button>
-                    <button class="month-arrow month-arrow-next" id="month-next" type="button" aria-label="下一月">›</button>
+                <div class="month-picker">
+                    <div class="months" id="months" role="group" aria-label="选择月份"></div>
                 </div>
-                <div class="months" id="months"></div>
+                <div class="month-stage" id="month-stage" aria-live="polite"></div>
             </div>
         </section>
 
@@ -2307,22 +2313,25 @@
                 <p class="eyebrow">Before / after</p>
                 <h2>把后来拖过来</h2>
                 <div class="wipe" id="wipe">
-                    <div class="pane pane-before">
+                    <div class="pane pane-before" aria-hidden="true">
                         <h3>曾经</h3>
-                        <p class="slot" id="before-copy"></p>
                     </div>
-                    <div class="pane pane-after">
+                    <div class="pane pane-after" aria-hidden="true">
                         <h3>后来</h3>
-                        <p class="slot" id="after-copy"></p>
                     </div>
-                    <input id="wipe-range" type="range" min="12" max="88" value="48" aria-label="在曾经和后来之间拖动">
+                    <input id="wipe-range" type="range" min="0" max="100" value="48" aria-label="在曾经和后来之间拖动">
+                    <span class="wipe-handle" aria-hidden="true">↔</span>
+                </div>
+                <div class="wipe-notes">
+                    <p><strong>曾经</strong><span id="before-copy"></span></p>
+                    <p><strong>后来</strong><span id="after-copy"></span></p>
                 </div>
             </div>
         </section>
 
         <section class="chapter" data-name="六处">
             <div class="sheet">
-                <p class="eyebrow">Six places</p>
+                <p class="eyebrow">Five things</p>
                 <h2>今年我留下的五件事</h2>
                 <p class="slot" style="margin-bottom: 14px">存款到了，工作满意了，人也走出去了。心比年初稳，烟也放下了。</p>
                 <div class="rite-stage" id="rite-stage">
@@ -2336,7 +2345,9 @@
                 <p class="eyebrow">Pulse</p>
                 <h2>这一年的起伏</h2>
                 <div class="pulse-wrap">
-                    <svg class="pulse" viewBox="0 0 760 230" id="pulse" role="img" aria-label="十二个月的情绪曲线"></svg>
+                    <output class="pulse-readout" id="pulse-readout" aria-live="polite"></output>
+                    <svg class="pulse" viewBox="0 0 760 230" id="pulse" preserveAspectRatio="none" role="img" aria-label="十二个月的情绪曲线"></svg>
+                    <div class="pulse-months" id="pulse-months" role="group" aria-label="选择月份查看心情"></div>
                 </div>
             </div>
         </section>
@@ -2360,18 +2371,64 @@
                 <h2 id="finale-title"></h2>
                 <p class="slot" id="finale-copy"></p>
                 <button class="again" id="again" type="button">再看一遍</button>
+                <p class="photo-source">封面摄影 <a href="https://commons.wikimedia.org/wiki/File:The_Twins_SE_Asia_2019_(49171985716).jpg">James Kerwin · The Twins SE Asia 2019</a> · <a href="https://creativecommons.org/licenses/by/2.0/">CC BY 2.0</a> · 已裁切、压缩</p>
             </div>
         </section>
     </main>
 
     <script>
+        /* Icons from Lucide. License notices follow.
+           ISC License
+
+           Copyright (c) 2026 Lucide Icons and Contributors
+
+           Permission to use, copy, modify, and/or distribute this software for any
+           purpose with or without fee is hereby granted, provided that the above
+           copyright notice and this permission notice appear in all copies.
+
+           THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+           WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+           MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+           ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+           WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+           ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+           OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+           ---
+
+           The following Lucide icons are derived from the Feather project:
+
+           airplay, alert-circle, alert-octagon, alert-triangle, aperture, arrow-down-circle, arrow-down-left, arrow-down-right, arrow-down, arrow-left-circle, arrow-left, arrow-right-circle, arrow-right, arrow-up-circle, arrow-up-left, arrow-up-right, arrow-up, at-sign, calendar, cast, check, chevron-down, chevron-left, chevron-right, chevron-up, chevrons-down, chevrons-left, chevrons-right, chevrons-up, circle, clipboard, clock, code, columns, command, compass, corner-down-left, corner-down-right, corner-left-down, corner-left-up, corner-right-down, corner-right-up, corner-up-left, corner-up-right, crosshair, database, divide-circle, divide-square, dollar-sign, download, external-link, feather, frown, hash, headphones, help-circle, info, italic, key, layout, life-buoy, link-2, link, loader, lock, log-in, log-out, maximize, meh, minimize, minimize-2, minus-circle, minus-square, minus, monitor, moon, more-horizontal, more-vertical, move, music, navigation-2, navigation, octagon, pause-circle, percent, plus-circle, plus-square, plus, power, radio, rss, search, server, share, shopping-bag, sidebar, smartphone, smile, square, table-2, tablet, target, terminal, trash-2, trash, triangle, tv, type, upload, x-circle, x-octagon, x-square, x, zoom-in, zoom-out
+
+           The MIT License (MIT) (for the icons listed above)
+
+           Copyright (c) 2013-present Cole Bemis
+
+           Permission is hereby granted, free of charge, to any person obtaining a copy
+           of this software and associated documentation files (the "Software"), to deal
+           in the Software without restriction, including without limitation the rights
+           to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+           copies of the Software, and to permit persons to whom the Software is
+           furnished to do so, subject to the following conditions:
+
+           The above copyright notice and this permission notice shall be included in all
+           copies or substantial portions of the Software.
+
+           THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+           IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+           FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+           AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+           LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+           OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+           SOFTWARE.
+        */
         /* =========================================================
            2026 年度总结模板
            改下面这一段就够了。界面和动效不用动。
            ========================================================= */
         const YEAR = {
             title: "我成为人生的救赎",
-            subtitle: "这一年的主题先放在这里。界面跟首页同一套绿色，句子都还能换。",
+            subtitle: "失败我可以接受，但我一定要从失败里站起来。",
             lines: [
                 "没有人会从远处走来。",
                 "所以这一年，我自己走了回来。",
@@ -2409,7 +2466,7 @@
                 { emoji: "🌴", name: "吉隆坡", when: "11月", line: "马来西亚。" }
             ],
             games: [
-                { place: "年度最佳", mark: "is-title", logo: "../../../image/games/destroyer-logo.jpg", name: "桌面破坏神", tag: "挂机 ARPG", line: "这一年的第一名。" },
+                { place: "年度最佳", mark: "is-title", logo: "../../../image/games/destroyer-logo.jpg", artwork: "../../../image/games/destroyer-header.jpg", name: "桌面破坏神", tag: "挂机 ARPG", line: "这一年的第一名。" },
                 { place: "第二名", mark: "is-word", logo: "../../../image/games/rust-logo.png", name: "Rust", tag: "生存", line: "这一年的第二名。" },
                 { place: "第三名", mark: "is-word", logo: "../../../image/games/cs-logo.png", name: "CS:GO", tag: "射击", line: "这一年的第三名。" }
             ],
@@ -2438,16 +2495,16 @@
         const chapters = [...document.querySelectorAll(".chapter")];
         const monthChapter = chapters.findIndex((chapter) => chapter.dataset.name === "十二月");
         const rail = document.getElementById("rail");
-        let index = 0;
+        let index = -1;
         let monthCursor = 0;
-        let progress = 0;
-        let lockUntil = 0;
         let soundOn = false;
         let audioCtx = null;
 
         const title = document.getElementById("cover-title");
         const mark = "救赎";
-        if (YEAR.title.endsWith(mark)) {
+        if (YEAR.title === "我成为人生的救赎") {
+            title.innerHTML = '<span class="cover-line">我成为</span>人生的<span class="accent-word">救赎</span>';
+        } else if (YEAR.title.endsWith(mark)) {
             title.innerHTML = `${YEAR.title.slice(0, -mark.length)}<span class="accent-word">${mark}</span>`;
         } else {
             title.textContent = YEAR.title;
@@ -2530,79 +2587,37 @@
             monthProgress.innerHTML = `${String(i + 1).padStart(2, "0")}<span> / 12</span>`;
             monthPrev.disabled = i === 0;
             monthNext.disabled = i === YEAR.months.length - 1;
-        }
-
-        function paintMonth(i) {
-            markMonth(i);
-            monthStage.querySelectorAll(".month-page").forEach((el) => el.remove());
-            const page = monthPage(i);
-            monthStage.insertBefore(page, monthPrev);
-            requestAnimationFrame(() => page.classList.add("is-turn"));
-        }
-
-        function showMonth(i, dir = 0) {
-            const current = monthStage.querySelector(".month-page");
-            if (!dir || !current || i === monthCursor) {
-                paintMonth(i);
-                return;
+            const strip = document.getElementById("months");
+            const button = strip.children[i];
+            const shift = button.getBoundingClientRect().left - strip.getBoundingClientRect().left;
+            if (shift < 0 || shift + button.offsetWidth > strip.clientWidth) {
+                strip.scrollLeft += shift - (strip.clientWidth - button.offsetWidth) / 2;
             }
-            const distance = Math.max(monthStage.offsetHeight, 180);
-            const leave = dir > 0 ? -distance : distance;
-            monthStage.classList.remove("is-sliding");
-            current.style.transition = "none";
-            const incoming = monthPage(i);
-            incoming.style.transition = "none";
-            incoming.style.transform = `translateY(${-leave}px)`;
-            incoming.style.opacity = "0";
-            monthStage.insertBefore(incoming, monthPrev);
+        }
+
+        function showMonth(i) {
             markMonth(i);
-            monthStage.offsetHeight;
-            lockUntil = performance.now() + 760;
-
-            requestAnimationFrame(() => {
-                monthStage.classList.add("is-sliding");
-                current.style.transition = "";
-                incoming.style.transition = "";
-                current.style.transform = `translateY(${leave}px)`;
-                current.style.opacity = "0";
-                incoming.style.transform = "translateY(0)";
-                incoming.style.opacity = "1";
-                incoming.classList.add("is-turn");
-                if (!reduce) {
-                    const streak = document.createElement("span");
-                    streak.className = "month-streak";
-                    streak.textContent = YEAR.months[i].emoji || "✨";
-                    streak.setAttribute("aria-hidden", "true");
-                    monthStage.appendChild(streak);
-                    window.setTimeout(() => streak.remove(), 700);
-                }
-            });
-
-            window.setTimeout(() => {
-                if (current.isConnected) current.remove();
-                incoming.style.transform = "";
-                incoming.style.opacity = "";
-                incoming.style.transition = "";
-                monthStage.classList.remove("is-sliding");
-            }, 720);
+            const page = monthPage(i);
+            page.classList.add("is-turn");
+            monthStage.replaceChildren(page);
         }
 
         function stepMonth(dir) {
-            if (performance.now() < lockUntil) return false;
             const next = monthCursor + dir;
-            if (monthChapter < 0 || next < 0 || next >= YEAR.months.length) return false;
-            showMonth(next, dir);
-            return true;
+            if (next >= 0 && next < YEAR.months.length) showMonth(next);
         }
 
         showMonth(0);
 
         document.getElementById("podium").innerHTML = YEAR.games.map((game, i) => `
-            <article class="game-card ${i === 0 ? "is-first" : i === 1 ? "is-second" : "is-third"}">
+            <article class="game-card ${i === 0 ? "is-first" : i === 1 ? "is-second" : "is-third"}" aria-label="${game.place}：${game.name}">
                 ${i === 0 ? '<span class="game-beam" aria-hidden="true"></span>' : ""}
                 <span class="game-medal" aria-hidden="true">${i + 1}</span>
                 <span class="game-rank">${String(i + 1).padStart(2, "0")} · ${game.place}</span>
-                <span class="game-logo-plate ${game.mark}"><img class="game-logo" src="${game.logo}" alt="${game.name}"></span>
+                <picture class="game-logo-plate ${game.mark}">
+                    ${game.artwork ? `<source media="(min-width: 350px)" srcset="${game.artwork}">` : ""}
+                    <img class="game-logo" src="${game.logo}" alt="" loading="lazy">
+                </picture>
                 <h3>${game.name}</h3>
                 <span class="tag">${game.tag}</span>
                 <p>${game.line}</p>
@@ -2618,7 +2633,7 @@
                 <article class="stop${i === 0 ? " is-here" : ""}" style="--i:${i}">
                     <span class="dot" aria-hidden="true"></span>
                     <span class="idx">${String(i + 1).padStart(2, "0")}</span>
-                    <span class="mark"><span class="emo">${city.emoji}</span></span>
+                    <span class="mark" aria-hidden="true"><span class="emo">${city.emoji}</span></span>
                     <div class="stop-copy">
                         <div class="stop-title">
                             <strong>${city.name}</strong>
@@ -2643,17 +2658,17 @@
             const board = cityBoard.getBoundingClientRect();
             if (!plane || cards.length < 2 || board.height < 8) return;
             const route = cards.map((card) => {
-                const dot = card.querySelector(".dot").getBoundingClientRect();
+                const dot = card.querySelector(".dot");
                 return {
-                    x: dot.left + dot.width / 2 - board.left,
-                    y: dot.top + dot.height / 2 - board.top
+                    x: card.offsetLeft + card.clientLeft + dot.offsetLeft + dot.offsetWidth / 2,
+                    y: card.offsetTop + card.clientTop + dot.offsetTop + dot.offsetHeight / 2
                 };
             });
             if (spine && route.length > 1) {
                 spine.style.top = `${route[0].y}px`;
                 spine.style.bottom = "auto";
                 spine.style.height = `${route[route.length - 1].y - route[0].y}px`;
-                spine.style.left = `${route[0].x - 2}px`;
+                spine.style.left = `${route[0].x - spine.offsetWidth / 2}px`;
             }
             if (reduce) {
                 plane.style.display = "none";
@@ -2731,8 +2746,7 @@
             const button = event.target.closest(".glass");
             if (!button) return;
             const next = Number(button.dataset.i);
-            if (next === monthCursor || performance.now() < lockUntil) return;
-            showMonth(next, next > monthCursor ? 1 : -1);
+            if (next !== monthCursor) showMonth(next);
         });
         monthPrev.addEventListener("click", () => stepMonth(-1));
         monthNext.addEventListener("click", () => stepMonth(1));
@@ -2758,8 +2772,8 @@
         const riteStage = document.getElementById("rite-stage");
 
         function celebrate(button, soft) {
-            if (!soft) burst(button.getBoundingClientRect());
             if (reduce) return;
+            if (!soft) burst(button.getBoundingClientRect());
             const orb = button.querySelector(".rite-orb");
             const stamp = String(performance.now());
             const flash = document.createElement("span");
@@ -2808,6 +2822,13 @@
             const token = riteShow;
             riteStage.classList.remove("armed");
             const cards = [...document.querySelectorAll("#rites .rite")];
+            if (reduce) {
+                cards.forEach(card => {
+                    card.classList.add("on");
+                    card.querySelector(".rite-status").textContent = "LIVE";
+                });
+                return;
+            }
             cards.forEach((card) => {
                 card.classList.remove("on", "charging", "hit");
                 card.querySelector(".rite-status").textContent = "STANDBY";
@@ -2888,6 +2909,10 @@
             nextShow += 1;
             const token = nextShow;
             const cards = [...document.querySelectorAll("#next-goals .goal")];
+            if (reduce) {
+                cards.forEach(card => card.classList.add("lit"));
+                return;
+            }
             cards.forEach((card) => card.classList.remove("lit"));
             yearWalker.textContent = "🌙";
             cards.forEach((card, i) => {
@@ -2930,71 +2955,125 @@
                     <stop offset="1" stop-color="#18bd78" stop-opacity="0"/>
                 </linearGradient>
             </defs>
+            ${[0, 25, 50, 75, 100].map(value => {
+                const y = height - pad - (value / 100) * (height - pad * 2);
+                return `<line class="plot-grid" x1="${pad}" x2="${width - pad}" y1="${y}" y2="${y}"/>`;
+            }).join("")}
             <path d="${area}" fill="url(#greenFill)" stroke="none"></path>
             <path id="line" d="${d}"></path>
             ${points.map((point, i) => `
                 <g transform="translate(${point[0]} ${point[1]})">
-                    <circle r="4.5" fill="#18bd78"></circle>
-                    <text y="22" text-anchor="middle" fill="#8ba097" font-size="11" font-family="ui-monospace, monospace">${i + 1}</text>
-                    <text y="-12" text-anchor="middle" fill="#07965b" font-size="11">${YEAR.pulseWords[i]}</text>
+                    <circle class="pulse-point" r="5" data-i="${i}"></circle>
                 </g>
             `).join("")}
         `;
+        const pulseMonths = document.getElementById("pulse-months");
+        const pulseReadout = document.getElementById("pulse-readout");
+        pulseMonths.innerHTML = YEAR.pulseWords.map((word, i) => `
+            <button type="button" data-i="${i}">
+                <span>${i + 1}月</span><strong>${word}</strong>
+            </button>
+        `).join("");
+
+        function selectPulse(i) {
+            const number = i + 1;
+            pulseReadout.innerHTML = `<span>${number}月</span> <strong>${YEAR.pulseWords[i]}</strong> <span>${YEAR.pulse[i]} / 100</span>`;
+            pulseMonths.querySelectorAll("button").forEach((button, n) => {
+                button.setAttribute("aria-pressed", String(n === i));
+            });
+            pulse.querySelectorAll(".pulse-point").forEach((point, n) => {
+                point.classList.toggle("selected", n === i);
+                point.setAttribute("r", n === i ? 8 : 5);
+            });
+        }
+        pulseMonths.addEventListener("click", event => {
+            const button = event.target.closest("button");
+            if (button) selectPulse(Number(button.dataset.i));
+        });
+        selectPulse(0);
+
+        const contents = document.getElementById("contents");
+        const counter = document.getElementById("chapter-counter");
+        const readingProgress = document.querySelector(".reading-progress");
+        const chapterNames = { "十二月": "十二个月", "六处": "五件事" };
 
         chapters.forEach((chapter, i) => {
+            const name = chapterNames[chapter.dataset.name] || chapter.dataset.name;
+            chapter.tabIndex = -1;
+            chapter.setAttribute("aria-label", name);
             const button = document.createElement("button");
             button.type = "button";
-            button.setAttribute("aria-label", chapter.dataset.name);
-            if (i === 0) button.setAttribute("aria-current", "true");
-            const label = document.createElement("span");
-            label.textContent = chapter.dataset.name;
-            button.append(label);
-            button.addEventListener("click", () => go(i));
+            button.innerHTML = `<span>${String(i + 1).padStart(2, "0")}</span> ${name}`;
+            button.addEventListener("click", () => {
+                contents.close();
+                go(i);
+            });
             rail.append(button);
         });
 
+        document.getElementById("contents-toggle").addEventListener("click", () => {
+            contents.showModal();
+            const current = rail.querySelector('[aria-current="true"]');
+            current.focus({ preventScroll: true });
+            contents.scrollTop = Math.max(0, current.offsetTop - contents.clientHeight / 2);
+        });
+        document.getElementById("contents-close").addEventListener("click", () => contents.close());
+        contents.addEventListener("click", event => {
+            if (event.target !== contents) return;
+            const box = contents.getBoundingClientRect();
+            if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) contents.close();
+        });
+
         function activate(next) {
+            if (next === index) return;
+            if (index >= 0) {
+                chapters[index].classList.remove("is-on", "play");
+                rail.children[index].removeAttribute("aria-current");
+            }
             index = next;
-            progress = chapters.length === 1 ? 1 : next / (chapters.length - 1);
-            chapters.forEach((chapter, i) => {
-                chapter.classList.toggle("is-on", i === next);
-                chapter.classList.remove("play");
-            });
-            document.body.dataset.ch = String(next);
-            [...rail.children].forEach((button, i) => {
-                if (i === next) button.setAttribute("aria-current", "true");
-                else button.removeAttribute("aria-current");
-            });
-            requestAnimationFrame(() => chapters[next].classList.add("play"));
-            if (next === 2) countStats();
-            if (chapters[next]?.dataset.name === "城市") flyCities();
-            if (chapters[next]?.dataset.name === "六处") igniteRites();
-            if (chapters[next]?.dataset.name === "明年") lightNext();
-            if (chapters[next]?.dataset.name === "心跳") {
+            const chapter = chapters[index];
+            chapter.classList.add("is-on", "play");
+            document.body.dataset.ch = String(index);
+            rail.children[index].setAttribute("aria-current", "true");
+            counter.textContent = `${String(index + 1).padStart(2, "0")} / ${chapters.length}`;
+            if (chapter.dataset.name === "回望") countStats();
+            if (chapter.dataset.name === "城市") flyCities();
+            if (chapter.dataset.name === "六处") igniteRites();
+            if (chapter.dataset.name === "明年") lightNext();
+            if (chapter.dataset.name === "心跳") {
                 const line = document.getElementById("line");
-                if (line) line.style.setProperty("--len", `${line.getTotalLength()}`);
+                line.style.setProperty("--len", line.getTotalLength());
             }
         }
 
         function go(next) {
-            next = Math.max(0, Math.min(chapters.length - 1, next));
-            const now = performance.now();
-            if (next === index || now < lockUntil) return;
-            const from = index;
-            lockUntil = now + 560;
-            activate(next);
+            chapters[next].focus({ preventScroll: true });
+            chapters[next].scrollIntoView({ block: "start" });
             if (soundOn) blip();
-            if (next === monthChapter) {
-                const land = from === monthChapter + 1 ? YEAR.months.length - 1 : 0;
-                showMonth(land, land === monthCursor ? 0 : (land > monthCursor ? 1 : -1));
-            }
         }
+
+        let scrollFrame = 0;
+        function syncReadingPosition() {
+            scrollFrame = 0;
+            const threshold = Math.min(window.innerHeight * 0.38, 260);
+            let active = 0;
+            for (let i = 1; i < chapters.length && chapters[i].getBoundingClientRect().top <= threshold; i++) active = i;
+            const distance = document.documentElement.scrollHeight - window.innerHeight;
+            const fraction = distance > 0 ? Math.min(1, Math.max(0, window.scrollY / distance)) : 0;
+            readingProgress.style.transform = `scaleX(${fraction})`;
+            activate(fraction > 0.999 ? chapters.length - 1 : active);
+        }
+        function queueReadingPosition() {
+            if (!scrollFrame) scrollFrame = requestAnimationFrame(syncReadingPosition);
+        }
+        window.addEventListener("scroll", queueReadingPosition, { passive: true });
+        window.addEventListener("resize", queueReadingPosition);
 
         function countStats() {
             document.querySelectorAll(".stat b").forEach((node) => {
                 const raw = node.dataset.n;
-                if (raw === "∞") {
-                    node.textContent = "∞";
+                if (reduce || raw === "∞") {
+                    node.textContent = raw;
                     return;
                 }
                 const target = Number(raw);
@@ -3010,7 +3089,11 @@
 
         const range = document.getElementById("wipe-range");
         const wipe = document.getElementById("wipe");
-        const paintWipe = () => wipe.style.setProperty("--cut", `${range.value}%`);
+        const paintWipe = () => {
+            wipe.style.setProperty("--cut", `${range.value}%`);
+            wipe.style.setProperty("--fraction", Number(range.value) / 100);
+            range.setAttribute("aria-valuetext", `曾经 ${range.value}%，后来 ${100 - range.value}%`);
+        };
         range.addEventListener("input", paintWipe);
         paintWipe();
 
@@ -3020,74 +3103,14 @@
         });
         document.getElementById("again").addEventListener("click", () => go(0));
 
-        function advance(step) {
-            if (performance.now() < lockUntil) return;
-            if (index === monthChapter && stepMonth(step)) {
-                lockUntil = performance.now() + 820;
-                if (soundOn) blip();
-                return;
-            }
-            go(index + step);
-        }
-
-        let wheel = 0;
-        window.addEventListener("wheel", (event) => {
-            const sheet = chapters[index].querySelector(".sheet");
-            const dir = Math.sign(event.deltaY);
-            if (index === monthChapter) {
-                const copy = monthStage.querySelector(".month-copy");
-                if (copy && copy.scrollHeight > copy.clientHeight + 8) {
-                    const atTop = copy.scrollTop <= 4;
-                    const atBottom = copy.scrollTop + copy.clientHeight >= copy.scrollHeight - 4;
-                    if ((dir > 0 && !atBottom) || (dir < 0 && !atTop)) return;
-                }
-            } else if (sheet && sheet.scrollHeight > sheet.clientHeight + 8) {
-                const atTop = sheet.scrollTop <= 4;
-                const atBottom = sheet.scrollTop + sheet.clientHeight >= sheet.scrollHeight - 4;
-                if ((dir > 0 && !atBottom) || (dir < 0 && !atTop)) return;
-            }
-            event.preventDefault();
-            wheel += event.deltaY;
-            if (Math.abs(wheel) < 36) return;
-            const step = wheel > 0 ? 1 : -1;
-            wheel = 0;
-            advance(step);
-        }, { passive: false });
-
-        window.addEventListener("keydown", (event) => {
-            if (event.target.closest("input, textarea")) return;
-            if (["ArrowDown", "PageDown", " "].includes(event.key)) {
+        chapters[monthChapter].addEventListener("keydown", event => {
+            if (event.altKey || event.ctrlKey || event.metaKey) return;
+            if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
                 event.preventDefault();
-                advance(1);
-            } else if (["ArrowUp", "PageUp"].includes(event.key)) {
-                event.preventDefault();
-                advance(-1);
-            } else if (event.key === "ArrowRight" && index === monthChapter) {
-                event.preventDefault();
-                stepMonth(1);
-            } else if (event.key === "ArrowLeft" && index === monthChapter) {
-                event.preventDefault();
-                stepMonth(-1);
-            } else if (event.key === "Home") {
-                event.preventDefault();
-                go(0);
-            } else if (event.key === "End") {
-                event.preventDefault();
-                go(chapters.length - 1);
+                stepMonth(event.key === "ArrowRight" ? 1 : -1);
+                if (event.target.closest("#months")) document.querySelector("#months .on").focus();
             }
         });
-
-        let touchY = null;
-        window.addEventListener("touchstart", (event) => {
-            touchY = event.touches[0].clientY;
-        }, { passive: true });
-        window.addEventListener("touchend", (event) => {
-            if (touchY == null) return;
-            const dy = touchY - event.changedTouches[0].clientY;
-            touchY = null;
-            if (Math.abs(dy) < 46) return;
-            advance(dy > 0 ? 1 : -1);
-        }, { passive: true });
 
         const canvas = document.getElementById("field");
         const ctx = canvas.getContext("2d");
@@ -3103,62 +3126,43 @@
             canvas.height = Math.floor(heightPx * ratio);
             canvas.style.width = `${widthPx}px`;
             canvas.style.height = `${heightPx}px`;
-            ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+            ctx?.setTransform(ratio, 0, 0, ratio, 0, 0);
             if (chapters[index]?.dataset.name === "城市") flyCities();
         }
 
-        function makeMote(bursting, x, y) {
-            const angle = Math.random() * Math.PI * 2;
-            const speed = bursting ? Math.random() * 2.4 + 0.6 : 0;
-            return {
-                x: x ?? Math.random() * widthPx,
-                y: y ?? Math.random() * heightPx,
-                r: Math.random() * 2.2 + 0.6,
-                v: Math.random() * 0.28 + 0.06,
-                drift: Math.random() * 0.22 - 0.11,
-                alpha: bursting ? 0.7 : Math.random() * 0.22 + 0.06,
-                vx: Math.cos(angle) * speed,
-                vy: Math.sin(angle) * speed,
-                life: bursting ? 36 + Math.random() * 18 : 0,
-                bursting
-            };
-        }
-
+        let particleFrame = 0;
         function burst(rect) {
-            if (reduce) return;
-            const x = rect.left + rect.width / 2;
-            const y = rect.top + rect.height / 2;
-            for (let i = 0; i < 16; i += 1) motes.push(makeMote(true, x, y));
+            if (reduce || !ctx || rect.bottom < 0 || rect.top > heightPx) return;
+            for (let i = 0; i < 16; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 2.4 + 0.6;
+                motes.push({
+                    x: rect.left + rect.width / 2, y: rect.top + rect.height / 2,
+                    vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed,
+                    r: Math.random() * 2.2 + 0.6, life: 40
+                });
+            }
+            if (!particleFrame) particleFrame = requestAnimationFrame(frame);
         }
 
         function frame() {
             ctx.clearRect(0, 0, widthPx, heightPx);
-            for (let i = motes.length - 1; i >= 0; i -= 1) {
+            for (let i = motes.length - 1; i >= 0; i--) {
                 const mote = motes[i];
-                if (mote.bursting) {
-                    mote.x += mote.vx;
-                    mote.y += mote.vy;
-                    mote.vx *= 0.96;
-                    mote.vy *= 0.96;
-                    mote.life -= 1;
-                    mote.alpha *= 0.96;
-                    if (mote.life <= 0) {
-                        motes.splice(i, 1);
-                        continue;
-                    }
-                } else {
-                    mote.x += mote.drift;
-                    mote.y -= mote.v;
-                    if (mote.y < -8) mote.y = heightPx + 8;
-                    if (mote.x < 0) mote.x = widthPx;
-                    if (mote.x > widthPx) mote.x = 0;
+                if (--mote.life <= 0) {
+                    motes.splice(i, 1);
+                    continue;
                 }
+                mote.x += mote.vx;
+                mote.y += mote.vy;
+                mote.vx *= 0.96;
+                mote.vy *= 0.96;
                 ctx.beginPath();
-                ctx.fillStyle = `rgba(24, 189, 120, ${mote.alpha})`;
+                ctx.fillStyle = `rgba(24, 189, 120, ${mote.life / 60})`;
                 ctx.arc(mote.x, mote.y, mote.r, 0, Math.PI * 2);
                 ctx.fill();
             }
-            requestAnimationFrame(frame);
+            particleFrame = motes.length ? requestAnimationFrame(frame) : 0;
         }
 
         function toast(message) {
@@ -3192,19 +3196,16 @@
         document.getElementById("sound").addEventListener("click", (event) => {
             soundOn = !soundOn;
             event.currentTarget.setAttribute("aria-pressed", String(soundOn));
-            event.currentTarget.textContent = soundOn ? "声音 开" : "声音";
             if (soundOn) blip();
         });
 
         window.addEventListener("resize", resize);
         resize();
-        for (let i = 0; i < 36; i += 1) motes.push(makeMote(false));
-        if (!reduce) requestAnimationFrame(frame);
 
         const params = new URLSearchParams(location.search);
         const start = Number(params.get("c"));
-        if (Number.isInteger(start) && start > 0 && start < chapters.length) activate(start);
-        else activate(0);
+        if (Number.isInteger(start) && start > 0 && start < chapters.length) go(start);
+        syncReadingPosition();
     </script>
 </body>
 </html>
