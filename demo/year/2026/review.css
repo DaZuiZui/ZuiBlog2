@@ -216,6 +216,53 @@ h2 { margin-bottom: 22px; font-size: 44px; line-height: 1.18; }
 .month-artwork > .month-visual { height: 100%; }
 .month-leaf { display: none; }
 
+.jamie-memorial {
+    display: grid;
+    align-content: center;
+    justify-items: center;
+    min-height: 100%;
+    margin: 0;
+    padding: 24px;
+    background: #26302b;
+    color: #fbf5e7;
+    text-align: center;
+}
+.jamie-print {
+    width: min(100%, 360px);
+    padding: 5px;
+    background: #f4efe2;
+    box-shadow: 0 6px 18px #101b1540;
+}
+.jamie-photo { display: block; width: 100%; height: auto; }
+.jamie-memorial figcaption { margin-top: 19px; }
+.jamie-memorial figcaption::before {
+    content: ""; display: block; width: 32px; height: 1px;
+    margin: 0 auto 12px; background: #c7a76a;
+}
+.jamie-memorial strong { font: 600 27px/1.4 var(--serif); }
+.jamie-memorial figcaption p { margin: 5px 0 0; font-size: 15px; color: #e2ddce; }
+
+@media (max-width: 640px) {
+    .jamie-memorial { padding: 18px 22px 22px; }
+    .jamie-print { max-width: 310px; }
+    .jamie-memorial figcaption { margin-top: 14px; }
+    .jamie-memorial strong { font-size: 24px; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .jamie-memorial.in-light .jamie-print { animation: jamie-settle 1.6s cubic-bezier(.2,.68,.24,1) both; }
+    .jamie-memorial.in-light .jamie-photo { animation: jamie-develop 2s ease-out both; }
+    .jamie-memorial.in-light figcaption::before { animation: jamie-line 1.25s .45s ease-out both; }
+    .jamie-memorial.in-light figcaption p { animation: jamie-wish 1.3s .7s ease-out both; }
+}
+@keyframes jamie-settle {
+    from { transform: translateY(7px) rotate(-1deg); }
+    to { transform: none; }
+}
+@keyframes jamie-develop { from { opacity: .32; } to { opacity: 1; } }
+@keyframes jamie-line { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes jamie-wish { from { opacity: .2; transform: translateY(3px); } to { opacity: 1; transform: none; } }
+
 @media (prefers-reduced-motion: no-preference) {
     .month-page[data-turn="forward"] {
         --month-hinge: left; --month-angle: -88deg; --month-gloss: 90deg; --month-offset: 14px;
