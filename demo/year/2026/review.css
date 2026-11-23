@@ -239,6 +239,7 @@ h2 { margin-bottom: 22px; font-size: 44px; line-height: 1.18; }
     content: ""; display: block; width: 32px; height: 1px;
     margin: 0 auto 12px; background: #c7a76a;
 }
+.jamie-memorial figcaption small { display: block; margin-bottom: 4px; color: #e2ddce; font: 14px/1.5 var(--serif); }
 .jamie-memorial strong { font: 600 27px/1.4 var(--serif); }
 .jamie-memorial figcaption p { margin: 5px 0 0; font-size: 15px; color: #e2ddce; }
 
