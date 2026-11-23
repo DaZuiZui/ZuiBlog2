@@ -706,20 +706,20 @@
         .flake:nth-child(6) { left: 16%; top: 40%; font-size: 16px; }
         .flake:nth-child(7) { left: 62%; top: 70%; }
 
-        .month-page[data-motion="snow"] .flake,
-        .month-page[data-motion="bloom"] .flake,
-        .month-page[data-motion="leaf"] .flake,
-        .month-page[data-motion="rain"] .flake {
+        .month-visual[data-motion="snow"] .flake,
+        .month-visual[data-motion="bloom"] .flake,
+        .month-visual[data-motion="leaf"] .flake,
+        .month-visual[data-motion="rain"] .flake {
             top: -8%;
             animation-name: fall-y;
             animation-timing-function: linear;
             animation-duration: 6.2s;
         }
-        .month-page[data-motion="bloom"] .flake { animation-duration: 8s; }
-        .month-page[data-motion="rain"] .flake { animation-duration: 1.5s; font-size: 16px; }
-        .month-page[data-motion="leaf"] .flake { animation-name: leaf-fall; animation-duration: 7s; }
+        .month-visual[data-motion="bloom"] .flake { animation-duration: 8s; }
+        .month-visual[data-motion="rain"] .flake { animation-duration: 1.5s; font-size: 16px; }
+        .month-visual[data-motion="leaf"] .flake { animation-name: leaf-fall; animation-duration: 7s; }
 
-        .month-page[data-motion="storm"] .month-visual::after {
+        .month-visual[data-motion="storm"]::after {
             content: "";
             position: absolute;
             inset: 0;
@@ -727,42 +727,42 @@
             animation: lightning 4.6s infinite;
             pointer-events: none;
         }
-        .month-page[data-motion="storm"] .hero-emoji { animation: shake 0.48s ease-in-out infinite; }
+        .month-visual[data-motion="storm"] .hero-emoji { animation: shake 0.48s ease-in-out infinite; }
 
-        .month-page[data-motion="sun"] .halo,
-        .month-page[data-motion="peak"] .halo {
+        .month-visual[data-motion="sun"] .halo,
+        .month-visual[data-motion="peak"] .halo {
             opacity: 1;
             background: repeating-conic-gradient(from 0deg, color-mix(in srgb, var(--maccent) 42%, transparent) 0 8deg, transparent 8deg 22deg);
             animation: spin 26s linear infinite;
         }
-        .month-page[data-motion="sun"] .hero-emoji,
-        .month-page[data-motion="peak"] .hero-emoji { animation: pulse-glow 2.6s ease-in-out infinite; }
+        .month-visual[data-motion="sun"] .hero-emoji,
+        .month-visual[data-motion="peak"] .hero-emoji { animation: pulse-glow 2.6s ease-in-out infinite; }
 
-        .month-page[data-motion="heart"] .flake { animation-name: heart-beat; animation-duration: 1.35s; }
-        .month-page[data-motion="heart"] .hero-emoji { animation: heart-beat 1.05s ease-in-out infinite; }
+        .month-visual[data-motion="heart"] .flake { animation-name: heart-beat; animation-duration: 1.35s; }
+        .month-visual[data-motion="heart"] .hero-emoji { animation: heart-beat 1.05s ease-in-out infinite; }
 
-        .month-page[data-motion="fish"] .flake,
-        .month-page[data-motion="wave"] .flake { animation-name: wave-drift; animation-duration: 3.8s; }
-        .month-page[data-motion="fish"] .hero-emoji { animation: swim 3.6s ease-in-out infinite; }
-        .month-page[data-motion="wave"] .ground { height: 36%; }
+        .month-visual[data-motion="fish"] .flake,
+        .month-visual[data-motion="wave"] .flake { animation-name: wave-drift; animation-duration: 3.8s; }
+        .month-visual[data-motion="fish"] .hero-emoji { animation: swim 3.6s ease-in-out infinite; }
+        .month-visual[data-motion="wave"] .ground { height: 36%; }
 
-        .month-page[data-motion="fire"] .flake {
+        .month-visual[data-motion="fire"] .flake {
             top: auto;
             bottom: 6%;
             animation-name: rise-y;
             animation-duration: 2.6s;
             animation-timing-function: ease-out;
         }
-        .month-page[data-motion="fire"] .hero-emoji { animation: pulse-glow 1.6s ease-in-out infinite; }
+        .month-visual[data-motion="fire"] .hero-emoji { animation: pulse-glow 1.6s ease-in-out infinite; }
 
-        .month-page[data-motion="sparkle"] .flake { animation-name: twinkle; animation-duration: 1.7s; }
-        .month-page[data-motion="sparkle"] .halo,
-        .month-page[data-motion="bloom"] .halo {
+        .month-visual[data-motion="sparkle"] .flake { animation-name: twinkle; animation-duration: 1.7s; }
+        .month-visual[data-motion="sparkle"] .halo,
+        .month-visual[data-motion="bloom"] .halo {
             opacity: 0.9;
             background: radial-gradient(circle, color-mix(in srgb, var(--maccent) 34%, white), transparent 68%);
         }
 
-        .month-page[data-motion="compass"] .halo {
+        .month-visual[data-motion="compass"] .halo {
             opacity: 1;
             border: 1px dashed color-mix(in srgb, var(--maccent) 70%, white);
             background:
@@ -2228,10 +2228,16 @@
 
     <main id="deck">
         <section class="chapter is-on" data-name="序章" id="cover">
-            <picture class="cover-image">
-                <source media="(max-width: 640px) and (orientation: portrait)" srcset="cover-mobile.webp">
-                <img class="cover-photo" src="cover.webp" width="1536" height="1024" alt="" fetchpriority="high">
-            </picture>
+            <div class="cover-scene" aria-hidden="true">
+                <picture class="cover-image">
+                    <source media="(max-width: 640px) and (orientation: portrait)" srcset="cover-mobile.webp">
+                    <img class="cover-photo" src="cover.webp" width="1536" height="1024" alt="" fetchpriority="high">
+                </picture>
+                <picture class="tower-reflection">
+                    <source media="(max-width: 640px) and (orientation: portrait)" srcset="tower-light-mobile.webp">
+                    <img class="cover-photo" src="tower-light.webp" width="1536" height="1024" alt="">
+                </picture>
+            </div>
             <div class="sheet cover">
                 <div>
                     <p class="eyebrow">2026 年度总结 <span lang="en">Year in Review</span></p>
@@ -2371,7 +2377,7 @@
                 <h2 id="finale-title"></h2>
                 <p class="slot" id="finale-copy"></p>
                 <button class="again" id="again" type="button">再看一遍</button>
-                <p class="photo-source">封面摄影 <a href="https://commons.wikimedia.org/wiki/File:The_Twins_SE_Asia_2019_(49171985716).jpg">James Kerwin · The Twins SE Asia 2019</a> · <a href="https://creativecommons.org/licenses/by/2.0/">CC BY 2.0</a> · 已裁切、压缩</p>
+                <p class="photo-source">封面摄影 <a href="https://commons.wikimedia.org/wiki/File:The_Twins_SE_Asia_2019_(49171985716).jpg">James Kerwin · The Twins SE Asia 2019</a> · <a href="https://creativecommons.org/licenses/by/2.0/">CC BY 2.0</a> · 已裁切、压缩并添加光影</p>
             </div>
         </section>
     </main>
@@ -2491,7 +2497,12 @@
             finale: "待填：用一句属于你的话，关上 2026。模板先留在这里：我没有等谁。我成为了那只手。"
         };
 
-        const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const motionPreference = matchMedia("(prefers-reduced-motion: reduce)");
+        let reduce = motionPreference.matches;
+        motionPreference.addEventListener("change", event => {
+            reduce = event.matches;
+            queueReadingPosition();
+        });
         const chapters = [...document.querySelectorAll(".chapter")];
         const monthChapter = chapters.findIndex((chapter) => chapter.dataset.name === "十二月");
         const rail = document.getElementById("rail");
@@ -2503,7 +2514,7 @@
         const title = document.getElementById("cover-title");
         const mark = "救赎";
         if (YEAR.title === "我成为人生的救赎") {
-            title.innerHTML = '<span class="cover-line">我成为</span>人生的<span class="accent-word">救赎</span>';
+            title.innerHTML = '<span class="cover-line"><span>我成为</span></span><span class="cover-line"><span>人生的<span class="accent-word">救赎</span></span></span>';
         } else if (YEAR.title.endsWith(mark)) {
             title.innerHTML = `${YEAR.title.slice(0, -mark.length)}<span class="accent-word">${mark}</span>`;
         } else {
@@ -2546,10 +2557,10 @@
             const page = document.createElement("article");
             page.className = "month-page";
             page.dataset.tone = String(i + 1);
-            page.dataset.motion = month.motion || "sparkle";
             page.innerHTML = `
                 <div class="month-layout">
-                    <div class="month-visual" aria-hidden="true">
+                    <div class="month-artwork" aria-hidden="true">
+                      <div class="month-visual">
                         <div class="month-sky">
                             <span class="halo"></span>
                             ${(month.floats || []).map((emo, n) => `<span class="flake" style="--n:${n}">${emo}</span>`).join("")}
@@ -2557,6 +2568,7 @@
                         </div>
                         <span class="hero-pop"><span class="hero-emoji"></span></span>
                         <span class="month-watermark">${String(i + 1).padStart(2, "0")}</span>
+                      </div>
                     </div>
                     <div class="month-copy">
                         <div class="month-kicker">
@@ -2568,6 +2580,7 @@
                     </div>
                 </div>
             `;
+            page.querySelector(".month-visual").dataset.motion = month.motion || "sparkle";
             page.querySelector(".hero-emoji").textContent = month.emoji || "✨";
             page.querySelector(".eyebrow").textContent = `第 ${i + 1} 月`;
             page.querySelector(".season-pill").textContent = month.season || "";
@@ -2596,8 +2609,25 @@
         }
 
         function showMonth(i) {
-            markMonth(i);
             const page = monthPage(i);
+            const previous = monthStage.firstElementChild;
+            if (previous && !motionPreference.matches) {
+                page.dataset.turn = i > monthCursor ? "forward" : "back";
+                const leaf = previous.querySelector(".month-visual");
+                const colors = getComputedStyle(previous);
+                for (const token of ["--sky", "--sky-deep", "--maccent"]) {
+                    leaf.style.setProperty(token, colors.getPropertyValue(token));
+                }
+                leaf.classList.add("month-leaf");
+                page.querySelector(".month-artwork").append(leaf);
+                leaf.addEventListener("animationend", event => {
+                    if (event.target === leaf && event.animationName === "month-fold") leaf.remove();
+                });
+                leaf.addEventListener("animationcancel", event => {
+                    if (event.target === leaf && event.animationName === "month-fold") leaf.remove();
+                });
+            }
+            markMonth(i);
             page.classList.add("is-turn");
             monthStage.replaceChildren(page);
         }
@@ -2945,11 +2975,11 @@
         const area = `${d} L ${points.at(-1)[0]} ${height - 8} L ${points[0][0]} ${height - 8} Z`;
         pulse.innerHTML = `
             <defs>
-                <linearGradient id="greenStroke" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0" stop-color="#8ba097"/>
-                    <stop offset="0.4" stop-color="#18bd78"/>
-                    <stop offset="1" stop-color="#07965b"/>
+                <linearGradient id="pulse-ink">
+                    <stop stop-color="#86ddcc"/>
+                    <stop offset="1" stop-color="#ddf5a5"/>
                 </linearGradient>
+                <clipPath id="pulse-elapsed"><rect width="0" height="${height}"/></clipPath>
                 <linearGradient id="greenFill" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0" stop-color="#18bd78" stop-opacity="0.28"/>
                     <stop offset="1" stop-color="#18bd78" stop-opacity="0"/>
@@ -2961,11 +2991,13 @@
             }).join("")}
             <path d="${area}" fill="url(#greenFill)" stroke="none"></path>
             <path id="line" d="${d}"></path>
-            ${points.map((point, i) => `
-                <g transform="translate(${point[0]} ${point[1]})">
-                    <circle class="pulse-point" r="5" data-i="${i}"></circle>
-                </g>
-            `).join("")}
+            <path class="pulse-ink" d="${d}" clip-path="url(#pulse-elapsed)"></path>
+            ${points.map(([x, y]) => `<circle class="pulse-point" cx="${x}" cy="${y}" r="4"></circle>`).join("")}
+            <g class="pulse-focus">
+                <line class="pulse-guide" x2="0"></line>
+                <circle class="pulse-ring" r="12"></circle>
+                <circle class="pulse-nib" r="4"></circle>
+            </g>
         `;
         const pulseMonths = document.getElementById("pulse-months");
         const pulseReadout = document.getElementById("pulse-readout");
@@ -2975,17 +3007,56 @@
             </button>
         `).join("");
 
+        const pulseFocus = pulse.querySelector(".pulse-focus");
+        const pulseGuide = pulse.querySelector(".pulse-guide");
+        const pulseElapsed = pulse.querySelector("#pulse-elapsed rect");
+        let selectedPulse = -1;
+        let pulsePosition = 0;
+        let pulseFrame = 0;
+
+        function drawPulse(position) {
+            pulsePosition = position;
+            const segment = Math.min(Math.floor(position), points.length - 2);
+            const t = position - segment;
+            const [x0, y0] = points[segment];
+            const [x1, y1] = points[segment + 1];
+            // The curve above has both control points at the midpoint of each month interval.
+            const x = x0 + (x1 - x0) * (1.5 * t * (1 - t) + t ** 3);
+            const y = y0 + (y1 - y0) * t * t * (3 - 2 * t);
+            pulseFocus.setAttribute("transform", `translate(${x} ${y})`);
+            pulseGuide.setAttribute("y2", height - pad - y);
+            pulseElapsed.setAttribute("width", x);
+        }
+
         function selectPulse(i) {
-            const number = i + 1;
-            pulseReadout.innerHTML = `<span>${number}月</span> <strong>${YEAR.pulseWords[i]}</strong> <span>${YEAR.pulse[i]} / 100</span>`;
+            if (i === selectedPulse) return;
+            const first = selectedPulse < 0;
+            selectedPulse = i;
+            pulseReadout.innerHTML = `<span>${i + 1}月</span> <strong>${YEAR.pulseWords[i]}</strong> <span>${YEAR.pulse[i]} / 100</span>`;
             pulseMonths.querySelectorAll("button").forEach((button, n) => {
                 button.setAttribute("aria-pressed", String(n === i));
             });
-            pulse.querySelectorAll(".pulse-point").forEach((point, n) => {
-                point.classList.toggle("selected", n === i);
-                point.setAttribute("r", n === i ? 8 : 5);
-            });
+            cancelAnimationFrame(pulseFrame);
+            if (first || motionPreference.matches) {
+                drawPulse(i);
+                return;
+            }
+            const from = pulsePosition;
+            const start = performance.now();
+            const duration = Math.min(650, 245 + Math.abs(i - from) * 45);
+            function travel(now) {
+                const t = motionPreference.matches ? 1 : Math.min(1, (now - start) / duration);
+                const eased = t * t * (3 - 2 * t);
+                drawPulse(from + (i - from) * eased);
+                if (t < 1) pulseFrame = requestAnimationFrame(travel);
+            }
+            pulseFrame = requestAnimationFrame(travel);
         }
+        pulse.addEventListener("click", event => {
+            const bounds = pulse.getBoundingClientRect();
+            const x = (event.clientX - bounds.left) * width / bounds.width;
+            selectPulse(Math.max(0, Math.min(points.length - 1, Math.round((x - pad) / step))));
+        });
         pulseMonths.addEventListener("click", event => {
             const button = event.target.closest("button");
             if (button) selectPulse(Number(button.dataset.i));
@@ -3052,6 +3123,7 @@
             if (soundOn) blip();
         }
 
+        const coverScene = document.querySelector(".cover-scene");
         let scrollFrame = 0;
         function syncReadingPosition() {
             scrollFrame = 0;
@@ -3060,6 +3132,12 @@
             for (let i = 1; i < chapters.length && chapters[i].getBoundingClientRect().top <= threshold; i++) active = i;
             const distance = document.documentElement.scrollHeight - window.innerHeight;
             const fraction = distance > 0 ? Math.min(1, Math.max(0, window.scrollY / distance)) : 0;
+            if (reduce) {
+                coverScene.style.removeProperty("transform");
+            } else if (active === 0) {
+                const travel = Math.min(34, Math.max(0, window.scrollY) * 0.09);
+                coverScene.style.transform = `translateY(${travel.toFixed(1)}px)`;
+            }
             readingProgress.style.transform = `scaleX(${fraction})`;
             activate(fraction > 0.999 ? chapters.length - 1 : active);
         }

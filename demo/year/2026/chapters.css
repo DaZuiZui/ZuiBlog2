@@ -221,11 +221,14 @@
 .pulse-readout span { font: 600 13px var(--mono); color: #b7d4c5; }
 .pulse-readout strong { font-size: 26px; line-height: 1.2; }
 .pulse-readout span:last-child { margin-left: auto; }
-svg.pulse { width: 100%; height: 170px; }
+svg.pulse { width: 100%; height: 170px; cursor: crosshair; }
 .plot-grid { stroke: #ffffff24; stroke-width: 1; stroke-dasharray: 3 6; vector-effect: non-scaling-stroke; }
-.pulse path#line { stroke: #91e8b8; stroke-width: 2.5; vector-effect: non-scaling-stroke; }
-.pulse-point { fill: #99e7b9; stroke: #142e28; stroke-width: 2; vector-effect: non-scaling-stroke; }
-.pulse-point.selected { fill: #fff; stroke: #cdffaf; }
+.pulse path#line { stroke: #86aa9b; stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+.pulse-ink { fill: none; stroke: url(#pulse-ink); stroke-width: 2.5; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.pulse-point { fill: #bddacb; stroke: #142e28; stroke-width: 1; vector-effect: non-scaling-stroke; }
+.pulse-guide { stroke: #d9eeac; stroke-opacity: .56; stroke-width: 1; stroke-dasharray: 2 4; vector-effect: non-scaling-stroke; }
+.pulse-ring { fill: #efffc329; stroke: #dbf5b4; stroke-width: 1; vector-effect: non-scaling-stroke; }
+.pulse-nib { fill: #f6ffdd; stroke: #f6ffdd; stroke-width: 3; vector-effect: non-scaling-stroke; }
 .pulse-months { display: grid; grid-template-columns: repeat(12, minmax(0,1fr)); gap: 4px; }
 .pulse-months button {
     display: grid; gap: 3px; place-content: center;
