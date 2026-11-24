@@ -2198,7 +2198,7 @@
     <link rel="stylesheet" href="review.css">
     <link rel="stylesheet" href="chapters.css">
 </head>
-<body data-ch="0">
+<body data-ch="0" data-months-pending>
     <canvas id="field" aria-hidden="true"></canvas>
 
     <header class="topbar">
@@ -2223,6 +2223,7 @@
             <button id="contents-close" type="button" aria-label="关闭目录" title="关闭目录"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg></button>
         </div>
         <nav id="rail" aria-label="章节"></nav>
+        <p class="month-directory-note">读完十二个月后，开放后续章节。</p>
     </dialog>
     <div class="toast" id="toast" role="status"></div>
 
@@ -2288,6 +2289,13 @@
                     <div class="months" id="months" role="group" aria-label="选择月份"></div>
                 </div>
                 <div class="month-stage" id="month-stage" aria-live="polite"></div>
+                <footer class="month-reading">
+                    <div class="month-reading-progress">
+                        <span id="month-read-count" role="status">已读 0 / 12 个月</span>
+                        <progress id="month-read-meter" max="12" value="0" aria-labelledby="month-read-count"></progress>
+                    </div>
+                    <button id="month-continue" type="button"><span></span><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+                </footer>
             </div>
         </section>
 
@@ -2554,6 +2562,15 @@
         const monthProgress = document.getElementById("month-progress");
         const monthPrev = document.getElementById("month-prev");
         const monthNext = document.getElementById("month-next");
+        const monthContinue = document.getElementById("month-continue");
+        const readKey = "zuiblog:2026:read-months";
+        let savedMonths = [];
+        try {
+            const stored = JSON.parse(sessionStorage.getItem(readKey));
+            if (Array.isArray(stored)) savedMonths = stored.filter(i => Number.isInteger(i) && i >= 0 && i < YEAR.months.length);
+        } catch { /* Storage may be unavailable in private or local-file viewing. */ }
+        const readMonths = new Set(savedMonths);
+        let currentMonthText;
 
         document.getElementById("months").innerHTML = YEAR.months.map((month, i) => `
             <button class="glass${i === 0 ? " on" : ""}" type="button" data-i="${i}">
@@ -2562,6 +2579,61 @@
                 <strong>${month.name}</strong>
             </button>
         `).join("");
+
+        function nextUnreadMonth() {
+            for (let n = 1; n <= YEAR.months.length; n++) {
+                const i = (monthCursor + n) % YEAR.months.length;
+                if (!readMonths.has(i)) return i;
+            }
+            return -1;
+        }
+
+        function renderMonthReading() {
+            const count = readMonths.size;
+            const total = YEAR.months.length;
+            const pending = count < total;
+            document.body.toggleAttribute("data-months-pending", pending);
+            [...rail.children].forEach((button, i) => { button.disabled = pending && i > monthChapter; });
+            document.getElementById("month-read-count").textContent = `已读 ${count} / ${total} 个月`;
+            const meter = document.getElementById("month-read-meter");
+            meter.max = total;
+            meter.value = count;
+            document.querySelectorAll("#months .glass").forEach((button, i) => {
+                button.toggleAttribute("data-read", readMonths.has(i));
+                button.setAttribute("aria-label", `${i + 1}月，${YEAR.months[i].name}，${readMonths.has(i) ? "已读" : "未读"}`);
+            });
+            const next = nextUnreadMonth();
+            let action = "继续到城市";
+            if (!readMonths.has(monthCursor)) action = "读完本月";
+            else if (pending) action = next < monthCursor ? `补读 ${next + 1} 月` : `读 ${next + 1} 月`;
+            monthContinue.querySelector("span").textContent = action;
+        }
+
+        function saveMonthReading() {
+            try { sessionStorage.setItem(readKey, JSON.stringify([...readMonths])); } catch { /* Keep the in-memory progress. */ }
+        }
+
+        function recordMonthEnd(readingTop) {
+            if (document.hidden || contents.open || readMonths.has(monthCursor)) return;
+            const { bottom } = currentMonthText.getBoundingClientRect();
+            if (bottom <= readingTop || bottom > window.innerHeight + 1) return;
+            readMonths.add(monthCursor);
+            saveMonthReading();
+            renderMonthReading();
+        }
+
+        monthContinue.addEventListener("click", () => {
+            if (readMonths.size === YEAR.months.length) {
+                go(monthChapter + 1);
+            } else if (readMonths.has(monthCursor)) {
+                showMonth(nextUnreadMonth());
+                monthStage.scrollIntoView({ block: "start" });
+                monthStage.querySelector("h3").focus({ preventScroll: true });
+            } else {
+                currentMonthText.scrollIntoView({ block: "end" });
+                queueReadingPosition();
+            }
+        });
 
         function monthPage(i) {
             const month = YEAR.months[i];
@@ -2594,7 +2666,7 @@
                             <p class="eyebrow"></p>
                             <span class="season-pill"></span>
                         </div>
-                        <h3></h3>
+                        <h3 tabindex="-1"></h3>
                         <p class="slot"></p>
                     </div>
                 </div>
@@ -2659,6 +2731,9 @@
             markMonth(i);
             page.classList.add("is-turn");
             monthStage.replaceChildren(page);
+            currentMonthText = page.querySelector(".month-copy .slot");
+            renderMonthReading();
+            requestAnimationFrame(queueReadingPosition);
         }
 
         function stepMonth(dir) {
@@ -3110,6 +3185,7 @@
             });
             rail.append(button);
         });
+        renderMonthReading();
 
         document.getElementById("contents-toggle").addEventListener("click", () => {
             clearName();
@@ -3148,6 +3224,7 @@
         }
 
         function go(next) {
+            if (readMonths.size < YEAR.months.length && next > monthChapter) next = monthChapter;
             chapters[next].focus({ preventScroll: true });
             chapters[next].scrollIntoView({ block: "start" });
             if (soundOn) blip();
@@ -3216,10 +3293,13 @@
             scrollFrame = 0;
             const threshold = Math.min(window.innerHeight * 0.38, 260);
             const readingTop = topbar.getBoundingClientRect().bottom;
+            recordMonthEnd(readingTop);
+            const monthsPending = readMonths.size < YEAR.months.length;
             const viewportHeight = window.innerHeight - readingTop;
             let active = 0;
             let atFinale = false;
             chapters.forEach((chapter, i) => {
+                if (monthsPending && i > monthChapter) return;
                 const bounds = chapter.getBoundingClientRect();
                 if (bounds.top <= threshold) active = i;
                 const visible = Math.min(window.innerHeight, bounds.bottom) - Math.max(readingTop, bounds.top);
@@ -3239,8 +3319,9 @@
                 const travel = Math.min(34, Math.max(0, window.scrollY) * 0.09);
                 coverScene.style.transform = `translateY(${travel.toFixed(1)}px)`;
             }
-            readingProgress.style.transform = `scaleX(${fraction})`;
-            activate(fraction > 0.999 ? chapters.length - 1 : active);
+            const totalProgress = monthsPending ? fraction * (monthChapter + readMonths.size / YEAR.months.length) / chapters.length : fraction;
+            readingProgress.style.transform = `scaleX(${totalProgress})`;
+            activate(fraction > 0.999 ? (monthsPending ? monthChapter : chapters.length - 1) : active);
         }
         function queueReadingPosition() {
             if (!scrollFrame) scrollFrame = requestAnimationFrame(syncReadingPosition);
@@ -3282,6 +3363,9 @@
         });
         document.getElementById("again").addEventListener("click", () => {
             visitedChapters.clear();
+            readMonths.clear();
+            saveMonthReading();
+            showMonth(0);
             goodnight.hidden = true;
             finalePhoto.hidden = true;
             nameField.hidden = false;
