@@ -204,7 +204,6 @@ h2 { margin-bottom: 22px; font-size: 44px; line-height: 1.18; }
 .glass em { margin: 0; font-size: 12px; line-height: 1.5; }
 .glass strong { margin-top: 2px; font-size: 12px; line-height: 1.4; letter-spacing: 0; }
 .month-stage { min-height: 0; overflow: visible; }
-.chapter[data-name="十二月"] { min-height: calc(100svh - var(--bar-height) - env(safe-area-inset-top)); }
 body[data-months-pending] .chapter[data-name="十二月"] ~ .chapter { display: none; }
 #rail button:disabled { color: var(--muted); opacity: .6; cursor: default; }
 .month-directory-note { display: none; }
@@ -357,8 +356,7 @@ body[data-months-pending] .month-directory-note {
     .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .stat:nth-child(2) { border-right: 0; }
     .stat:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
-    .months { display: flex; overflow-x: auto; scrollbar-width: thin; overscroll-behavior-x: contain; }
-    .months .glass { flex: 0 0 76px; }
+    .months { grid-template-columns: repeat(6, minmax(0, 1fr)); }
     .lines p { font-size: 27px; }
 }
 
@@ -392,6 +390,8 @@ body[data-months-pending] .month-directory-note {
     .month-progress { font-size: 17px; }
     .month-progress span { font-size: 12px; }
     .month-picker { margin: 14px 0 12px; }
+    .months { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .months .glass { min-height: 46px; padding-block: 3px; }
     .month-layout { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto; }
     .month-visual { min-height: 126px; }
     .hero-emoji { font-size: 62px; }
@@ -399,6 +399,12 @@ body[data-months-pending] .month-directory-note {
     .month-copy h3 { font-size: 29px; }
     .month-watermark { font-size: 40px; }
     .finale h2 { font-size: 38px; }
+}
+
+.chapter[data-name="十二月"] {
+    min-height: calc(100svh - var(--bar-height) - env(safe-area-inset-top));
+    min-height: calc(100dvh - var(--bar-height) - env(safe-area-inset-top));
+    padding-block: clamp(12px, 3vh, 28px) clamp(24px, 5vh, 52px);
 }
 
 @media (max-height: 500px) and (orientation: landscape) {
@@ -410,6 +416,9 @@ body[data-months-pending] .month-directory-note {
     .cover .sub { margin-top: 6px; font-size: 14px; }
     .hero-actions { margin-top: 12px; }
     .cover-credit { bottom: 12px; }
+    .month-head .eyebrow { margin-bottom: 4px; }
+    .month-picker { margin-block: 8px; }
+    .months .glass { min-height: 44px; padding-block: 2px; }
 }
 @media (prefers-reduced-motion: reduce) {
     .lines p { width: auto; }
