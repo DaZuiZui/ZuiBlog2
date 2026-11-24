@@ -305,6 +305,13 @@ h2 { margin-bottom: 22px; font-size: 44px; line-height: 1.18; }
 .finale .slot { color: #dae3d9; font-size: 16px; }
 #finale-goodnight { margin-top: 28px; }
 #finale-goodnight > p { color: #f6e1bf; font: 600 25px/1.6 var(--serif); }
+.finale-inscription { position: relative; width: fit-content; }
+#finale-name {
+    position: absolute; inset: 0; width: 100%; height: 100%; min-height: 44px;
+    padding: 0; border: 0; background: transparent; color: transparent;
+    caret-color: transparent; font-size: 16px;
+}
+.finale-portrait[hidden] { display: none; }
 .finale-portrait { display: block; width: min(100%, 560px); height: auto; margin-top: 16px; }
 @media (prefers-reduced-motion: no-preference) {
     #finale-goodnight:not([hidden]) { animation: finale-goodnight-in 1.4s ease-out both; }

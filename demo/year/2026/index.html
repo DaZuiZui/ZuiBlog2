@@ -2377,8 +2377,8 @@
                 <h2 id="finale-title"></h2>
                 <p class="slot" id="finale-copy"></p>
                 <div id="finale-goodnight" hidden>
-                    <p>晚安，杰米，祝你快乐。</p>
-                    <img class="finale-portrait" src="jamie-by-the-sea.jpg" width="896" height="1200" alt="杰米背着小书包来到日落的海边，遇见小伙伴，最后望向镜头。三格字幕依次是「人，我到吱星啦」「这里有很多小伙伴」「我会照顾好自己的，你也要照顾好自己哦」。">
+                    <p class="finale-inscription">晚安，杰米，祝你快乐。<input id="finale-name" type="text" lang="en" aria-label="输入她的名字" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" enterkeyhint="done"></p>
+                    <img hidden class="finale-portrait" src="jamie-by-the-sea.jpg" width="896" height="1200" alt="杰米背着小书包来到日落的海边，遇见小伙伴，最后望向镜头。三格字幕依次是「人，我到吱星啦」「这里有很多小伙伴」「我会照顾好自己的，你也要照顾好自己哦」。">
                 </div>
                 <button class="again" id="again" type="button">再看一遍</button>
                 <p class="photo-source">封面摄影 <a href="https://commons.wikimedia.org/wiki/File:The_Twins_SE_Asia_2019_(49171985716).jpg">James Kerwin · The Twins SE Asia 2019</a> · <a href="https://creativecommons.org/licenses/by/2.0/">CC BY 2.0</a> · 已裁切、压缩并添加光影</p>
@@ -3112,6 +3112,7 @@
         });
 
         document.getElementById("contents-toggle").addEventListener("click", () => {
+            clearName();
             contents.showModal();
             const current = rail.querySelector('[aria-current="true"]');
             current.focus({ preventScroll: true });
@@ -3154,6 +3155,60 @@
 
         const coverScene = document.querySelector(".cover-scene");
         const goodnight = document.getElementById("finale-goodnight");
+        const finalePhoto = goodnight.querySelector(".finale-portrait");
+        const nameField = document.getElementById("finale-name");
+        let finaleInView = false;
+        let typedName = "";
+        let firstLetterAt = 0;
+        let nameTimer = 0;
+
+        function clearName() {
+            clearTimeout(nameTimer);
+            typedName = "";
+            nameField.value = "";
+        }
+
+        function typeLetter(letter) {
+            if (!finaleInView || goodnight.hidden || !finalePhoto.hidden || contents.open) return;
+            const now = performance.now();
+            if (now - firstLetterAt > 10000 || letter === "j") clearName();
+            if (!typedName && letter === "j") {
+                firstLetterAt = now;
+                nameTimer = setTimeout(clearName, 10000);
+            }
+            if (letter !== "jamie"[typedName.length]) {
+                clearName();
+                return;
+            }
+            typedName += letter;
+            if (typedName === "jamie") {
+                clearName();
+                nameField.blur();
+                nameField.hidden = true;
+                finalePhoto.hidden = false;
+            }
+        }
+
+        document.addEventListener("keydown", event => {
+            if (event.target.closest("input, textarea, [contenteditable=true]") ||
+                event.ctrlKey || event.metaKey || event.altKey || event.isComposing || event.repeat) return;
+            if (event.key.length === 1) typeLetter(event.key.toLowerCase());
+            else if (event.key !== "Shift") clearName();
+        });
+        nameField.addEventListener("input", event => {
+            // Some mobile keyboards replace the composing word on every keystroke.
+            const value = nameField.value.toLowerCase();
+            if (["insertText", "insertCompositionText"].includes(event.inputType) &&
+                value.length === typedName.length + 1 && value.startsWith(typedName)) {
+                typeLetter(value.slice(-1));
+                if (nameField.value.toLowerCase() !== typedName) nameField.value = typedName;
+            } else {
+                clearName();
+            }
+        });
+        nameField.addEventListener("blur", clearName);
+        window.addEventListener("blur", clearName);
+        document.addEventListener("visibilitychange", () => { if (document.hidden) clearName(); });
         const topbar = document.querySelector(".topbar");
         const visitedChapters = new Set();
         let scrollFrame = 0;
@@ -3174,6 +3229,8 @@
                 }
             });
             if (atFinale && visitedChapters.size === chapters.length) goodnight.hidden = false;
+            if (finaleInView && !atFinale) clearName();
+            finaleInView = atFinale;
             const distance = document.documentElement.scrollHeight - window.innerHeight;
             const fraction = distance > 0 ? Math.min(1, Math.max(0, window.scrollY / distance)) : 0;
             if (reduce) {
@@ -3226,6 +3283,9 @@
         document.getElementById("again").addEventListener("click", () => {
             visitedChapters.clear();
             goodnight.hidden = true;
+            finalePhoto.hidden = true;
+            nameField.hidden = false;
+            clearName();
             go(0);
         });
 
