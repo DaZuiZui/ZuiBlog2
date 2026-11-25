@@ -1319,8 +1319,6 @@
             animation: walk-year 2.8s ease forwards;
         }
 
-        .year-walker.swap { animation: walker-swap 460ms ease; }
-
         .goal {
             min-height: 228px;
             padding: 22px 20px 20px;
@@ -1386,7 +1384,7 @@
             letter-spacing: -0.045em;
         }
 
-        .goal span {
+        .goal-copy {
             display: block;
             margin-top: 8px;
             color: rgba(244, 255, 249, 0.74);
@@ -1448,7 +1446,7 @@
         }
 
         .goal.lit strong { color: var(--ink-strong); }
-        .goal.lit span { color: var(--ink); }
+        .goal.lit .goal-copy { color: var(--ink); }
         .goal.lit:nth-child(1) small { color: #5d7094; }
         .goal.lit:nth-child(2) small { color: var(--accent-strong); }
         .goal.lit:nth-child(3) small { color: #9a6410; }
@@ -1534,11 +1532,6 @@
             from { left: 6%; transform: translateY(0); }
             50% { transform: translateY(-6px); }
             to { left: 88%; transform: translateY(0); }
-        }
-        @keyframes walker-swap {
-            0% { transform: translateY(4px) scale(0.7); }
-            60% { transform: translateY(-8px) scale(1.18); }
-            100% { transform: none; }
         }
         @keyframes emoji-pop {
             0% { transform: scale(0.45); }
@@ -2207,6 +2200,12 @@
             <span>Bryan Yang</span>
         </a>
         <div class="nav-links">
+            <button class="chapter-arrow" id="chapter-prev" type="button" aria-label="上一章" title="上一章" disabled>
+                <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+            <button class="chapter-arrow" id="chapter-next" type="button" aria-label="下一章" title="下一章">
+                <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
             <button class="sound" id="sound" type="button" aria-label="声音" title="声音" aria-pressed="false">
                 <svg class="ui-icon sound-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4.702a.7.7 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.7.7 0 0 0 11 19.298z" /><path d="m16.5 14.5 5-5" /><path d="m16.5 9.5 5 5" /></svg><svg class="ui-icon sound-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z" /><path d="M16 9a5 5 0 0 1 0 6" /><path d="M19.364 18.364a9 9 0 0 0 0-12.728" /></svg>
             </button>
@@ -2520,9 +2519,13 @@
         let reduce = motionPreference.matches;
         motionPreference.addEventListener("change", event => {
             reduce = event.matches;
+            if (chapters[index] === goalChapter) lightNext();
             queueReadingPosition();
         });
         const chapters = [...document.querySelectorAll(".chapter")];
+        const deck = document.getElementById("deck");
+        const chapterPrev = document.getElementById("chapter-prev");
+        const chapterNext = document.getElementById("chapter-next");
         const monthChapter = chapters.findIndex((chapter) => chapter.dataset.name === "十二月");
         const rail = document.getElementById("rail");
         let index = -1;
@@ -2593,6 +2596,7 @@
             const total = YEAR.months.length;
             const pending = count < total;
             document.body.toggleAttribute("data-months-pending", pending);
+            updateChapterArrows();
             [...rail.children].forEach((button, i) => { button.disabled = pending && i > monthChapter; });
             document.getElementById("month-read-count").textContent = `已读 ${count} / ${total} 个月`;
             const meter = document.getElementById("month-read-meter");
@@ -2613,13 +2617,15 @@
             try { sessionStorage.setItem(readKey, JSON.stringify([...readMonths])); } catch { /* Keep the in-memory progress. */ }
         }
 
-        function monthEndVisible(readingTop) {
+        function monthEndVisible() {
+            const viewport = deck.getBoundingClientRect();
             const { bottom } = currentMonthText.getBoundingClientRect();
-            return bottom > readingTop && bottom <= window.innerHeight + 1;
+            return bottom > viewport.top && bottom <= viewport.bottom + 1;
         }
 
-        function recordMonthEnd(readingTop) {
-            if (document.hidden || contents.open || readMonths.has(monthCursor) || !monthEndVisible(readingTop)) return;
+        function recordMonthEnd() {
+            if (index !== monthChapter || deck.dataset.turn || document.hidden || contents.open ||
+                readMonths.has(monthCursor) || !monthEndVisible()) return;
             readMonths.add(monthCursor);
             saveMonthReading();
             renderMonthReading();
@@ -2739,7 +2745,7 @@
 
         function openMonth(i) {
             showMonth(i);
-            chapters[monthChapter].scrollIntoView({ block: "start" });
+            chapters[monthChapter].scrollTop = 0;
         }
 
         showMonth(0);
@@ -3025,43 +3031,71 @@
             toast(`${rite.e} ${rite.k}`);
         });
 
-        document.getElementById("next-goals").innerHTML = YEAR.next.map((goal, i) => `
-            <article class="goal">
-                <div class="goal-stage" aria-hidden="true">
+        const nextGoals = document.getElementById("next-goals");
+        nextGoals.innerHTML = YEAR.next.map((goal, i) => `
+            <button class="goal" type="button" aria-label="点亮目标：${goal.k}" aria-describedby="goal-copy-${i}">
+                <span class="goal-stage" aria-hidden="true">
                     <b>${goal.e}</b>
                     ${goal.bits.map((bit) => `<em>${bit}</em>`).join("")}
-                </div>
+                </span>
                 <small>2027 · 0${i + 1}</small>
                 <strong>${goal.k}</strong>
-                <span>${goal.t}</span>
-            </article>
+                <span class="goal-copy" id="goal-copy-${i}">${goal.t}</span>
+            </button>
         `).join("");
 
-        let nextShow = 0;
         const yearWalker = document.getElementById("year-walker");
+        const goalChapter = nextGoals.closest(".chapter");
+        const goalCards = [...nextGoals.children];
+        const goalTimers = new Map();
+
+        function lightGoal(card) {
+            clearTimeout(goalTimers.get(card));
+            goalTimers.delete(card);
+            goalObserver.unobserve(card);
+            if (card.classList.contains("lit") && !reduce) {
+                card.querySelector(".goal-stage").getAnimations({ subtree: true }).forEach(animation => {
+                    animation.currentTime = 0;
+                });
+            }
+            card.classList.add("lit");
+            yearWalker.textContent = YEAR.next[goalCards.indexOf(card)].e;
+        }
+
+        const goalObserver = new IntersectionObserver(entries => {
+            if (!goalChapter.classList.contains("is-on")) return;
+            const compact = matchMedia("(max-width: 900px)").matches;
+            let order = 0;
+            for (const { target: card, intersectionRatio } of entries) {
+                clearTimeout(goalTimers.get(card));
+                goalTimers.delete(card);
+                if (intersectionRatio < 0.25 || card.classList.contains("lit")) continue;
+                const delay = compact ? order * 110 : 640 + order * 720;
+                goalTimers.set(card, setTimeout(() => {
+                    if (goalChapter.classList.contains("is-on")) lightGoal(card);
+                }, delay));
+                order++;
+            }
+        }, { threshold: 0.25 });
 
         function lightNext() {
-            nextShow += 1;
-            const token = nextShow;
-            const cards = [...document.querySelectorAll("#next-goals .goal")];
-            if (reduce) {
-                cards.forEach(card => card.classList.add("lit"));
-                return;
-            }
-            cards.forEach((card) => card.classList.remove("lit"));
+            goalObserver.disconnect();
+            goalTimers.forEach(timer => clearTimeout(timer));
+            goalTimers.clear();
             yearWalker.textContent = "🌙";
-            cards.forEach((card, i) => {
-                setTimeout(() => {
-                    if (token !== nextShow) return;
-                    if (!document.querySelector('.chapter[data-name="明年"]')?.classList.contains("play")) return;
-                    card.classList.add("lit");
-                    yearWalker.textContent = YEAR.next[i].e;
-                    yearWalker.classList.remove("swap");
-                    void yearWalker.offsetWidth;
-                    yearWalker.classList.add("swap");
-                }, 640 + i * 720);
-            });
+            goalCards.forEach(card => card.classList.toggle("lit", reduce));
+            if (reduce) return;
+            const watchVisibleCards = () => {
+                if (goalChapter.classList.contains("is-on")) goalCards.forEach(card => goalObserver.observe(card));
+            };
+            if (activeTurn) activeTurn.finished.then(watchVisibleCards, () => {});
+            else watchVisibleCards();
         }
+
+        nextGoals.addEventListener("click", event => {
+            const card = event.target.closest(".goal");
+            if (card) lightGoal(card);
+        });
 
         const pulse = document.getElementById("pulse");
         const width = 760;
@@ -3175,6 +3209,8 @@
 
         chapters.forEach((chapter, i) => {
             const name = chapterNames[chapter.dataset.name] || chapter.dataset.name;
+            chapter.inert = true;
+            chapter.classList.remove("is-on");
             chapter.tabIndex = -1;
             chapter.setAttribute("aria-label", name);
             const button = document.createElement("button");
@@ -3202,18 +3238,60 @@
             if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) contents.close();
         });
 
-        function activate(next) {
-            if (next === index) return;
-            if (index >= 0) {
-                chapters[index].classList.remove("is-on", "play");
+        function updateChapterArrows() {
+            chapterPrev.disabled = index <= 0;
+            chapterNext.disabled = index === chapters.length - 1 ||
+                (index === monthChapter && readMonths.size < YEAR.months.length);
+        }
+
+        let leavingChapter = null;
+        let activeTurn = null;
+        function finishTurn() {
+            leavingChapter?.classList.remove("is-leaving", "play");
+            leavingChapter = null;
+            activeTurn = null;
+            delete deck.dataset.turn;
+            queueReadingPosition();
+        }
+
+        function go(next, fromBottom = false) {
+            if (next < 0 || next >= chapters.length) return;
+            if (readMonths.size < YEAR.months.length && next > monthChapter) next = monthChapter;
+            const chapter = chapters[next];
+            if (next === index) {
+                chapter.focus({ preventScroll: true });
+                return;
+            }
+            const previous = chapters[index];
+            finishTurn();
+            if (previous) {
+                previous.inert = true;
+                previous.classList.remove("is-on");
                 rail.children[index].removeAttribute("aria-current");
+                if (reduce) previous.classList.remove("play");
+                else {
+                    leavingChapter = previous;
+                    previous.classList.add("is-leaving");
+                    deck.dataset.turn = next > index ? "forward" : "back";
+                }
             }
             index = next;
-            const chapter = chapters[index];
+            chapter.inert = false;
             chapter.classList.add("is-on", "play");
+            chapter.scrollTop = fromBottom ? chapter.scrollHeight : 0;
+            if (previous) chapter.focus({ preventScroll: true });
             document.body.dataset.ch = String(index);
             rail.children[index].setAttribute("aria-current", "true");
             counter.textContent = `${String(index + 1).padStart(2, "0")} / ${chapters.length}`;
+            updateChapterArrows();
+            if (leavingChapter) {
+                const animation = previous.getAnimations().find(a => a.animationName === "chapter-fold" || a.animationName === "chapter-settle");
+                if (animation) {
+                    const finish = () => { if (animation === activeTurn) finishTurn(); };
+                    activeTurn = animation;
+                    animation.finished.then(finish, finish);
+                } else finishTurn();
+            }
             if (chapter.dataset.name === "回望") countStats();
             if (chapter.dataset.name === "城市") flyCities();
             if (chapter.dataset.name === "六处") igniteRites();
@@ -3222,20 +3300,15 @@
                 const line = document.getElementById("line");
                 line.style.setProperty("--len", line.getTotalLength());
             }
-        }
-
-        function go(next) {
-            if (readMonths.size < YEAR.months.length && next > monthChapter) next = monthChapter;
-            chapters[next].focus({ preventScroll: true });
-            chapters[next].scrollIntoView({ block: "start" });
+            if (index !== chapters.length - 1) clearName();
             if (soundOn) blip();
         }
+        chapterPrev.addEventListener("click", () => go(index - 1));
+        chapterNext.addEventListener("click", () => go(index + 1));
 
-        const coverScene = document.querySelector(".cover-scene");
         const goodnight = document.getElementById("finale-goodnight");
         const finalePhoto = goodnight.querySelector(".finale-portrait");
         const nameField = document.getElementById("finale-name");
-        let finaleInView = false;
         let typedName = "";
         let firstLetterAt = 0;
         let nameTimer = 0;
@@ -3247,7 +3320,7 @@
         }
 
         function typeLetter(letter) {
-            if (!finaleInView || goodnight.hidden || !finalePhoto.hidden || contents.open) return;
+            if (index !== chapters.length - 1 || goodnight.hidden || !finalePhoto.hidden || contents.open) return;
             const now = performance.now();
             if (now - firstLetterAt > 10000 || letter === "j") clearName();
             if (!typedName && letter === "j") {
@@ -3287,111 +3360,127 @@
         nameField.addEventListener("blur", clearName);
         window.addEventListener("blur", clearName);
         document.addEventListener("visibilitychange", () => { if (document.hidden) clearName(); });
-        const topbar = document.querySelector(".topbar");
         const visitedChapters = new Set();
         let scrollFrame = 0;
         function syncReadingPosition() {
             scrollFrame = 0;
-            const threshold = Math.min(window.innerHeight * 0.38, 260);
-            const readingTop = topbar.getBoundingClientRect().bottom;
-            recordMonthEnd(readingTop);
-            const monthsPending = readMonths.size < YEAR.months.length;
-            const viewportHeight = window.innerHeight - readingTop;
-            let active = 0;
-            let atFinale = false;
-            chapters.forEach((chapter, i) => {
-                if (monthsPending && i > monthChapter) return;
-                const bounds = chapter.getBoundingClientRect();
-                if (bounds.top <= threshold) active = i;
-                const visible = Math.min(window.innerHeight, bounds.bottom) - Math.max(readingTop, bounds.top);
-                if (visible >= Math.min(viewportHeight, bounds.height) / 2) {
-                    visitedChapters.add(chapter);
-                    if (i === chapters.length - 1) atFinale = true;
-                }
-            });
-            if (atFinale && visitedChapters.size === chapters.length) goodnight.hidden = false;
-            if (finaleInView && !atFinale) clearName();
-            finaleInView = atFinale;
-            const distance = document.documentElement.scrollHeight - window.innerHeight;
-            const fraction = distance > 0 ? Math.min(1, Math.max(0, window.scrollY / distance)) : 0;
-            if (reduce) {
-                coverScene.style.removeProperty("transform");
-            } else if (active === 0) {
-                const travel = Math.min(34, Math.max(0, window.scrollY) * 0.09);
-                coverScene.style.transform = `translateY(${travel.toFixed(1)}px)`;
+            if (index < 0 || document.hidden) return;
+            const chapter = chapters[index];
+            if (!deck.dataset.turn) {
+                visitedChapters.add(chapter);
+                recordMonthEnd();
+                if (index === chapters.length - 1 && visitedChapters.size === chapters.length) goodnight.hidden = false;
             }
-            const totalProgress = monthsPending ? fraction * (monthChapter + readMonths.size / YEAR.months.length) / chapters.length : fraction;
-            readingProgress.style.transform = `scaleX(${totalProgress})`;
-            activate(fraction > 0.999 ? (monthsPending ? monthChapter : chapters.length - 1) : active);
+            const distance = chapter.scrollHeight - chapter.clientHeight;
+            let progress = distance > 0 ? Math.min(1, Math.max(0, chapter.scrollTop / distance)) : 0;
+            if (index === monthChapter) progress = readMonths.size / YEAR.months.length;
+            const fraction = index === chapters.length - 1 ? 1 : (index + progress) / chapters.length;
+            readingProgress.style.transform = `scaleX(${fraction})`;
         }
         function queueReadingPosition() {
             if (!scrollFrame) scrollFrame = requestAnimationFrame(syncReadingPosition);
         }
-        window.addEventListener("scroll", queueReadingPosition, { passive: true });
+        deck.addEventListener("scroll", queueReadingPosition, { capture: true, passive: true });
         window.addEventListener("resize", queueReadingPosition);
+        document.addEventListener("visibilitychange", queueReadingPosition);
 
-        const monthSection = chapters[monthChapter];
-        function nextMonthOnScroll() {
-            const readingTop = topbar.getBoundingClientRect().bottom;
-            if (contents.open || monthSection.getBoundingClientRect().top > readingTop + 1 || !monthEndVisible(readingTop)) return -1;
-            recordMonthEnd(readingTop);
-            return monthCursor + 1 < YEAR.months.length ? monthCursor + 1 : nextUnreadMonth();
+        // Choose the action before native scrolling starts. A swipe that reaches
+        // the bottom still belongs to this page, including its momentum.
+        function turnAtEdge(direction) {
+            if (deck.dataset.turn || contents.open) return null;
+            const chapter = chapters[index];
+            const atEdge = direction < 0 ? chapter.scrollTop <= 1 :
+                chapter.scrollTop + chapter.clientHeight >= chapter.scrollHeight - 1;
+            if (index === monthChapter && direction > 0 && (atEdge || monthEndVisible())) {
+                recordMonthEnd();
+                if (readMonths.has(monthCursor)) {
+                    const next = monthCursor + 1 < YEAR.months.length ? monthCursor + 1 : nextUnreadMonth();
+                    if (next >= 0) return () => openMonth(next);
+                }
+            }
+            if (!atEdge) return null;
+            if (index === monthChapter && direction < 0 && monthCursor > 0) return () => openMonth(monthCursor - 1);
+            const next = index + direction;
+            if (next < 0 || next >= chapters.length || (direction > 0 && chapterNext.disabled)) return null;
+            return () => go(next, direction < 0);
         }
 
-        // Decide at the start of a gesture so scrolling a long story into view
-        // and the momentum after a page turn both stay within the same month.
-        let lastWheelTime = -Infinity;
-        let wheelTarget = -1;
+        let wheelTime = -Infinity;
+        let wheelDirection = 0;
+        let wheelTurn = null;
         let wheelDistance = 0;
-        monthSection.addEventListener("wheel", event => {
-            const newGesture = event.timeStamp - lastWheelTime > 180;
-            lastWheelTime = event.timeStamp;
-            if (event.ctrlKey || event.metaKey || event.deltaY <= 0 || Math.abs(event.deltaX) >= event.deltaY) {
-                wheelTarget = -1;
-                return;
-            }
-            if (newGesture) {
-                wheelTarget = nextMonthOnScroll();
+        deck.addEventListener("wheel", event => {
+            if (event.ctrlKey || event.metaKey || Math.abs(event.deltaX) >= Math.abs(event.deltaY)) return;
+            const direction = Math.sign(event.deltaY);
+            if (event.timeStamp - wheelTime > 180 || direction !== wheelDirection) {
+                wheelTurn = turnAtEdge(direction);
                 wheelDistance = 0;
             }
-            if (wheelTarget < 0 || !event.cancelable) return;
+            wheelTime = event.timeStamp;
+            wheelDirection = direction;
+            if (!wheelTurn || !event.cancelable) return;
             event.preventDefault();
-            if (wheelTarget === monthCursor) return;
             const unit = event.deltaMode === WheelEvent.DOM_DELTA_LINE ? 16 :
-                event.deltaMode === WheelEvent.DOM_DELTA_PAGE ? window.innerHeight : 1;
-            wheelDistance += event.deltaY * unit;
-            if (wheelDistance >= 24) openMonth(wheelTarget);
+                event.deltaMode === WheelEvent.DOM_DELTA_PAGE ? deck.clientHeight : 1;
+            const before = wheelDistance;
+            wheelDistance += Math.abs(event.deltaY) * unit;
+            if (before < 24 && wheelDistance >= 24) wheelTurn();
         }, { passive: false });
 
-        let monthSwipe = null;
-        monthSection.addEventListener("touchstart", event => {
-            monthSwipe = null;
-            if (event.touches.length !== 1) return;
-            const next = nextMonthOnScroll();
-            if (next < 0) return;
+        let swipe = null;
+        deck.addEventListener("touchstart", event => {
+            swipe = null;
+            if (event.touches.length !== 1 || event.target.closest("input, textarea, select, [contenteditable=true]")) return;
             const { clientX, clientY } = event.touches[0];
-            monthSwipe = { x: clientX, y: clientY, next, ready: false };
+            swipe = { x: clientX, y: clientY, turn: null, direction: 0, ready: false };
         }, { passive: true });
-        monthSection.addEventListener("touchmove", event => {
-            if (!monthSwipe) return;
+        deck.addEventListener("touchmove", event => {
+            if (!swipe) return;
             if (event.touches.length !== 1 || !event.cancelable) {
-                monthSwipe = null;
+                swipe = null;
                 return;
             }
             const { clientX, clientY } = event.touches[0];
-            const distance = monthSwipe.y - clientY;
-            if (distance <= 0 || distance <= Math.abs(monthSwipe.x - clientX)) {
-                monthSwipe = null;
-                return;
+            const dy = swipe.y - clientY;
+            if (!swipe.direction) {
+                if (Math.max(Math.abs(dy), Math.abs(swipe.x - clientX)) < 4) return;
+                if (Math.abs(dy) <= Math.abs(swipe.x - clientX)) {
+                    swipe = null;
+                    return;
+                }
+                swipe.direction = Math.sign(dy);
+                swipe.turn = turnAtEdge(swipe.direction);
+                if (!swipe.turn) {
+                    swipe = null;
+                    return;
+                }
             }
             event.preventDefault();
-            monthSwipe.ready = distance >= 40;
+            swipe.ready = dy * swipe.direction >= 38;
         }, { passive: false });
-        monthSection.addEventListener("touchend", () => {
-            if (monthSwipe?.ready) openMonth(monthSwipe.next);
-            monthSwipe = null;
+        deck.addEventListener("touchend", () => {
+            if (swipe?.ready) swipe.turn();
+            swipe = null;
         });
-        monthSection.addEventListener("touchcancel", () => { monthSwipe = null; });
+        deck.addEventListener("touchcancel", () => { swipe = null; });
+
+        document.addEventListener("keydown", event => {
+            if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || event.isComposing ||
+                contents.open || event.target.closest("input, textarea, select, [contenteditable=true]")) return;
+            if (!["ArrowUp", "ArrowDown", "PageUp", "PageDown", " "].includes(event.key)) return;
+            if (event.key === " " && event.target.closest("button, a")) return;
+            event.preventDefault();
+            if (deck.dataset.turn) return;
+            const direction = ["ArrowUp", "PageUp"].includes(event.key) || (event.key === " " && event.shiftKey) ? -1 : 1;
+            const turn = turnAtEdge(direction);
+            if (turn) {
+                if (!event.repeat) turn();
+            } else {
+                const chapter = chapters[index];
+                const step = event.key.startsWith("Arrow") ? 48 : chapter.clientHeight * .85;
+                chapter.scrollBy(0, direction * step);
+            }
+        });
 
         function countStats() {
             document.querySelectorAll(".stat b").forEach((node) => {
@@ -3538,7 +3627,7 @@
 
         const params = new URLSearchParams(location.search);
         const start = Number(params.get("c"));
-        if (Number.isInteger(start) && start > 0 && start < chapters.length) go(start);
+        go(Number.isInteger(start) && start > 0 && start < chapters.length ? start : 0);
         syncReadingPosition();
     </script>
 </body>

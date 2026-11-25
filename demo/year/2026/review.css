@@ -12,17 +12,16 @@
     --serif: "Songti SC", "Noto Serif CJK SC", "Source Han Serif SC", "STSong", SimSun, Georgia, serif;
 }
 
-html, body { height: auto; }
-html { scroll-padding-top: calc(var(--bar-height) + env(safe-area-inset-top)); }
-body { overflow: visible; background: var(--bg); }
+html, body { height: 100%; overflow: hidden; }
+body { display: flex; flex-direction: column; height: 100dvh; background: var(--bg); }
 body::before { display: none; }
 #field { z-index: 6; }
 button, a { -webkit-tap-highlight-color: transparent; }
 :where(button, a, input):focus-visible { outline: 3px solid #27a677; outline-offset: 3px; }
 
 .topbar {
-    position: sticky;
-    top: 0;
+    position: relative;
+    flex: none;
     height: calc(var(--bar-height) + env(safe-area-inset-top));
     padding: env(safe-area-inset-top) max(var(--gutter), env(safe-area-inset-right)) 0 max(var(--gutter), env(safe-area-inset-left));
     background: rgba(250, 251, 246, .96);
@@ -32,14 +31,20 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .brand-photo { border-radius: 50%; width: 33px; height: 33px; object-fit: cover; }
 .topbar .brand span { display: inline; }
 .nav-links { gap: 10px; }
-.sound, .contents-toggle, #contents-close {
+.sound, .contents-toggle, .chapter-arrow, #contents-close {
     display: inline-flex;
     justify-content: center;
     align-items: center;
     min-height: 44px;
     color: var(--ink-strong);
 }
-.sound, #contents-close { width: 44px; padding: 0; border: 0; background: none; }
+.sound, .chapter-arrow, #contents-close { width: 44px; padding: 0; border: 0; background: none; }
+.chapter-arrow { flex: none; border-radius: 50%; }
+.chapter-arrow:disabled { opacity: .3; cursor: default; }
+@media (hover: hover) {
+    .chapter-arrow:enabled:hover { background: var(--accent-soft); }
+}
+.chapter-arrow:enabled:active { background: var(--accent-soft); }
 .sound[aria-pressed="true"] { color: var(--accent-strong); background: var(--accent-soft); }
 .ui-icon {
     width: 18px; height: 18px; fill: none; stroke: currentColor;
@@ -78,14 +83,43 @@ body:has(#contents[open]) { overflow: hidden; }
 #rail button[aria-current] { background: var(--accent-soft); color: var(--accent-strong); }
 #rail button[aria-current]::after { content: "●"; margin-left: auto; font-size: 10px; }
 
+#deck {
+    position: relative; isolation: isolate; flex: 1; min-height: 0;
+    overflow: hidden; background: var(--bg);
+}
 .chapter, .chapter.is-on {
-    position: relative; inset: auto; z-index: auto; display: block;
+    position: absolute; inset: 0; z-index: auto; display: flex; flex-direction: column;
+    overflow: hidden auto; overscroll-behavior-y: contain;
     padding: clamp(54px, 7%, 100px) max(var(--gutter), env(safe-area-inset-right)) clamp(54px, 7%, 100px) max(var(--gutter), env(safe-area-inset-left));
     opacity: 1; visibility: visible; transform: none; transition: none; outline: 0;
-    border-bottom: 1px solid var(--line);
+    background-color: var(--bg);
 }
+#deck > .chapter:not(.is-on, .is-leaving) { display: none; }
+.chapter.is-leaving { pointer-events: none; }
 .chapter .sheet, .chapter[data-name="十二月"] .sheet, .chapter .city-sheet {
-    width: min(1120px, 100%); height: auto; max-height: none; margin: 0 auto; overflow: visible;
+    flex: none; width: min(1120px, 100%); height: auto; max-height: none; margin: auto; overflow: visible;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    /* The upper sheet turns around the spine. The page beneath settles into place. */
+    #deck[data-turn] > :is(.is-on, .is-leaving) {
+        animation: chapter-settle 560ms cubic-bezier(.35, .03, .22, 1) both;
+    }
+    #deck[data-turn="forward"] > .is-leaving, #deck[data-turn="back"] > .is-on {
+        z-index: 1; transform-origin: left center;
+        box-shadow: inset -2px 0 0 #fffc, inset -24px 0 28px -26px #665439, 12px 0 28px -6px #17241955;
+        animation-name: chapter-fold;
+    }
+    #deck[data-turn="back"] > :is(.is-on, .is-leaving) { animation-direction: reverse; }
+}
+@keyframes chapter-fold {
+    from { transform: perspective(max(1600px, 290vw)) rotateY(0deg); opacity: 1; }
+    78% { opacity: 1; }
+    to { transform: perspective(max(1600px, 290vw)) rotateY(-90deg); opacity: 0; }
+}
+@keyframes chapter-settle {
+    from { transform: translateX(1.5%); }
+    to { transform: none; }
 }
 .chapter .eyebrow {
     margin-bottom: 15px; font: 600 11px/1.5 var(--mono);
@@ -97,9 +131,8 @@ h2 { margin-bottom: 22px; font-size: 44px; line-height: 1.18; }
 .chapter:nth-of-type(even) { background-color: #f0f4ed; }
 
 #cover {
-    isolation: isolate; display: grid; align-content: end; box-sizing: border-box;
-    min-height: min(74svh, 760px); padding-top: 62px; padding-bottom: clamp(64px, 6%, 96px);
-    border-bottom: 0; overflow: hidden; background: #1a3028;
+    isolation: isolate; padding-top: 62px; padding-bottom: max(18px, env(safe-area-inset-bottom));
+    background: #1a3028;
 }
 .cover-scene, .cover-image, .tower-reflection, #cover::after { position: absolute; inset: 0; pointer-events: none; }
 .cover-scene { z-index: -2; }
@@ -110,7 +143,7 @@ h2 { margin-bottom: 22px; font-size: 44px; line-height: 1.18; }
     background: linear-gradient(90deg, #0c211ded 0%, #0e211caa 30%, #0b19131a 67%),
                 linear-gradient(0deg, #10251bd9, transparent 42%);
 }
-#cover .cover { display: block; }
+#cover .cover { display: block; margin-bottom: 0; }
 #cover .eyebrow { margin-bottom: 18px; color: #cef5a9; font-size: 12px; }
 #cover .eyebrow span { color: #ecf5df; }
 #cover h1 {
@@ -129,7 +162,7 @@ h2 { margin-bottom: 22px; font-size: 44px; line-height: 1.18; }
 #ignite:hover { background: #e2fac0; }
 #ignite span { font-size: 19px; }
 .cover-credit {
-    position: absolute; bottom: 18px; right: max(var(--gutter), env(safe-area-inset-right));
+    align-self: flex-end; margin-top: clamp(18px, 5vh, 52px);
     display: flex; align-items: baseline; gap: 8px; color: #fffff4; font-size: 12px; font-weight: 650;
 }
 .cover-credit span[lang] { font: 11px var(--mono); }
@@ -181,7 +214,7 @@ h2 { margin-bottom: 22px; font-size: 44px; line-height: 1.18; }
 #stats .stat:nth-child(2) b { color: #93632b; }
 #stats .stat:nth-child(3) b { color: #524b68; }
 
-.chapter[data-name="十二月"] .sheet { display: block; }
+.chapter[data-name="十二月"] .sheet { display: block; margin-block: 0; }
 .month-head .eyebrow { margin-bottom: 12px; }
 .month-top { align-items: end; flex-wrap: wrap; }
 .month-head h2 { margin: 0; font-size: 44px; }
@@ -204,7 +237,7 @@ h2 { margin-bottom: 22px; font-size: 44px; line-height: 1.18; }
 .glass em { margin: 0; font-size: 12px; line-height: 1.5; }
 .glass strong { margin-top: 2px; font-size: 12px; line-height: 1.4; letter-spacing: 0; }
 .month-stage { min-height: 0; overflow: visible; }
-body[data-months-pending] .chapter[data-name="十二月"] ~ .chapter { display: none; }
+body[data-months-pending] .chapter[data-name="十二月"] ~ .chapter:not(.is-leaving) { display: none; }
 #rail button:disabled { color: var(--muted); opacity: .6; cursor: default; }
 .month-directory-note { display: none; }
 body[data-months-pending] .month-directory-note {
@@ -370,13 +403,13 @@ body[data-months-pending] .month-directory-note {
     #rail { grid-template-columns: 1fr 1fr; }
     #rail button { gap: 10px; }
     .chapter, .chapter.is-on { padding-block: 48px; }
-    #cover { min-height: 76svh; padding-top: 130px; padding-bottom: 49px; }
+    #cover { padding-top: 48px; padding-bottom: max(13px, env(safe-area-inset-bottom)); }
     #cover::after { background: linear-gradient(0deg, #092219f7, #11231ec9 33%, #17271d30 73%, #1b2c2112); }
     #cover .eyebrow { margin-bottom: 10px; font-size: 10px; }
     #cover h1 { font-size: 48px; }
     .cover .sub { font-size: 15px; margin-top: 12px; line-height: 1.72; }
     .hero-actions { margin-top: 17px; }
-    .cover-credit { bottom: 13px; font-size: 11px; }
+    .cover-credit { margin-top: 24px; font-size: 11px; }
     .cover-credit span[lang] { font-size: 10px; }
     h2, .month-head h2 { font-size: 31px; }
     .chapter[data-name="主题"] { padding-block: 30px 38px; }
@@ -402,9 +435,11 @@ body[data-months-pending] .month-directory-note {
 }
 
 .chapter[data-name="十二月"] {
-    min-height: calc(100svh - var(--bar-height) - env(safe-area-inset-top));
-    min-height: calc(100dvh - var(--bar-height) - env(safe-area-inset-top));
     padding-block: clamp(12px, 3vh, 28px) clamp(24px, 5vh, 52px);
+}
+
+@media (max-width: 410px) {
+    .topbar .brand span { display: none; }
 }
 
 @media (max-height: 500px) and (orientation: landscape) {
@@ -415,7 +450,7 @@ body[data-months-pending] .month-directory-note {
     #cover .eyebrow { margin-bottom: 6px; }
     .cover .sub { margin-top: 6px; font-size: 14px; }
     .hero-actions { margin-top: 12px; }
-    .cover-credit { bottom: 12px; }
+    .cover-credit { margin-top: 12px; }
     .month-head .eyebrow { margin-bottom: 4px; }
     .month-picker { margin-block: 8px; }
     .months .glass { min-height: 44px; padding-block: 2px; }
