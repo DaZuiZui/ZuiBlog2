@@ -100,27 +100,6 @@ body:has(#contents[open]) { overflow: hidden; }
     flex: none; width: min(1120px, 100%); height: auto; max-height: none; margin: auto; overflow: visible;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    /* The upper sheet turns around the spine. The page beneath settles into place. */
-    #deck[data-turn] > :is(.is-on, .is-leaving) {
-        animation: chapter-settle 560ms cubic-bezier(.35, .03, .22, 1) both;
-    }
-    #deck[data-turn="forward"] > .is-leaving, #deck[data-turn="back"] > .is-on {
-        z-index: 1; transform-origin: left center;
-        box-shadow: inset -2px 0 0 #fffc, inset -24px 0 28px -26px #665439, 12px 0 28px -6px #17241955;
-        animation-name: chapter-fold;
-    }
-    #deck[data-turn="back"] > :is(.is-on, .is-leaving) { animation-direction: reverse; }
-}
-@keyframes chapter-fold {
-    from { transform: perspective(max(1600px, 290vw)) rotateY(0deg); opacity: 1; }
-    78% { opacity: 1; }
-    to { transform: perspective(max(1600px, 290vw)) rotateY(-90deg); opacity: 0; }
-}
-@keyframes chapter-settle {
-    from { transform: translateX(1.5%); }
-    to { transform: none; }
-}
 .chapter .eyebrow {
     margin-bottom: 15px; font: 600 11px/1.5 var(--mono);
     letter-spacing: .11em; color: var(--accent-strong);
@@ -276,7 +255,7 @@ body[data-months-pending] .month-directory-note {
 .month-watermark { font: italic 52px/1 Georgia, var(--serif); }
 .month-artwork { position: relative; overflow: hidden; }
 .month-artwork > .month-visual { height: 100%; }
-.month-leaf { display: none; }
+.month-outgoing { display: none; }
 
 .jamie-memorial {
     display: grid;
@@ -327,34 +306,65 @@ body[data-months-pending] .month-directory-note {
 @keyframes jamie-wish { from { opacity: .2; transform: translateY(3px); } to { opacity: 1; transform: none; } }
 
 @media (prefers-reduced-motion: no-preference) {
-    .month-page[data-turn="forward"] {
-        --month-hinge: left; --month-angle: -88deg; --month-gloss: 90deg; --month-offset: 14px;
-    }
+    .month-page { --month-direction: 1; --exit-mask: 180deg; --exit-start: 0%; --exit-end: 100%; }
     .month-page[data-turn="back"] {
-        --month-hinge: right; --month-angle: 88deg; --month-gloss: 270deg; --month-offset: -14px;
+        --month-direction: -1; --exit-mask: 0deg; --exit-start: 100%; --exit-end: 0%;
     }
-    .month-visual.month-leaf {
+    .month-visual.month-outgoing {
         display: block; position: absolute; inset: 0; z-index: 4; min-height: 0;
-        pointer-events: none; transform-origin: var(--month-hinge) center;
-        animation: month-fold 460ms cubic-bezier(.42, 0, .3, 1) both;
+        pointer-events: none;
+        mask-image: linear-gradient(var(--exit-mask), #000 47%, transparent 53%);
+        mask-size: 100% 230%; mask-repeat: no-repeat;
+        animation: month-scene-exit 510ms cubic-bezier(.38,.03,.21,1) both;
     }
-    .month-leaf::before {
-        content: ""; position: absolute; inset: 0; z-index: 3;
-        background: linear-gradient(var(--month-gloss), #173a302e, #fff6 33%, transparent 72%);
-        animation: month-paper-light 460ms ease-out both;
+    @keyframes month-scene-exit {
+        from { mask-position: 50% var(--exit-start); }
+        to { mask-position: 50% var(--exit-end); translate: 0 calc(-12% * var(--month-direction)); }
     }
-    .month-page[data-turn] .month-copy {
-        animation: month-type-in 340ms cubic-bezier(.2, .72, .24, 1) backwards;
+    .chapter.play .month-visual:not(.month-outgoing) .hero-pop {
+        transform-origin: 50% 75%;
+        animation: var(--arrival, month-symbol-in) var(--arrival-time, 820ms) cubic-bezier(.19,.76,.28,1) both;
     }
-    @keyframes month-fold {
-        from { transform: perspective(850px) rotateY(0); opacity: 1; }
-        65% { opacity: 1; }
-        to { transform: perspective(850px) rotateY(var(--month-angle)); opacity: 0; }
+    .month-visual[data-motion="storm"] { --arrival: month-drop; --lift: -65px; --tilt: -11deg; }
+    .month-visual[data-motion="snow"] { --lift: -38px; --tilt: 6deg; --arrival-time: 1080ms; }
+    .month-visual[data-motion="bloom"] { --arrival: month-grow; --lift: 36px; --size: .32; }
+    .month-visual[data-motion="rain"] { --lift: -22px; --arrival-time: 1050ms; }
+    .month-visual[data-motion="heart"] { --arrival: month-droop; --lift: -16px; --tilt: 17deg; }
+    .month-visual[data-motion="sun"] { --lift: 68px; --arrival-time: 1140ms; }
+    .month-visual[data-motion="wave"] { --arrival: month-swell; --lift: 28px; --tilt: -9deg; }
+    .month-visual[data-motion="peak"] { --arrival: month-grow; --lift: 56px; --size: .72; --arrival-time: 700ms; }
+    .month-visual[data-motion="compass"] { --arrival: month-swell; --lift: 15px; --tilt: -50deg; }
+    .month-visual[data-motion="leaf"] { --arrival: month-swell; --lift: -48px; --tilt: 23deg; --arrival-time: 1150ms; }
+    .month-visual[data-motion="fire"] { --arrival: month-grow; --lift: 44px; --size: .18; }
+    @keyframes month-symbol-in {
+        from { opacity: .25; translate: 0 calc(var(--lift, 24px) * var(--month-direction)); rotate: var(--tilt, 0deg); }
+        to { opacity: 1; translate: 0 0; rotate: 0deg; }
     }
-    @keyframes month-paper-light { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes month-type-in {
-        from { opacity: .45; transform: translateX(var(--month-offset)); }
-        to { opacity: 1; transform: none; }
+    @keyframes month-drop {
+        from { opacity: .35; translate: 0 calc(var(--lift) * var(--month-direction)); rotate: var(--tilt); }
+        70% { translate: 0 calc(5px * var(--month-direction)); rotate: 3deg; }
+        to { translate: 0 0; rotate: 0deg; }
+    }
+    @keyframes month-grow {
+        from { opacity: .25; translate: 0 calc(var(--lift) * var(--month-direction)); scale: var(--size); }
+        to { opacity: 1; translate: 0 0; scale: 1; }
+    }
+    @keyframes month-droop {
+        from { opacity: .2; translate: 0 calc(var(--lift) * var(--month-direction)); rotate: calc(-1 * var(--tilt)); }
+        66% { rotate: var(--tilt); }
+        to { opacity: 1; translate: 0 0; rotate: 0deg; }
+    }
+    @keyframes month-swell {
+        from { opacity: .35; translate: 0 calc(var(--lift) * var(--month-direction)); rotate: var(--tilt); }
+        65% { translate: 0 calc(-6px * var(--month-direction)); rotate: calc(-.24 * var(--tilt)); }
+        to { translate: 0 0; rotate: 0deg; }
+    }
+    .month-page[data-turn] .month-copy h3 {
+        animation: month-heading-in 450ms cubic-bezier(.2,.72,.24,1) backwards;
+    }
+    @keyframes month-heading-in {
+        from { opacity: .4; translate: 0 calc(12px * var(--month-direction)); }
+        to { opacity: 1; translate: 0 0; }
     }
 }
 .hero-emoji { font-size: 88px; }

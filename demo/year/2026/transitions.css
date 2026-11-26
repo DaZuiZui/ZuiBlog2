@@ -1,0 +1,187 @@
+/* A shaped edge flattens as the incoming chapter reaches its resting place. */
+@property --edge-depth {
+    syntax: "<length>";
+    initial-value: 0px;
+    inherits: false;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    #deck[data-turn] {
+        --direction: 1;
+        --near: 0%;
+        --far: 100%;
+        --duration: 620ms;
+        --ease: cubic-bezier(.42, .05, .18, 1);
+        background: #657b70;
+    }
+    #deck[data-turn="back"] {
+        --direction: -1;
+        --near: 100%;
+        --far: 0%;
+    }
+    #deck[data-turn] > .is-on {
+        --crest: calc(var(--near) + var(--direction) * var(--edge-depth));
+        --shoulder: calc(var(--near) + var(--direction) * var(--edge-depth) * .45);
+        z-index: 2;
+        transform-origin: center var(--near);
+        animation: var(--arrival, chapter-arrive) var(--duration) var(--ease) both;
+    }
+    #deck[data-turn] > .is-leaving {
+        z-index: 1;
+        animation: chapter-recede var(--duration) var(--ease) both;
+    }
+    @keyframes chapter-arrive {
+        from {
+            transform: translateY(calc(var(--direction) * 100%));
+            --edge-depth: clamp(78px, 23vh, 210px);
+        }
+        48% { --edge-depth: clamp(70px, 20vh, 180px); }
+        to { transform: none; --edge-depth: 0px; }
+    }
+    @keyframes chapter-recede {
+        from { transform: none; opacity: 1; }
+        to { transform: scale(1.02); opacity: .66; }
+    }
+
+    /* The cover photograph moves behind the title as the frame opens. */
+    #deck[data-scene="cover"] { --arrival: cover-frame; }
+    @keyframes cover-frame {
+        from { transform: translateY(calc(var(--direction) * 100%)); clip-path: inset(0 20%); }
+        48% { clip-path: inset(0 7%); }
+        to { transform: none; clip-path: inset(0); }
+    }
+    [data-scene="cover"] .is-on .cover-scene {
+        animation: cover-framing 600ms ease-out both;
+    }
+    @keyframes cover-framing {
+        from { transform: scale(1.12) translateY(calc(var(--direction) * 3%)); }
+        to { transform: none; }
+    }
+
+    /* Reveal the three lines of the theme along their baselines. */
+    [data-scene="theme"] .is-on .lines {
+        animation: theme-lines 480ms 130ms cubic-bezier(.32, .02, .45, 1) backwards;
+    }
+    @keyframes theme-lines {
+        from { clip-path: inset(var(--near) 0 var(--far)); }
+        to { clip-path: inset(0); }
+    }
+
+    /* The four figures settle like individual counter wheels. */
+    [data-scene="numbers"] > .is-on {
+        clip-path: polygon(0 var(--crest), 25% var(--crest), 25% var(--near), 50% var(--near),
+            50% var(--shoulder), 75% var(--shoulder), 75% var(--crest), 100% var(--crest),
+            100% var(--far), 0 var(--far));
+    }
+    [data-scene="numbers"] .is-on .stat {
+        overflow: hidden;
+    }
+    [data-scene="numbers"] .is-on .stat b {
+        animation: number-roll 360ms calc(140ms + var(--order, 0) * 36ms) ease-out backwards;
+    }
+    :is(.stat, .goal):nth-child(2) { --order: 1; }
+    :is(.stat, .goal):nth-child(3) { --order: 2; }
+    :is(.stat, .goal):nth-child(4) { --order: 3; }
+    @keyframes number-roll {
+        from { transform: translateY(calc(var(--direction) * .85em)); opacity: .2; }
+        to { transform: none; opacity: 1; }
+    }
+
+    /* The calendar turns about the horizontal binding. */
+    #deck[data-scene="months"] { --arrival: calendar-open; }
+    @keyframes calendar-open {
+        from { transform: translateY(calc(var(--direction) * 100%)) perspective(1800px) rotateX(calc(var(--direction) * -66deg)); }
+        to { transform: translateY(0) perspective(1800px) rotateX(0deg); }
+    }
+
+    /* Print each stop beside the route as it travels into view. */
+    #deck[data-scene="cities"] { --arrival: city-route; }
+    @keyframes city-route {
+        from {
+            transform: translateY(calc(var(--direction) * 32%));
+            clip-path: polygon(0 var(--far), 100% var(--far), 100% var(--far), 0 var(--far));
+        }
+        44% {
+            clip-path: polygon(0 calc(var(--near) + var(--direction) * 18%),
+                100% calc(var(--near) + var(--direction) * 56%), 100% var(--far), 0 var(--far));
+        }
+        to { transform: none; clip-path: polygon(0 var(--near), 100% var(--near), 100% var(--far), 0 var(--far)); }
+    }
+    [data-scene="cities"] .is-on .stop-copy {
+        animation: stop-label 240ms calc(135ms + var(--i) * 30ms) ease-out backwards;
+    }
+    @keyframes stop-label {
+        from { clip-path: inset(var(--near) 0 var(--far)); transform: translateY(calc(var(--direction) * .65em)); }
+        to { clip-path: inset(0); transform: none; }
+    }
+
+    /* Three podium levels, the split in the comparison, five steps, and one
+       heartbeat each give the advancing edge a silhouette of its own. */
+    [data-scene="games"] > .is-on {
+        clip-path: polygon(0 var(--shoulder), 34% var(--shoulder), 34% var(--near),
+            66% var(--near), 66% var(--crest), 100% var(--crest), 100% var(--far), 0 var(--far));
+    }
+    [data-scene="before-after"] > .is-on {
+        clip-path: polygon(0 var(--shoulder), 42% var(--shoulder), 52% var(--near),
+            48% var(--crest), 59% var(--shoulder), 100% var(--shoulder), 100% var(--far), 0 var(--far));
+    }
+    [data-scene="before-after"] .is-on .wipe-notes > p {
+        animation: contrast-caption 360ms 160ms ease-out backwards;
+    }
+    [data-scene="before-after"] .is-on .wipe-notes > p + p { --caption-sign: -1; }
+    @keyframes contrast-caption {
+        from { transform: translateY(calc(var(--direction) * var(--caption-sign, 1) * 1.6em)); opacity: .25; }
+        to { transform: none; opacity: 1; }
+    }
+    [data-scene="milestones"] > .is-on {
+        --step: calc(var(--direction) * var(--edge-depth) / 4);
+        clip-path: polygon(0 var(--crest), 20% var(--crest),
+            20% calc(var(--near) + 3 * var(--step)), 40% calc(var(--near) + 3 * var(--step)),
+            40% calc(var(--near) + 2 * var(--step)), 60% calc(var(--near) + 2 * var(--step)),
+            60% calc(var(--near) + var(--step)), 80% calc(var(--near) + var(--step)),
+            80% var(--near), 100% var(--near), 100% var(--far), 0 var(--far));
+    }
+    [data-scene="pulse"] > .is-on {
+        clip-path: polygon(0 var(--shoulder), 34% var(--shoulder), 41% var(--near),
+            46% var(--crest), 52% var(--near), 57% var(--shoulder), 100% var(--shoulder),
+            100% var(--far), 0 var(--far));
+    }
+    [data-scene="pulse"] .is-on .pulse-wrap {
+        animation: pulse-expand 440ms 150ms ease-out backwards;
+    }
+    @keyframes pulse-expand {
+        from { clip-path: inset(45% 0 round 8px); }
+        to { clip-path: inset(0 round 8px); }
+    }
+
+    /* Open each goal from its year marker; the icons retain their tap animation. */
+    #deck[data-scene="goals"] { --arrival: goal-horizon; }
+    @keyframes goal-horizon {
+        from {
+            transform: translateY(calc(var(--direction) * 52%));
+            clip-path: circle(0% at 50% var(--far));
+        }
+        to { transform: none; clip-path: circle(160% at 50% var(--far)); }
+    }
+    [data-scene="goals"] .is-on .goal-copy {
+        animation: goal-unfold 330ms calc(130ms + var(--order, 0) * 45ms) ease-out backwards;
+    }
+    @keyframes goal-unfold {
+        from { clip-path: inset(var(--near) 0 var(--far)); transform: translateY(calc(var(--direction) * .9em)); }
+        to { clip-path: inset(0); transform: none; }
+    }
+
+    /* The final dark page expands from the horizon and the inscription develops. */
+    #deck[data-scene="finale"] { --duration: 680ms; --arrival: finale-horizon; }
+    @keyframes finale-horizon {
+        from { transform: translateY(calc(var(--direction) * 27%)); clip-path: ellipse(130% 0% at 50% var(--far)); }
+        to { transform: none; clip-path: ellipse(130% 118% at 50% var(--far)); }
+    }
+    [data-scene="finale"] .is-on .finale {
+        animation: finale-develop 480ms 190ms ease-out backwards;
+    }
+    @keyframes finale-develop {
+        from { opacity: .1; transform: translateY(calc(var(--direction) * 14px)); }
+        to { opacity: 1; transform: none; }
+    }
+}
