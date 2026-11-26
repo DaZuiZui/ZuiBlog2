@@ -2251,9 +2251,14 @@
         </section>
 
         <section class="chapter" data-name="回望" data-scene="numbers">
+            <header class="numbers-cover">
+                <div class="numbers-heading">
+                    <p class="eyebrow">2026 <span lang="en">/ Looking back</span></p>
+                    <h2>先给这一年<br><em>四个数字</em></h2>
+                    <p class="numbers-place">吉隆坡 <span lang="en">Kuala Lumpur</span></p>
+                </div>
+            </header>
             <div class="sheet">
-                <p class="eyebrow">Looking back</p>
-                <h2>先给这一年四个数字</h2>
                 <div class="stats" id="stats"></div>
             </div>
         </section>
@@ -2443,10 +2448,10 @@
                 "我成为人生的救赎。"
             ],
             stats: [
-                { n: "365", label: "天。待填：你真正留下来的理由" },
-                { n: "12", label: "个月。待填：你回头看了几次" },
-                { n: "4", label: "只宠物离开了我。R.I.P." },
-                { n: "∞", label: "次。待填：想消失，又把自己留下" }
+                { n: 1, unit: "份", label: "满意的 offer", copy: "一月收到裁员通知。三月，我找到了满意的工作，后来和同事一起做出了一个很稳定的项目。", month: 3 },
+                { n: 2, unit: "个", label: "存款目标", copy: "八月，存款到了我给自己定的数。十月，又攒够了新的目标。", month: 10 },
+                { get n() { return YEAR.cities.length; }, unit: "站", label: "走过的地方", copy: "从深圳出发，四月去了成都。哈尔滨去了两回，十一月到了吉隆坡。", month: 4 },
+                { n: 4, unit: "只", label: "离开我的小伙伴", copy: "十一月，我也和杰米告了别。晚安，杰米。祝你在另外一个世界快乐。", month: 11 }
             ],
             months: [
                 { name: "崩塌", emoji: "💔", season: "深冬", motion: "storm", floats: ["💔", "⛈️", "📉", "🌧️", "🖤"], copy: "悲痛的一月，裁员通知到了。公司即将倒闭，只留最低成本运转。整个人生像一下子塌掉。我到处找自己错在哪，为什么被裁，为什么被抛弃，是不是真的不配这个市场。这个月只剩下对自己的质疑，和疯狂准备面试。失败我可以接受，但我一定要从失败里站起来。" },
@@ -2545,12 +2550,23 @@
         }
         document.getElementById("finale-copy").textContent = YEAR.finale;
 
-        document.getElementById("stats").innerHTML = YEAR.stats.map((item) => `
+        const stats = document.getElementById("stats");
+        stats.innerHTML = YEAR.stats.map((item) => `
             <article class="stat">
-                <b data-n="${item.n}">${item.n === "∞" ? "∞" : "0"}</b>
-                <span>${item.label}</span>
+                <h3><span class="stat-quantity"><b>${item.n}</b><small>${item.unit}</small></span>${item.label}</h3>
+                <p>${item.copy}</p>
+                <button class="stat-read" type="button" data-month="${item.month}" aria-label="读${item.month}月手记：${item.label}">
+                    读${item.month}月手记
+                    <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+                </button>
             </article>
         `).join("");
+        stats.addEventListener("click", event => {
+            const button = event.target.closest(".stat-read");
+            if (!button) return;
+            go(monthChapter);
+            openMonth(Number(button.dataset.month) - 1);
+        });
 
         const monthStage = document.getElementById("month-stage");
         const monthProgress = document.getElementById("month-progress");
@@ -3350,7 +3366,6 @@
                 activeTurn = turn;
                 turn.then(() => { if (activeTurn === turn) finishTurn(); });
             }
-            if (chapter.dataset.name === "回望") countStats();
             if (chapter.dataset.name === "城市") flyCities();
             if (chapter.dataset.name === "六处") igniteRites();
             if (chapter.dataset.name === "明年") lightNext();
@@ -3539,24 +3554,6 @@
                 chapter.scrollBy(0, direction * step);
             }
         });
-
-        function countStats() {
-            document.querySelectorAll(".stat b").forEach((node) => {
-                const raw = node.dataset.n;
-                if (reduce || raw === "∞") {
-                    node.textContent = raw;
-                    return;
-                }
-                const target = Number(raw);
-                const start = performance.now();
-                const tick = (now) => {
-                    const t = Math.min(1, (now - start) / 900);
-                    node.textContent = String(Math.round(target * (1 - Math.pow(1 - t, 3))));
-                    if (t < 1) requestAnimationFrame(tick);
-                };
-                requestAnimationFrame(tick);
-            });
-        }
 
         const range = document.getElementById("wipe-range");
         const wipe = document.getElementById("wipe");

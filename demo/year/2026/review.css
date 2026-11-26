@@ -185,13 +185,57 @@ h2 { margin-bottom: 22px; font-size: 44px; line-height: 1.18; }
 .lines p { width: auto; opacity: 1; transform: none; font: 650 32px/1.48 var(--serif); letter-spacing: 0; }
 .lines p:last-child { color: var(--accent-strong); }
 .chapter[data-name="主题"] .rule { display: none; }
-.stats { gap: 0; grid-template-columns: repeat(4, minmax(0, 1fr)); border-block: 1px solid var(--line); }
-.stat { min-height: auto; padding: 25px 22px; background: transparent; border: 0; border-right: 1px solid var(--line); border-radius: 0; box-shadow: none; backdrop-filter: none; }
-.stat:last-child { border-right: 0; }
-.stat b { font: 500 68px/1 Georgia, var(--serif); color: var(--accent-strong); letter-spacing: 0; }
-.stat span { font-size: 15px; }
-#stats .stat:nth-child(2) b { color: #93632b; }
-#stats .stat:nth-child(3) b { color: #524b68; }
+#deck > .chapter[data-scene="numbers"] { padding: 0; }
+.numbers-cover {
+    display: flex; align-items: flex-end; align-self: stretch; flex: none;
+    min-height: clamp(250px, 39dvh, 460px);
+    padding: 34px var(--gutter) 32px;
+    background: linear-gradient(90deg, #0b2623ed, #102b2680 38%, transparent 70%),
+                linear-gradient(0deg, #0c211eb3, transparent 36%),
+                #263f43 url("cover.webp") center 2% / cover;
+}
+.numbers-heading { position: relative; width: min(1120px, 100%); margin: 0 auto; }
+.numbers-heading .eyebrow { color: #f1f4e7; margin-bottom: 14px; }
+.numbers-heading h2 { margin: 0; color: #fffdf3; font: 700 56px/1.13 var(--serif); }
+.numbers-heading em { color: #d3efa8; font-style: normal; }
+.numbers-place {
+    position: absolute; right: 0; bottom: 0; display: flex; align-items: baseline; gap: 8px;
+    color: white; font-size: 13px; text-shadow: 0 1px 4px #14291f;
+}
+.numbers-place span { font: 11px var(--mono); }
+.chapter[data-name="回望"] .sheet {
+    width: min(1120px, calc(100% - 2 * var(--gutter))); margin-block: auto;
+    padding-block: 38px max(38px, env(safe-area-inset-bottom));
+}
+.stats {
+    gap: 0; grid-template-columns: repeat(4, minmax(0, 1fr));
+    border-top: 2px solid var(--ink-strong); border-bottom: 1px solid var(--line);
+}
+.stat {
+    --figure: #176443;
+    display: flex; flex-direction: column; min-height: 0;
+    margin-block: 23px; padding: 0 22px; border: 0; border-right: 1px solid var(--line);
+    background: transparent; border-radius: 0; box-shadow: none; backdrop-filter: none;
+}
+.stat:first-child { padding-left: 0; }
+.stat:nth-child(2) { --figure: #875d2c; }
+.stat:nth-child(3) { --figure: #275b6f; }
+.stat:last-child { --figure: #665667; border-right: 0; padding-right: 0; }
+.stat h3 { color: var(--ink-strong); font: 700 22px/1.4 var(--serif); }
+.stat .stat-quantity {
+    display: flex; align-items: baseline; gap: 8px; margin: 0 0 14px; color: var(--figure);
+}
+.stat b { color: inherit; font: 400 80px/.94 Georgia, var(--serif); letter-spacing: 0; }
+.stat small { font: 600 15px/1.4 var(--serif); }
+.stat p { margin: 8px 0 13px; color: var(--muted); font-size: 15px; line-height: 1.8; }
+.stat-read {
+    align-self: flex-start; display: inline-flex; align-items: center; gap: 9px;
+    min-height: 44px; margin-top: auto; padding: 0 4px; color: var(--figure);
+    background: transparent; border: 0; border-radius: 0;
+    font-family: inherit; font-size: 14px; font-weight: 650;
+}
+.stat-read svg { width: 15px; height: 15px; }
+.stat-read:is(:hover, :focus-visible) { text-decoration: underline; text-underline-offset: 4px; }
 
 .chapter[data-name="十二月"] .sheet { display: block; margin-block: 0; }
 .month-head .eyebrow { margin-bottom: 12px; }
@@ -397,6 +441,8 @@ body[data-months-pending] .month-directory-note {
     #cover h1 { font-size: 63px; }
     h2, .month-head h2 { font-size: 36px; }
     .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .stat { margin: 0; padding: 18px; }
+    .stat:nth-child(odd) { padding-left: 0; }
     .stat:nth-child(2) { border-right: 0; }
     .stat:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
     .months { grid-template-columns: repeat(6, minmax(0, 1fr)); }
@@ -425,9 +471,17 @@ body[data-months-pending] .month-directory-note {
     .chapter[data-name="主题"] { padding-block: 30px 38px; }
     .chapter[data-name="主题"] .sheet { display: block; }
     .lines p { font-size: 23px; }
-    .stat { padding: 17px 14px; }
-    .stat b { font-size: 49px; }
-    .stat span { margin-top: 10px; font-size: 14px; }
+    .numbers-cover { min-height: 210px; padding-block: 24px; background-position: center, center, 57% 42%; }
+    .numbers-heading h2 { font-size: 38px; }
+    .numbers-heading .eyebrow { margin-bottom: 10px; }
+    .numbers-place { position: static; margin-top: 16px; font-size: 12px; }
+    .chapter[data-name="回望"] .sheet { padding-block: 20px max(24px, env(safe-area-inset-bottom)); }
+    .stat { padding: 16px 12px 7px; }
+    .stat:nth-child(even) { padding-right: 0; }
+    .stat b { font-size: 52px; }
+    .stat .stat-quantity { gap: 5px; margin-bottom: 8px; }
+    .stat h3 { font-size: 18px; }
+    .stat p { margin: 5px 0; font-size: 14px; line-height: 1.7; }
     .month-top { gap: 8px; }
     .month-toolbar { gap: 1px; }
     .month-progress { font-size: 17px; }
