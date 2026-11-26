@@ -448,6 +448,24 @@ body[data-months-pending] .month-directory-note {
     padding-block: clamp(12px, 3vh, 28px) clamp(24px, 5vh, 52px);
 }
 
+@media (max-width: 640px), (orientation: landscape) and (max-width: 980px) and (pointer: coarse) {
+    .months {
+        --half-month: 44px;
+        position: relative; display: flex;
+        overflow: auto hidden; overscroll-behavior-x: contain;
+        scroll-snap-type: x mandatory; scrollbar-width: none;
+    }
+    .months::-webkit-scrollbar { display: none; }
+    .months::before, .months::after {
+        content: ""; flex: 0 0 calc(50% - var(--half-month));
+    }
+    .months .glass {
+        flex: 0 0 calc(2 * var(--half-month)); min-height: 48px;
+        scroll-snap-align: center; white-space: nowrap;
+    }
+    .months .glass:focus-visible { outline-offset: -3px; }
+}
+
 @media (max-width: 410px) {
     .topbar .brand span { display: none; }
 }
