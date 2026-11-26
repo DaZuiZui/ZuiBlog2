@@ -2566,7 +2566,8 @@
         const readMonths = new Set(savedMonths);
         let currentMonthText;
 
-        document.getElementById("months").innerHTML = YEAR.months.map((month, i) => `
+        const monthPicker = document.getElementById("months");
+        monthPicker.innerHTML = YEAR.months.map((month, i) => `
             <button class="glass${i === 0 ? " on" : ""}" type="button" data-i="${i}">
                 <span class="glass-emo" aria-hidden="true">${month.emoji || "✨"}</span>
                 <em>${i + 1}月</em>
@@ -2574,12 +2575,70 @@
             </button>
         `).join("");
 
-        function nextUnreadMonth() {
-            for (let n = 1; n <= YEAR.months.length; n++) {
-                const i = (monthCursor + n) % YEAR.months.length;
-                if (!readMonths.has(i)) return i;
+        function monthOffset(button) {
+            return button.offsetLeft + (button.offsetWidth - monthPicker.clientWidth) / 2;
+        }
+
+        // Interrupted smooth scrolls also emit scrollend. Only a horizontal gesture may select a different month.
+        let pickerGesture = false;
+        let pickerTouch = null;
+        monthPicker.addEventListener("touchstart", event => {
+            pickerGesture = false;
+            pickerTouch = event.touches.length === 1 ? event.touches[0] : null;
+        }, { passive: true });
+        monthPicker.addEventListener("touchmove", event => {
+            if (!pickerTouch || event.touches.length !== 1) return;
+            const dx = Math.abs(event.touches[0].clientX - pickerTouch.clientX);
+            const dy = Math.abs(event.touches[0].clientY - pickerTouch.clientY);
+            if (dx > 5 && dx > dy) pickerGesture = true;
+        }, { passive: true });
+        for (const type of ["touchend", "touchcancel"]) {
+            monthPicker.addEventListener(type, () => { pickerTouch = null; }, { passive: true });
+        }
+        monthPicker.addEventListener("wheel", event => {
+            if (!event.ctrlKey && (Math.abs(event.deltaX) > Math.abs(event.deltaY) || event.shiftKey)) pickerGesture = true;
+        }, { passive: true });
+
+        function centerSelectedMonth(animate = false) {
+            pickerGesture = false;
+            if (!monthPicker.clientWidth || monthPicker.scrollWidth <= monthPicker.clientWidth) return;
+            monthPicker.scrollTo({
+                left: monthOffset(monthPicker.children[monthCursor]),
+                behavior: animate && !reduce ? "smooth" : "instant"
+            });
+        }
+
+        function selectCenteredMonth() {
+            if (!pickerGesture || pickerTouch || index !== monthChapter || monthPicker.scrollWidth <= monthPicker.clientWidth) return;
+            pickerGesture = false;
+            const left = monthPicker.scrollLeft;
+            const nearest = [...monthPicker.children].reduce((best, button) =>
+                Math.abs(monthOffset(button) - left) < Math.abs(monthOffset(best) - left) ? button : best
+            );
+            const i = Number(nearest.dataset.i);
+            if (i !== monthCursor) showMonth(i);
+        }
+
+        if ("onscrollend" in monthPicker) {
+            monthPicker.addEventListener("scrollend", selectCenteredMonth);
+        } else {
+            // Older iOS releases do not emit scrollend. Wait for both lift-off and the end of momentum.
+            let timer;
+            const settle = () => {
+                clearTimeout(timer);
+                timer = setTimeout(selectCenteredMonth, 160);
+            };
+            monthPicker.addEventListener("scroll", settle, { passive: true });
+            for (const type of ["touchend", "touchcancel"]) {
+                monthPicker.addEventListener(type, settle, { passive: true });
             }
-            return -1;
+        }
+        new ResizeObserver(() => centerSelectedMonth()).observe(monthPicker);
+
+        function followingMonth() {
+            if (monthCursor + 1 < YEAR.months.length) return monthCursor + 1;
+            // After December, return to the first missed month before leaving the year.
+            return YEAR.months.findIndex((_, i) => i !== monthCursor && !readMonths.has(i));
         }
 
         function renderMonthReading() {
@@ -2597,10 +2656,10 @@
                 button.toggleAttribute("data-read", readMonths.has(i));
                 button.setAttribute("aria-label", `${i + 1}月，${YEAR.months[i].name}，${readMonths.has(i) ? "已读" : "未读"}`);
             });
-            const next = nextUnreadMonth();
+            const next = followingMonth();
             let action = "继续到城市";
-            if (!readMonths.has(monthCursor)) action = "读完本月";
-            else if (pending) action = next < monthCursor ? `补读 ${next + 1} 月` : `读 ${next + 1} 月`;
+            if (next > monthCursor) action = `继续到 ${next + 1} 月`;
+            else if (next >= 0) action = `补读 ${next + 1} 月`;
             monthContinue.querySelector("span").textContent = action;
         }
 
@@ -2614,23 +2673,27 @@
             return bottom > viewport.top && bottom <= viewport.bottom + 1;
         }
 
-        function recordMonthEnd() {
-            if (index !== monthChapter || deck.dataset.turn || document.hidden || contents.open ||
-                readMonths.has(monthCursor) || !monthEndVisible()) return;
+        function markMonthRead() {
+            if (readMonths.has(monthCursor)) return;
             readMonths.add(monthCursor);
             saveMonthReading();
             renderMonthReading();
         }
 
+        function recordMonthEnd() {
+            if (index === monthChapter && !deck.dataset.turn && !document.hidden && !contents.open && monthEndVisible()) {
+                markMonthRead();
+            }
+        }
+
         monthContinue.addEventListener("click", () => {
-            if (readMonths.size === YEAR.months.length) {
+            markMonthRead();
+            const next = followingMonth();
+            if (next < 0) {
                 go(monthChapter + 1);
-            } else if (readMonths.has(monthCursor)) {
-                openMonth(nextUnreadMonth());
-                monthStage.querySelector("h3").focus({ preventScroll: true });
             } else {
-                currentMonthText.scrollIntoView({ block: "end" });
-                queueReadingPosition();
+                openMonth(next);
+                monthStage.querySelector("h3").focus({ preventScroll: true });
             }
         });
 
@@ -2700,6 +2763,7 @@
             monthProgress.innerHTML = `${String(i + 1).padStart(2, "0")}<span> / 12</span>`;
             monthPrev.disabled = i === 0;
             monthNext.disabled = i === YEAR.months.length - 1;
+            centerSelectedMonth(true);
         }
 
         function showMonth(i) {
@@ -2874,11 +2938,12 @@
             requestAnimationFrame(tick);
         }
 
-        document.getElementById("months").addEventListener("click", (event) => {
+        monthPicker.addEventListener("click", (event) => {
             const button = event.target.closest(".glass");
             if (!button) return;
             const next = Number(button.dataset.i);
             if (next !== monthCursor) showMonth(next);
+            else centerSelectedMonth(true);
         });
         monthPrev.addEventListener("click", () => stepMonth(-1));
         monthNext.addEventListener("click", () => stepMonth(1));
@@ -3271,6 +3336,7 @@
             index = next;
             chapter.inert = false;
             chapter.classList.add("is-on", "play");
+            if (next === monthChapter) centerSelectedMonth();
             chapter.scrollTop = fromBottom ? chapter.scrollHeight : 0;
             if (previous) chapter.focus({ preventScroll: true });
             document.body.dataset.ch = String(index);
@@ -3386,7 +3452,7 @@
             if (index === monthChapter && direction > 0 && (atEdge || monthEndVisible())) {
                 recordMonthEnd();
                 if (readMonths.has(monthCursor)) {
-                    const next = monthCursor + 1 < YEAR.months.length ? monthCursor + 1 : nextUnreadMonth();
+                    const next = followingMonth();
                     if (next >= 0) return () => openMonth(next);
                 }
             }
@@ -3523,7 +3589,7 @@
             if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
                 event.preventDefault();
                 stepMonth(event.key === "ArrowRight" ? 1 : -1);
-                if (event.target.closest("#months")) document.querySelector("#months .on").focus();
+                if (event.target.closest("#months")) monthPicker.children[monthCursor].focus({ preventScroll: true });
             }
         });
 
