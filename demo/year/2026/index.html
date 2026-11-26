@@ -604,10 +604,6 @@
             --maccent: #07965b;
         }
 
-        .month-stage.is-sliding .month-page {
-            transition: transform 680ms cubic-bezier(.16, .84, .28, 1), opacity 680ms ease;
-        }
-
         .month-page[data-tone="1"] { --sky: #d5dee8; --sky-deep: #8ea0b5; --maccent: #4d6484; }
         .month-page[data-tone="2"] { --sky: #e7f1f8; --sky-deep: #b7cddd; --maccent: #6d8eae; }
         .month-page[data-tone="3"] { --sky: #e7f6df; --sky-deep: #f3c9d4; --maccent: #3f9a62; }
@@ -666,8 +662,6 @@
             z-index: 2;
             transform: translate(-50%, -50%);
         }
-
-        .month-page.is-turn .hero-pop { animation: hero-pop 680ms cubic-bezier(.16, .84, .28, 1) both; }
 
         .hero-emoji {
             display: block;
@@ -1602,10 +1596,6 @@
             45% { transform: perspective(800px) rotateX(var(--rx)) rotateY(var(--ry)) translateY(-11px); }
             100% { transform: perspective(800px) rotateX(var(--rx)) rotateY(var(--ry)) translateY(-8px); }
         }
-        @keyframes hero-pop {
-            from { transform: translate(-50%, -42%) scale(0.72); }
-            to { transform: translate(-50%, -50%) scale(1); }
-        }
         @keyframes fall-y {
             0% { transform: translateY(-12%) rotate(0deg); opacity: 0; }
             12% { opacity: 1; }
@@ -2190,6 +2180,7 @@
     </style>
     <link rel="stylesheet" href="review.css">
     <link rel="stylesheet" href="chapters.css">
+    <link rel="stylesheet" href="transitions.css">
 </head>
 <body data-ch="0" data-months-pending>
     <canvas id="field" aria-hidden="true"></canvas>
@@ -2201,10 +2192,10 @@
         </a>
         <div class="nav-links">
             <button class="chapter-arrow" id="chapter-prev" type="button" aria-label="上一章" title="上一章" disabled>
-                <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+                <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg>
             </button>
             <button class="chapter-arrow" id="chapter-next" type="button" aria-label="下一章" title="下一章">
-                <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+                <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
             </button>
             <button class="sound" id="sound" type="button" aria-label="声音" title="声音" aria-pressed="false">
                 <svg class="ui-icon sound-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4.702a.7.7 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.7.7 0 0 0 11 19.298z" /><path d="m16.5 14.5 5-5" /><path d="m16.5 9.5 5 5" /></svg><svg class="ui-icon sound-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z" /><path d="M16 9a5 5 0 0 1 0 6" /><path d="M19.364 18.364a9 9 0 0 0 0-12.728" /></svg>
@@ -2227,7 +2218,7 @@
     <div class="toast" id="toast" role="status"></div>
 
     <main id="deck">
-        <section class="chapter is-on" data-name="序章" id="cover">
+        <section class="chapter is-on" data-name="序章" data-scene="cover" id="cover">
             <div class="cover-scene" aria-hidden="true">
                 <picture class="cover-image">
                     <source media="(max-width: 640px) and (orientation: portrait)" srcset="cover-mobile.webp">
@@ -2251,7 +2242,7 @@
             <p class="cover-credit"><span>吉隆坡</span><span lang="en">Kuala Lumpur</span></p>
         </section>
 
-        <section class="chapter" data-name="主题">
+        <section class="chapter" data-name="主题" data-scene="theme">
             <div class="sheet">
                 <p class="eyebrow">The theme</p>
                 <div class="lines" id="lines"></div>
@@ -2259,7 +2250,7 @@
             </div>
         </section>
 
-        <section class="chapter" data-name="回望">
+        <section class="chapter" data-name="回望" data-scene="numbers">
             <div class="sheet">
                 <p class="eyebrow">Looking back</p>
                 <h2>先给这一年四个数字</h2>
@@ -2267,7 +2258,7 @@
             </div>
         </section>
 
-        <section class="chapter" data-name="十二月">
+        <section class="chapter" data-name="十二月" data-scene="months">
             <div class="sheet">
                 <div class="month-head">
                     <div class="month-top">
@@ -2278,8 +2269,8 @@
                         <div class="month-toolbar">
                             <p class="month-progress" id="month-progress">01<span> / 12</span></p>
                             <div class="month-controls">
-                                <button class="month-arrow" id="month-prev" type="button" aria-label="上一月" title="上一月"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg></button>
-                                <button class="month-arrow" id="month-next" type="button" aria-label="下一月" title="下一月"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></svg></button>
+                                <button class="month-arrow" id="month-prev" type="button" aria-label="上一月" title="上一月"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 7-7 7 7M12 19V5" /></svg></button>
+                                <button class="month-arrow" id="month-next" type="button" aria-label="下一月" title="下一月"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 7 7 7-7M12 5v14" /></svg></button>
                             </div>
                         </div>
                     </div>
@@ -2298,7 +2289,7 @@
             </div>
         </section>
 
-        <section class="chapter" data-name="城市">
+        <section class="chapter" data-name="城市" data-scene="cities">
             <div class="sheet city-sheet">
                 <div class="city-head">
                     <div>
@@ -2312,7 +2303,7 @@
             </div>
         </section>
 
-        <section class="chapter" data-name="游戏">
+        <section class="chapter" data-name="游戏" data-scene="games">
             <div class="sheet">
                 <p class="eyebrow">Games of the year</p>
                 <h2>年度最佳游戏</h2>
@@ -2321,7 +2312,7 @@
             </div>
         </section>
 
-        <section class="chapter" data-name="裂与光">
+        <section class="chapter" data-name="裂与光" data-scene="before-after">
             <div class="sheet">
                 <p class="eyebrow">Before / after</p>
                 <h2>把后来拖过来</h2>
@@ -2342,7 +2333,7 @@
             </div>
         </section>
 
-        <section class="chapter" data-name="六处">
+        <section class="chapter" data-name="六处" data-scene="milestones">
             <div class="sheet">
                 <p class="eyebrow">Five things</p>
                 <h2>今年我留下的五件事</h2>
@@ -2353,7 +2344,7 @@
             </div>
         </section>
 
-        <section class="chapter" data-name="心跳">
+        <section class="chapter" data-name="心跳" data-scene="pulse">
             <div class="sheet">
                 <p class="eyebrow">Pulse</p>
                 <h2>这一年的起伏</h2>
@@ -2365,7 +2356,7 @@
             </div>
         </section>
 
-        <section class="chapter" data-name="明年">
+        <section class="chapter" data-name="明年" data-scene="goals">
             <div class="sheet">
                 <p class="eyebrow">2027</p>
                 <h2>明年的目标</h2>
@@ -2377,7 +2368,7 @@
             </div>
         </section>
 
-        <section class="chapter" data-name="结尾">
+        <section class="chapter" data-name="结尾" data-scene="finale">
             <div class="sheet finale">
                 <div class="sun" aria-hidden="true"></div>
                 <p class="eyebrow">Close</p>
@@ -2714,24 +2705,24 @@
         function showMonth(i) {
             const page = monthPage(i);
             const previous = monthStage.firstElementChild;
-            if (previous && !YEAR.months[i].memorial && !YEAR.months[monthCursor].memorial && !motionPreference.matches) {
+            if (previous && !motionPreference.matches) {
                 page.dataset.turn = i > monthCursor ? "forward" : "back";
-                const leaf = previous.querySelector(".month-visual");
-                const colors = getComputedStyle(previous);
-                for (const token of ["--sky", "--sky-deep", "--maccent"]) {
-                    leaf.style.setProperty(token, colors.getPropertyValue(token));
+                if (!YEAR.months[i].memorial && !YEAR.months[monthCursor].memorial) {
+                    const outgoing = previous.querySelector(".month-visual");
+                    const colors = getComputedStyle(previous);
+                    for (const token of ["--sky", "--sky-deep", "--maccent"]) {
+                        outgoing.style.setProperty(token, colors.getPropertyValue(token));
+                    }
+                    outgoing.classList.add("month-outgoing");
+                    page.querySelector(".month-artwork").append(outgoing);
+                    const removeScene = event => {
+                        if (event.target === outgoing && event.animationName === "month-scene-exit") outgoing.remove();
+                    };
+                    outgoing.addEventListener("animationend", removeScene);
+                    outgoing.addEventListener("animationcancel", removeScene);
                 }
-                leaf.classList.add("month-leaf");
-                page.querySelector(".month-artwork").append(leaf);
-                leaf.addEventListener("animationend", event => {
-                    if (event.target === leaf && event.animationName === "month-fold") leaf.remove();
-                });
-                leaf.addEventListener("animationcancel", event => {
-                    if (event.target === leaf && event.animationName === "month-fold") leaf.remove();
-                });
             }
             markMonth(i);
-            page.classList.add("is-turn");
             monthStage.replaceChildren(page);
             currentMonthText = page.querySelector(".month-copy .slot");
             renderMonthReading();
@@ -3086,9 +3077,9 @@
             goalCards.forEach(card => card.classList.toggle("lit", reduce));
             if (reduce) return;
             const watchVisibleCards = () => {
-                if (goalChapter.classList.contains("is-on")) goalCards.forEach(card => goalObserver.observe(card));
+                if (goalChapter.classList.contains("is-on") && !activeTurn && !reduce) goalCards.forEach(card => goalObserver.observe(card));
             };
-            if (activeTurn) activeTurn.finished.then(watchVisibleCards, () => {});
+            if (activeTurn) activeTurn.then(watchVisibleCards);
             else watchVisibleCards();
         }
 
@@ -3251,6 +3242,7 @@
             leavingChapter = null;
             activeTurn = null;
             delete deck.dataset.turn;
+            delete deck.dataset.scene;
             queueReadingPosition();
         }
 
@@ -3273,6 +3265,7 @@
                     leavingChapter = previous;
                     previous.classList.add("is-leaving");
                     deck.dataset.turn = next > index ? "forward" : "back";
+                    deck.dataset.scene = chapter.dataset.scene;
                 }
             }
             index = next;
@@ -3285,12 +3278,11 @@
             counter.textContent = `${String(index + 1).padStart(2, "0")} / ${chapters.length}`;
             updateChapterArrows();
             if (leavingChapter) {
-                const animation = previous.getAnimations().find(a => a.animationName === "chapter-fold" || a.animationName === "chapter-settle");
-                if (animation) {
-                    const finish = () => { if (animation === activeTurn) finishTurn(); };
-                    activeTurn = animation;
-                    animation.finished.then(finish, finish);
-                } else finishTurn();
+                // The incoming and outgoing scenes can settle at different times.
+                const animations = [...chapter.getAnimations(), ...previous.getAnimations()];
+                const turn = Promise.allSettled(animations.map(animation => animation.finished));
+                activeTurn = turn;
+                turn.then(() => { if (activeTurn === turn) finishTurn(); });
             }
             if (chapter.dataset.name === "回望") countStats();
             if (chapter.dataset.name === "城市") flyCities();
